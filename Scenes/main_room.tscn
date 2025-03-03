@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=3 uid="uid://c7jlh34oe660m"]
+
+[ext_resource type="PackedScene" uid="uid://p52avrbys6kv" path="res://Assets/dungeon/gltf/floor_wood_large.gltf" id="1_0o08x"]
+[ext_resource type="PackedScene" uid="uid://dqmnd6rrd28nd" path="res://Assets/dungeon/gltf/wall.gltf" id="2_vlmkk"]
+[ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_g8gpf"]
+sky_material = SubResource("ProceduralSkyMaterial_teq5p")
+
+[sub_resource type="Environment" id="Environment_lkk8e"]
+background_mode = 2
+sky = SubResource("Sky_g8gpf")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="mainRoom" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lkk8e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 8.73972, 0)
+shadow_enabled = true
+
+[node name="geometry" type="Node3D" parent="."]
+
+[node name="floor_wood_large1" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 4)
+
+[node name="floor_wood_large2" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="floor_wood_large3" parent="geometry" instance=ExtResource("1_0o08x")]
+
+[node name="floor_wood_large4" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -8)
+
+[node name="floor_wood_large5" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="floor_wood_large6" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="floor_wood_large7" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -8)
+
+[node name="floor_wood_large8" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+
+[node name="floor_wood_large9" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0)
+
+[node name="wall1" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -8)
+
+[node name="wall2" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+
+[node name="wall3" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+
+[node name="wall4" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)
+
+[node name="wall5" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -10)
+
+[node name="wall6" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="floor_wood_large10" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -8)
+
+[node name="floor_wood_large11" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+
+[node name="floor_wood_large12" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
+
+[node name="wall13" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 6)
+
+[node name="wall14" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -10)
+
+[node name="wall7" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -10)
+
+[node name="wall8" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 4)
+
+[node name="wall9" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 0)
+
+[node name="wall10" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, -8)
+
+[node name="wall11" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, 4)
+
+[node name="wall12" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, 0)
+
+[node name="floor_wood_large13" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="floor_wood_large14" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -4)
+
+[node name="floor_wood_large15" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -4)
+
+[node name="floor_wood_large16" parent="geometry" instance=ExtResource("1_0o08x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
+
+[node name="wall15" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, -4)
+
+[node name="wall16" parent="geometry" instance=ExtResource("2_vlmkk")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -4)
+
+[node name="Mage" parent="." instance=ExtResource("3_6mt2a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52548, 0, 0)
