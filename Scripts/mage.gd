@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+@export var hp = 100
+@export var mp = 100
 
 @export var speed = 5.0
 @export var acceleration = 5.0
@@ -9,6 +11,15 @@ extends CharacterBody3D
 @onready var model = $Rig
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = $AnimationTree.get("parameters/playback")
+
+func cast():
+	var fire_ball_scene = preload("res://Scenes/fireball.tscn")
+	var fireball = fire_ball_scene.instantiate()
+	fireball.position = global_position + model.global_rotation * Vector3(0, 0, -1)
+	fireball.dir = model.global_rotation
+	fireball.speed = 5
+	add_child(fireball)
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -32,3 +43,10 @@ func get_move_input(delta):
 	
 	var vl = velocity * model.transform.basis
 	anim_tree.set("parameters/IWR/blend_position", Vector2(vl.x, -vl.z) / speed)
+
+func _unhandled_input(event):
+	if event.is_action_pressed("attack"):
+		anim_state.travel("Spellcast_Shoot")
+		cast()
+	if event.is_action_pressed("summon"):
+		anim_state.travel("summon")

@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dacobh8k5nkw8"]
+
+[ext_resource type="Script" uid="uid://c0x27crwjwlm7" path="res://Scripts/fire_ball.gd" id="1_0mxqg"]
+[ext_resource type="PackedScene" uid="uid://cgu25sftslugq" path="res://Assets/dungeon/gltf/coin.gltf" id="2_ne4qj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jgg3l"]
+radius = 0.36757
+
+[node name="fireball" type="RigidBody3D"]
+script = ExtResource("1_0mxqg")
+
+[node name="coin2" parent="." instance=ExtResource("2_ne4qj")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_jgg3l")

@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://cflmai4wnxr71"]
+
+[ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_room.gd" id="1_gblpu"]
+[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_gkv7c"]
+[ext_resource type="Texture2D" uid="uid://f2tc0hq3yoir" path="res://Assets/textures/stone_flat_cream_wall_texture.jpg" id="3_ugtvn"]
+
+[node name="drawing_room" type="Node2D"]
+script = ExtResource("1_gblpu")
+cam_speed = 15.0
+
+[node name="background" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(795, 438)
+scale = Vector2(5, 5)
+texture = ExtResource("3_ugtvn")
+
+[node name="Control" type="Control" parent="."]
+top_level = true
+layout_mode = 3
+anchor_right = 0.709
+anchor_bottom = 0.801
+offset_right = 0.231934
+offset_bottom = -0.0480347
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="touch_controls" parent="Control" instance=ExtResource("2_gkv7c")]
+
+[node name="tool" type="Label" parent="Control/touch_controls"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -39.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "tools"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_left = -1000
+limit_top = -1000
+limit_right = 2500
+limit_bottom = 1800
+limit_smoothed = true
+position_smoothing_enabled = true

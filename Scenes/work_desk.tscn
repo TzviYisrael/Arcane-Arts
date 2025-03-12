@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://eyxu78xewiuj"]
+
+[ext_resource type="Script" uid="uid://d8tvk4gcmw8j" path="res://Scripts/work_desk.gd" id="1_y4lli"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0c4bl"]
+size = Vector3(1, 1.25964, 1)
+
+[node name="work_desk" type="StaticBody3D"]
+script = ExtResource("1_y4lli")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.6151, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0111694, 0)
+shape = SubResource("BoxShape3D_0c4bl")
