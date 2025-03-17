@@ -7,6 +7,7 @@
 [node name="drawing_room" type="Node2D"]
 script = ExtResource("1_gblpu")
 cam_speed = 15.0
+tool = 1
 
 [node name="background" type="Sprite2D" parent="."]
 z_index = -1
@@ -26,16 +27,14 @@ grow_vertical = 2
 
 [node name="touch_controls" parent="Control" instance=ExtResource("2_gkv7c")]
 
-[node name="tool" type="Label" parent="Control/touch_controls"]
+[node name="tool" type="Button" parent="Control/touch_controls"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -39.0
-offset_bottom = 23.0
+offset_left = -47.0
+offset_bottom = 31.0
 grow_horizontal = 0
 text = "tools"
-horizontal_alignment = 1
-vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -45,3 +44,5 @@ limit_right = 2500
 limit_bottom = 1800
 limit_smoothed = true
 position_smoothing_enabled = true
+
+[connection signal="pressed" from="Control/touch_controls/tool" to="." method="_on_tool_pressed"]

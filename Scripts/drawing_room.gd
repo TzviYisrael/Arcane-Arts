@@ -7,19 +7,24 @@ extends Node2D
 @onready var background = $background
 var center = Vector2()
 
+@onready var tool_button: Button = $Control/touch_controls/tool
+
 var points : Array[Vector2] = []
 var texture : Texture2D
 
-var circles : Array[Vector3] = []
+var guides : Array[Vector4] = []
 
 var first_point : Vector2 = Vector2.INF
 var current_point : Vector2 = Vector2.INF
-var snap_distanse : float = 100
+const SNAP_DISTANSE : float = 50
 var is_mouse_held = false
 
 @export var min_zoom = 0.3
 @export var max_zoom = 5.0
 @export var zoom_speed = 0.1
+
+enum tools{LINE, CIRCLE}
+@export_enum("line", "circle") var tool: int = 0;
 
 
 
@@ -34,6 +39,8 @@ func _ready():
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
 	
 	texture = load("res://Assets/textures/point.png")
+	
+	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
 	queue_redraw()
 
@@ -58,34 +65,50 @@ func _draw():
 	draw_circle(first_point, 10.0, Color.GREEN_YELLOW)
 	draw_circle(current_point, 10.0, Color.GREEN)
 	
-	#dynamic circle
+	#dynamic guides
 	if first_point < Vector2.INF:
-		var len = (first_point-current_point).length()
-		draw_ring(self, first_point, len, 3.0, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
-		
-	for c in circles:
-		draw_ring(self, Vector2(c.x, c.y), c.z, 6.0, 16 + c.z / 20, 0.0, Color.AQUAMARINE)
+		match tool:
+			tools.CIRCLE:
+				var len = (first_point-current_point).length()
+				draw_ring(self, first_point, len, 3.0, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
+			tools.LINE:
+				var angle = (first_point - current_point).angle()
+				draw_infinite_line(first_point, angle, 3.0, Color.WHITE_SMOKE)
+				
+	for g in guides:
+		#print(g.w)
+		match int(g.w):
+			tools.CIRCLE:
+				draw_ring(self, Vector2(g.x, g.y), g.z, 6.0, 16 + g.z / 20, 0.0, Color.AQUAMARINE)
+			tools.LINE:
+				draw_infinite_line(Vector2(g.x, g.y), g.z, 6.0, Color.AQUAMARINE)
 
 func _input(event):
+	#print(guides)
 	# Track mouse position when it moves
 	if event is InputEventMouseMotion:
 		current_point = get_global_mouse_position()
 		queue_redraw()
 	
 	if event is InputEventMouseButton:
+		
 		if event.button_index == MOUSE_BUTTON_LEFT:
+			var mp = get_global_mouse_position()
+			var closest_point = find_closest_point(mp, points)
 			if event.pressed:
-				var mp = get_global_mouse_position()
-				#first_point = mp
-				var closest_point = find_closest_point(mp, points)
-				if closest_point.distance_to(mp) < snap_distanse:
+				if closest_point.distance_to(mp) < SNAP_DISTANSE:
 					first_point = closest_point
 					is_mouse_held = true
-			else:
-				var mp = get_global_mouse_position()
-				var closest_point = find_closest_point(mp, points)
-				if closest_point.distance_to(mp) < snap_distanse and first_point < Vector2.INF:
-					circles.append(Vector3(first_point.x, first_point.y, first_point.distance_to(closest_point)))
+			else: #release LMB
+				match tool:
+					tools.CIRCLE:
+						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
+							var new_guide = Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
+							if not new_guide in guides: guides.append(new_guide)
+					tools.LINE:
+						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
+							var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.LINE)
+							if not new_guide in guides: guides.append(new_guide)
 				first_point = Vector2.INF
 				is_mouse_held = false
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -96,6 +119,8 @@ func _input(event):
 			# Zoom out
 			camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
 			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+	
+
 
 
 static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float, resolution:int, rotated:float, color:Color)->void:
@@ -108,6 +133,20 @@ static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float
 		to = Vector2(cos(rad)*radius, sin(rad)*radius)
 		node.draw_line(offset + from, offset + to, color, width)
 		from = to
+
+# Draw an infinite line from a point with an angle
+func draw_infinite_line(point: Vector2, angle_rad: float, width: float, color: Color = Color.WHITE) -> void:
+	# Get viewport size for calculating line length
+	var viewport_size = get_viewport_rect().size
+	var max_length = viewport_size.length() * 2  # Make it longer than the diagonal
+	
+	# Calculate end points using cos/sin
+	var direction = Vector2(cos(angle_rad), sin(angle_rad))
+	var start_point = point - direction * max_length
+	var end_point = point + direction * max_length
+	
+	# Draw the line
+	draw_line(start_point, end_point, color, width)
 
 func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> Vector2:
 	if point_array.size() == 0:
@@ -123,3 +162,9 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 			closest_point = point
 	
 	return closest_point
+
+
+func _on_tool_pressed() -> void:
+	tool = (tool + 1) % tools.size()
+	tool_button.text = str(tools.keys()[tool]).to_lower()
+	
