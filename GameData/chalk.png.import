@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ch2m6a7d7ok5x"
-path="res://.godot/imported/stone_flat_cream_wall_texture.jpg-9cc1759195fa82481c3ccb3cc35be6e0.ctex"
+uid="uid://ck2sc4vnyngq7"
+path="res://.godot/imported/chalk.png-fffba099d4e8812de06b37f62642d25e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/textures/stone_flat_cream_wall_texture.jpg"
-dest_files=["res://.godot/imported/stone_flat_cream_wall_texture.jpg-9cc1759195fa82481c3ccb3cc35be6e0.ctex"]
+source_file="res://GameData/chalk.png"
+dest_files=["res://.godot/imported/chalk.png-fffba099d4e8812de06b37f62642d25e.ctex"]
 
 [params]
 

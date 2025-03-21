@@ -1,19 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://cflmai4wnxr71"]
+[gd_scene load_steps=7 format=3 uid="uid://cflmai4wnxr71"]
 
 [ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_room.gd" id="1_gblpu"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_gkv7c"]
-[ext_resource type="Texture2D" uid="uid://f2tc0hq3yoir" path="res://Assets/textures/stone_flat_cream_wall_texture.jpg" id="3_ugtvn"]
+[ext_resource type="Texture2D" uid="uid://ch2m6a7d7ok5x" path="res://Assets/textures/stone_flat_cream_wall_texture.jpg" id="3_ugtvn"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_5a8fl"]
+[ext_resource type="Script" uid="uid://dur7tpbb13f1f" path="res://Scripts/guides_texture.gd" id="4_ugtvn"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
+viewport_path = NodePath("SubViewport")
 
 [node name="drawing_room" type="Node2D"]
 script = ExtResource("1_gblpu")
 cam_speed = 15.0
-tool = 1
+tool = 2
 
 [node name="background" type="Sprite2D" parent="."]
-z_index = -1
-position = Vector2(795, 438)
-scale = Vector2(5, 5)
+z_index = -2
+texture_repeat = 2
 texture = ExtResource("3_ugtvn")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2024, 2024)
+
+[node name="guide_viewer" type="Sprite2D" parent="."]
+z_index = -1
+texture = SubResource("ViewportTexture_5a8fl")
+centered = false
 
 [node name="Control" type="Control" parent="."]
 top_level = true
@@ -24,17 +36,43 @@ offset_right = 0.231934
 offset_bottom = -0.0480347
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="touch_controls" parent="Control" instance=ExtResource("2_gkv7c")]
 
-[node name="tool" type="Button" parent="Control/touch_controls"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -47.0
-offset_bottom = 31.0
+offset_left = -237.0
+offset_top = 20.0
+offset_bottom = 222.0
 grow_horizontal = 0
-text = "tools"
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="tool" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_5a8fl")
+text = "no_tool"
+metadata/_edit_use_anchors_ = true
+
+[node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_5a8fl")
+text = "save"
+metadata/_edit_use_anchors_ = true
+
+[node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_5a8fl")
+text = "return to the room"
+metadata/_edit_use_anchors_ = true
+
+[node name="moveToFloor" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_5a8fl")
+text = "move to the floor"
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -45,4 +83,16 @@ limit_bottom = 1800
 limit_smoothed = true
 position_smoothing_enabled = true
 
-[connection signal="pressed" from="Control/touch_controls/tool" to="." method="_on_tool_pressed"]
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 1
+
+[node name="guide_drawer" type="Node2D" parent="SubViewport"]
+script = ExtResource("4_ugtvn")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]

@@ -7,12 +7,17 @@ extends Node2D
 @onready var background = $background
 var center = Vector2()
 
-@onready var tool_button: Button = $Control/touch_controls/tool
+#@onready var guide_drawer: TextureRect = $guide_drawer
+@onready var guide_drawer: Node2D = $SubViewport/guide_drawer
+@onready var guide_viewer: Sprite2D = $guide_viewer
+
+@onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 
 var points : Array[Vector2] = []
 var texture : Texture2D
 
 var guides : Array[Vector4] = []
+var line_guides : Array[Vector4] = []
 
 var first_point : Vector2 = Vector2.INF
 var current_point : Vector2 = Vector2.INF
@@ -23,8 +28,8 @@ var is_mouse_held = false
 @export var max_zoom = 5.0
 @export var zoom_speed = 0.1
 
-enum tools{LINE, CIRCLE}
-@export_enum("line", "circle") var tool: int = 0;
+enum tools{LINE, INF_LINE, CIRCLE}
+@export_enum("line", "inf_line", "circle") var tool: int = 0;
 
 
 
@@ -34,8 +39,8 @@ func _ready():
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
 	camera_2d.position = center
-	for i in range(10):
-		for j in range(10):
+	for i in range(11):
+		for j in range(11):
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
 	
 	texture = load("res://Assets/textures/point.png")
@@ -71,20 +76,16 @@ func _draw():
 			tools.CIRCLE:
 				var len = (first_point-current_point).length()
 				draw_ring(self, first_point, len, 3.0, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
-			tools.LINE:
+			tools.INF_LINE:
 				var angle = (first_point - current_point).angle()
 				draw_infinite_line(first_point, angle, 3.0, Color.WHITE_SMOKE)
-				
-	for g in guides:
-		#print(g.w)
-		match int(g.w):
-			tools.CIRCLE:
-				draw_ring(self, Vector2(g.x, g.y), g.z, 6.0, 16 + g.z / 20, 0.0, Color.AQUAMARINE)
 			tools.LINE:
-				draw_infinite_line(Vector2(g.x, g.y), g.z, 6.0, Color.AQUAMARINE)
+				draw_line(first_point, current_point, Color.WHITE_SMOKE, 3.0)
+				
+	for lg in line_guides:
+		draw_line(Vector2(lg.x, lg.y), Vector2(lg.z, lg.w), Color.AQUAMARINE, 6.0)
 
 func _input(event):
-	#print(guides)
 	# Track mouse position when it moves
 	if event is InputEventMouseMotion:
 		current_point = get_global_mouse_position()
@@ -104,11 +105,15 @@ func _input(event):
 					tools.CIRCLE:
 						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
 							var new_guide = Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
-							if not new_guide in guides: guides.append(new_guide)
+							if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
+					tools.INF_LINE:
+						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
+							var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.INF_LINE)
+							if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
 					tools.LINE:
 						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
-							var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.LINE)
-							if not new_guide in guides: guides.append(new_guide)
+							var new_guide = Vector4(first_point.x, first_point.y,closest_point.x, closest_point.y)
+							if not new_guide in line_guides: line_guides.append(new_guide)
 				first_point = Vector2.INF
 				is_mouse_held = false
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -120,8 +125,6 @@ func _input(event):
 			camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
 			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 	
-
-
 
 static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float, resolution:int, rotated:float, color:Color)->void:
 	var increments: float = 2*PI / resolution
@@ -167,4 +170,27 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
 	tool_button.text = str(tools.keys()[tool]).to_lower()
+
+
+func _on_save_pressed() -> void:
+	var img : Image = guide_viewer.texture.get_image()
+	TextureManager.chalk_line = img
+	
+	var save_path = "res://GameData/chalk.png"
+	#var img : Image = guide_viewer.texture.get_image()
+	#
+	print("saving... ", img)
+	await img.save_png(save_path)
+	
+	guide_drawer.clear()
+	
+
+
+func _on_return_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/main_room.tscn") # Replace with function body.
+
+
+func _on_move_to_floor_pressed() -> void:
+	_on_save_pressed()
+	#get_tree().change_scene_to_file("res://Scenes/summonFloor.tscn")
 	

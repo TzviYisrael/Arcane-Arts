@@ -2,7 +2,19 @@ extends Node3D
 
 var mouse = Vector2()
 const MAX_D = 1000 
-@onready var t = $work_desk
+
+@onready var decal: Decal = $Decal
+
+func _ready() -> void:
+	if TextureManager.chalk_line:
+		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
+		decal.texture_albedo = chalk
+		decal.texture_normal = chalk
+		
+func _process(delta: float) -> void:
+	decal.rotation.y += deg_to_rad(1)
+	
+	
 func _input(event:InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse = event.position
@@ -22,5 +34,5 @@ func get_mouse_world_pos(_mouse:Vector2):
 	var coll = space.intersect_ray(params)["collider"]
 	print(coll)
 	if coll.is_in_group("tap_to_enter"):
-		get_tree().change_scene_to_file(t.get("scene"))
+		get_tree().change_scene_to_file(coll.get_meta("scene_path"))
 		#print(coll)
