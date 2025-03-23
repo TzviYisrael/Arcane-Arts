@@ -1,4 +1,4 @@
 extends Node
 
-@export var chalk_line : Image
-@export var circle : Image
+var chalk_line : Image
+var circle : Image

@@ -10,7 +10,10 @@ func _ready() -> void:
 		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
 		decal.texture_albedo = chalk
 		decal.texture_normal = chalk
-		
+	else:
+		decal.texture_albedo = null
+		decal.texture_normal = null
+
 func _process(delta: float) -> void:
 	decal.rotation.y += deg_to_rad(1)
 	

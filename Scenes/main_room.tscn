@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=10 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="PackedScene" uid="uid://p52avrbys6kv" path="res://Assets/dungeon/gltf/floor_wood_large.gltf" id="1_0o08x"]
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
 [ext_resource type="PackedScene" uid="uid://bpp0c3q5wldrr" path="res://Scenes/bull.tscn" id="4_7ykgi"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/work_desk.tscn" id="6_8147l"]
-[ext_resource type="Texture2D" uid="uid://ck2sc4vnyngq7" path="res://GameData/chalk.png" id="7_v1qvw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -144,5 +143,3 @@ metadata/scene_path = "res://Scenes/mage.tscn"
 
 [node name="Decal" type="Decal" parent="."]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, -4)
-texture_albedo = ExtResource("7_v1qvw")
-texture_normal = ExtResource("7_v1qvw")

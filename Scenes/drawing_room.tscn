@@ -57,7 +57,14 @@ theme = ExtResource("4_5a8fl")
 text = "no_tool"
 metadata/_edit_use_anchors_ = true
 
+[node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_5a8fl")
+text = "reset"
+metadata/_edit_use_anchors_ = true
+
 [node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("4_5a8fl")
 text = "save"
@@ -76,6 +83,7 @@ text = "move to the floor"
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1012, 1012)
 limit_left = -1000
 limit_top = -1000
 limit_right = 2500
@@ -86,13 +94,17 @@ position_smoothing_enabled = true
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
 size = Vector2i(2024, 2024)
-render_target_clear_mode = 1
+render_target_clear_mode = 2
+
+[node name="saved_texture" type="Sprite2D" parent="SubViewport"]
+centered = false
 
 [node name="guide_drawer" type="Node2D" parent="SubViewport"]
 script = ExtResource("4_ugtvn")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="_on_clear_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]

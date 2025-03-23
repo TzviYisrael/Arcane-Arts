@@ -10,6 +10,8 @@ var center = Vector2()
 #@onready var guide_drawer: TextureRect = $guide_drawer
 @onready var guide_drawer: Node2D = $SubViewport/guide_drawer
 @onready var guide_viewer: Sprite2D = $guide_viewer
+@onready var saved_texture: Sprite2D = $SubViewport/saved_texture
+@onready var sub_viewport: SubViewport = $SubViewport
 
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 
@@ -39,11 +41,15 @@ func _ready():
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
 	camera_2d.position = center
+	print(center)
 	for i in range(11):
 		for j in range(11):
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
 	
 	texture = load("res://Assets/textures/point.png")
+	
+	if TextureManager.chalk_line:
+		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line)
 	
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
@@ -78,7 +84,7 @@ func _draw():
 				draw_ring(self, first_point, len, 3.0, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
 			tools.INF_LINE:
 				var angle = (first_point - current_point).angle()
-				draw_infinite_line(first_point, angle, 3.0, Color.WHITE_SMOKE)
+				draw_line(first_point, current_point, Color.WHITE_SMOKE, 3.0)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE, 3.0)
 				
@@ -166,6 +172,20 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 	
 	return closest_point
 
+func save_to_disk():
+	var save_path = "res://GameData/chalk.png"
+	var img : Image = guide_viewer.texture.get_image()
+	print("saving... ", img)
+	await img.save_png(save_path)
+	
+	guide_drawer.clear()
+
+func save_to_tex_men():
+	var img : Image = guide_viewer.texture.get_image()
+	TextureManager.chalk_line = img
+	TextureManager.chalk_empty = false
+	
+	guide_drawer.clear()
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
@@ -173,24 +193,23 @@ func _on_tool_pressed() -> void:
 
 
 func _on_save_pressed() -> void:
-	var img : Image = guide_viewer.texture.get_image()
-	TextureManager.chalk_line = img
-	
-	var save_path = "res://GameData/chalk.png"
-	#var img : Image = guide_viewer.texture.get_image()
-	#
-	print("saving... ", img)
-	await img.save_png(save_path)
-	
-	guide_drawer.clear()
+	save_to_tex_men()
 	
 
 
 func _on_return_pressed() -> void:
+	save_to_tex_men()
 	get_tree().change_scene_to_file("res://Scenes/main_room.tscn") # Replace with function body.
 
 
 func _on_move_to_floor_pressed() -> void:
-	_on_save_pressed()
+	save_to_tex_men()
 	#get_tree().change_scene_to_file("res://Scenes/summonFloor.tscn")
-	
+
+
+func _on_clear_pressed() -> void:
+	TextureManager.chalk_line = null
+	TextureManager.chalk_empty = true
+	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
+	guide_drawer.clear()
+	get_tree().reload_current_scene()
