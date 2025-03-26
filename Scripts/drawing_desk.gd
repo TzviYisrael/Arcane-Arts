@@ -7,7 +7,6 @@ extends Node2D
 @onready var background = $background
 var center = Vector2()
 
-#@onready var guide_drawer: TextureRect = $guide_drawer
 @onready var guide_drawer: Node2D = $SubViewport/guide_drawer
 @onready var guide_viewer: Sprite2D = $guide_viewer
 @onready var saved_texture: Sprite2D = $SubViewport/saved_texture
@@ -26,9 +25,11 @@ var current_point : Vector2 = Vector2.INF
 const SNAP_DISTANSE : float = 50
 var is_mouse_held = false
 
-@export var min_zoom = 0.3
-@export var max_zoom = 5.0
-@export var zoom_speed = 0.1
+@export var min_zoom = 0.5
+@export var max_zoom = 2.0
+@export var zoom_speed = 0.05
+
+@export var line_thickness : float = 9
 
 enum tools{LINE, INF_LINE, CIRCLE}
 @export_enum("line", "inf_line", "circle") var tool: int = 0;
@@ -41,7 +42,6 @@ func _ready():
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
 	camera_2d.position = center
-	print(center)
 	for i in range(11):
 		for j in range(11):
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
@@ -81,17 +81,17 @@ func _draw():
 		match tool:
 			tools.CIRCLE:
 				var len = (first_point-current_point).length()
-				draw_ring(self, first_point, len, 3.0, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
+				draw_ring(self, first_point, len, line_thickness / 2, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
 			tools.INF_LINE:
 				var angle = (first_point - current_point).angle()
-				draw_line(first_point, current_point, Color.WHITE_SMOKE, 3.0)
+				draw_line(first_point, current_point, Color.WHITE_SMOKE, line_thickness / 2)
 			tools.LINE:
-				draw_line(first_point, current_point, Color.WHITE_SMOKE, 3.0)
+				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
 				
 	for lg in line_guides:
 		draw_line(Vector2(lg.x, lg.y), Vector2(lg.z, lg.w), Color.AQUAMARINE, 6.0)
 
-func _input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	# Track mouse position when it moves
 	if event is InputEventMouseMotion:
 		current_point = get_global_mouse_position()
@@ -172,6 +172,22 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 	
 	return closest_point
 
+func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
+	var size = image.get_width()
+	var center = Vector2(size / 2, size / 2)
+	var radius = (size / 2) * radius_percentage
+	
+	# Ensure image has an alpha channel
+	image.convert(Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var pos = Vector2(x, y)
+			if pos.distance_to(center) > radius:
+				image.set_pixel(x, y, Color(0, 0, 0, 0))  # Make it transparent
+
+	return image
+
 func save_to_disk():
 	var save_path = "res://GameData/chalk.png"
 	var img : Image = guide_viewer.texture.get_image()
@@ -181,35 +197,27 @@ func save_to_disk():
 	guide_drawer.clear()
 
 func save_to_tex_men():
-	var img : Image = guide_viewer.texture.get_image()
+	var img : Image = crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	TextureManager.chalk_line = img
-	TextureManager.chalk_empty = false
-	
 	guide_drawer.clear()
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 
-
 func _on_save_pressed() -> void:
 	save_to_tex_men()
-	
-
 
 func _on_return_pressed() -> void:
 	save_to_tex_men()
-	get_tree().change_scene_to_file("res://Scenes/main_room.tscn") # Replace with function body.
-
+	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
 
 func _on_move_to_floor_pressed() -> void:
 	save_to_tex_men()
-	#get_tree().change_scene_to_file("res://Scenes/summonFloor.tscn")
-
+	get_tree().change_scene_to_file("res://Scenes/summon_floor.tscn")
 
 func _on_clear_pressed() -> void:
 	TextureManager.chalk_line = null
-	TextureManager.chalk_empty = true
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	guide_drawer.clear()
 	get_tree().reload_current_scene()

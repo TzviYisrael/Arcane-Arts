@@ -15,9 +15,9 @@ extends CharacterBody3D
 func cast():
 	var fire_ball_scene = preload("res://Scenes/fireball.tscn")
 	var fireball = fire_ball_scene.instantiate()
-	fireball.position = global_position + model.global_rotation * Vector3(0, 0, -1)
-	fireball.dir = model.global_rotation
-	fireball.speed = 5
+	fireball.position = model.position + Vector3(0.0, 1.5, 0.0)
+	fireball.dir = -model.global_transform.basis.z
+	fireball.speed = 0.5
 	add_child(fireball)
 
 

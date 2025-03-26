@@ -6,7 +6,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_jgg3l"]
 radius = 0.36757
 
-[node name="fireball" type="RigidBody3D"]
+[node name="fireball" type="Area3D"]
 script = ExtResource("1_0mxqg")
 
 [node name="coin2" parent="." instance=ExtResource("2_ne4qj")]
@@ -14,3 +14,5 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_jgg3l")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

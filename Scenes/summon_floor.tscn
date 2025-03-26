@@ -1,29 +1,30 @@
-[gd_scene load_steps=7 format=3 uid="uid://cflmai4wnxr71"]
+[gd_scene load_steps=7 format=3 uid="uid://cbw7pmrwoar5r"]
 
-[ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_room.gd" id="1_gblpu"]
-[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_gkv7c"]
-[ext_resource type="Texture2D" uid="uid://ch2m6a7d7ok5x" path="res://Assets/textures/stone_flat_cream_wall_texture.jpg" id="3_ugtvn"]
-[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_5a8fl"]
-[ext_resource type="Script" uid="uid://dur7tpbb13f1f" path="res://Scripts/guides_texture.gd" id="4_ugtvn"]
+[ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summon_floor.gd" id="1_f68f3"]
+[ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="2_pgytx"]
+[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_mq1gj"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_p16ct"]
+[ext_resource type="Script" uid="uid://cgnacxk5m2e56" path="res://Scripts/ink_drawer.gd" id="5_f68f3"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
 viewport_path = NodePath("SubViewport")
 
-[node name="drawing_room" type="Node2D"]
-script = ExtResource("1_gblpu")
-cam_speed = 15.0
-tool = 2
+[node name="summon_floor" type="Node2D"]
+script = ExtResource("1_f68f3")
+brush_size = 300
 
 [node name="background" type="Sprite2D" parent="."]
 z_index = -2
 texture_repeat = 2
-texture = ExtResource("3_ugtvn")
+texture = ExtResource("2_pgytx")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 2024, 2024)
 
-[node name="guide_viewer" type="Sprite2D" parent="."]
-z_index = -1
+[node name="chalk_lines" type="Sprite2D" parent="."]
+centered = false
+
+[node name="ink_viewer" type="Sprite2D" parent="."]
 texture = SubResource("ViewportTexture_5a8fl")
 centered = false
 
@@ -38,7 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="touch_controls" parent="Control" instance=ExtResource("2_gkv7c")]
+[node name="touch_controls" parent="Control" instance=ExtResource("3_mq1gj")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
 anchors_preset = 1
@@ -53,41 +54,63 @@ alignment = 1
 
 [node name="tool" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_5a8fl")
+theme = ExtResource("4_p16ct")
 text = "no_tool"
+metadata/_edit_use_anchors_ = true
+
+[node name="showGuides" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_p16ct")
+text = "show guides"
 metadata/_edit_use_anchors_ = true
 
 [node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_5a8fl")
+theme = ExtResource("4_p16ct")
 text = "reset"
 metadata/_edit_use_anchors_ = true
 
 [node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
 layout_mode = 2
-theme = ExtResource("4_5a8fl")
+theme = ExtResource("4_p16ct")
 text = "save"
 metadata/_edit_use_anchors_ = true
 
 [node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_5a8fl")
+theme = ExtResource("4_p16ct")
 text = "return to the room"
 metadata/_edit_use_anchors_ = true
 
-[node name="moveToFloor" type="Button" parent="Control/touch_controls/VBoxContainer"]
+[node name="moveToDesk" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_5a8fl")
-text = "move to the floor"
+theme = ExtResource("4_p16ct")
+text = "move to the table
+"
 metadata/_edit_use_anchors_ = true
+
+[node name="brushSlider" type="HSlider" parent="Control/touch_controls"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -80.0
+offset_right = 250.0
+offset_bottom = -64.0
+grow_vertical = 0
+scale = Vector2(1.5, 1.5)
+min_value = 15.0
+max_value = 300.0
+step = 3.0
+value = 15.0
+tick_count = 20
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1012, 1012)
 limit_left = -1000
 limit_top = -1000
 limit_right = 2500
-limit_bottom = 1800
+limit_bottom = 2500
 limit_smoothed = true
 position_smoothing_enabled = true
 
@@ -99,12 +122,14 @@ render_target_clear_mode = 2
 [node name="saved_texture" type="Sprite2D" parent="SubViewport"]
 centered = false
 
-[node name="guide_drawer" type="Node2D" parent="SubViewport"]
-script = ExtResource("4_ugtvn")
+[node name="ink_drawer" type="Node2D" parent="SubViewport"]
+script = ExtResource("5_f68f3")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/showGuides" to="." method="_on_show_guides_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="_on_clear_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToDesk" to="." method="_on_move_to_desk_pressed"]
+[connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_h_slider_value_changed"]

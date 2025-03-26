@@ -10,9 +10,9 @@ func _draw():
 	for g in guides:
 		match int(g.w):
 			root.tools.CIRCLE: # CIRCLE type
-				draw_ring(self, Vector2(g.x, g.y), g.z, 6.0, 16 + g.z / 20, 0.0, Color.AQUAMARINE)
+				draw_ring(self, Vector2(g.x, g.y), g.z, root.line_thickness, 16 + g.z / 20, 0.0, Color.WHEAT)
 			root.tools.INF_LINE:
-				draw_infinite_line(Vector2(g.x, g.y), g.z, 6.0, Color.AQUAMARINE)
+				draw_infinite_line(Vector2(g.x, g.y), g.z, root.line_thickness, Color.WHEAT)
 
 
 func _process(delta):
@@ -27,7 +27,7 @@ static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float
 	for i in resolution:
 		rad = rotated + increments * (i+1)
 		to = Vector2(cos(rad)*radius, sin(rad)*radius)
-		node.draw_line(offset + from, offset + to, color, width)
+		node.draw_line(offset + from, offset + to, color, width, true)
 		from = to
 
 # Draw an infinite line from a point with an angle
@@ -41,7 +41,7 @@ func draw_infinite_line(point: Vector2, angle_rad: float, width: float, color: C
 	var start_point = point - direction * max_length
 	var end_point = point + direction * max_length
 	
-	draw_line(start_point, end_point, color, width)
+	draw_line(start_point, end_point, color, width, true)
 
 
 
