@@ -1,18 +1,18 @@
 extends Node2D
 
-var guides : Array[Vector4] = []
+var circle_guides : Array[Vector4] = []
+var line_guides : Array[Vector4] = []
 @onready var root: Node2D = $"../.."
 
 func _ready() -> void:
 	position = Vector2.ZERO
 
 func _draw():
-	for g in guides:
-		match int(g.w):
-			root.tools.CIRCLE: # CIRCLE type
-				draw_ring(self, Vector2(g.x, g.y), g.z, root.line_thickness, 16 + g.z / 20, 0.0, Color.WHEAT)
-			root.tools.INF_LINE:
-				draw_infinite_line(Vector2(g.x, g.y), g.z, root.line_thickness, Color.WHEAT)
+	for c in circle_guides:
+			draw_ring(self, Vector2(c.x, c.y), c.z, root.line_thickness, 16 + c.z / 20, 0.0, Color.WHEAT)
+		
+	for l in line_guides:
+		draw_line(Vector2(l.x, l.y), Vector2(l.z, l.w), Color.WHEAT, root.line_thickness)
 
 
 func _process(delta):
@@ -43,10 +43,9 @@ func draw_infinite_line(point: Vector2, angle_rad: float, width: float, color: C
 	
 	draw_line(start_point, end_point, color, width, true)
 
-
-
 func clear() -> void:
-	guides.clear()
+	circle_guides.clear()
+	line_guides.clear()
 	queue_redraw()
 
 	

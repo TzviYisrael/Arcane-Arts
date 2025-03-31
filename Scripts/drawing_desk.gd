@@ -17,7 +17,7 @@ var center = Vector2()
 var points : Array[Vector2] = []
 var texture : Texture2D
 
-var guides : Array[Vector4] = []
+var circle_guides : Array[Vector4] = []
 var line_guides : Array[Vector4] = []
 
 var first_point : Vector2 = Vector2.INF
@@ -31,8 +31,8 @@ var is_mouse_held = false
 
 @export var line_thickness : float = 9
 
-enum tools{LINE, INF_LINE, CIRCLE}
-@export_enum("line", "inf_line", "circle") var tool: int = 0;
+enum tools{LINE, CIRCLE}
+@export_enum("line", "circle") var tool: int = 0;
 
 
 
@@ -55,13 +55,13 @@ func _ready():
 	
 	queue_redraw()
 
-func _process(delta):
+func _process(_delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	camera_2d.position += input_dir * cam_speed
 	queue_redraw()
 
 func _draw():
-	var scale_factor: float = 0.2
+	var scale_factor: float = 0.15
 	
 	#center
 	draw_circle(center, 30.0, Color.RED)
@@ -80,16 +80,15 @@ func _draw():
 	if first_point < Vector2.INF:
 		match tool:
 			tools.CIRCLE:
-				var len = (first_point-current_point).length()
-				draw_ring(self, first_point, len, line_thickness / 2, 16 + len / 20, 0.0, Color.WHITE_SMOKE)
-			tools.INF_LINE:
-				var angle = (first_point - current_point).angle()
-				draw_line(first_point, current_point, Color.WHITE_SMOKE, line_thickness / 2)
+				var radius = (first_point-current_point).length()
+				draw_ring(self, first_point, radius, line_thickness / 2, 16 + radius / 20, 0.0, Color.WHITE_SMOKE)
+			#tools.INF_LINE:
+				#draw_line(first_point, current_point, Color.WHITE_SMOKE, line_thickness / 2)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
 				
-	for lg in line_guides:
-		draw_line(Vector2(lg.x, lg.y), Vector2(lg.z, lg.w), Color.AQUAMARINE, 6.0)
+	#for lg in line_guides:
+		#draw_line(Vector2(lg.x, lg.y), Vector2(lg.z, lg.w), Color.AQUAMARINE, 6.0)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Track mouse position when it moves
@@ -111,15 +110,15 @@ func _unhandled_input(event: InputEvent) -> void:
 					tools.CIRCLE:
 						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
 							var new_guide = Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
-							if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
-					tools.INF_LINE:
-						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
-							var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.INF_LINE)
-							if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
+							if not new_guide in guide_drawer.circle_guides: guide_drawer.circle_guides.append(new_guide)
+					#tools.INF_LINE:
+						#if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
+							#var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.INF_LINE)
+							#if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
 					tools.LINE:
 						if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
 							var new_guide = Vector4(first_point.x, first_point.y,closest_point.x, closest_point.y)
-							if not new_guide in line_guides: line_guides.append(new_guide)
+							if not new_guide in guide_drawer.line_guides: guide_drawer.line_guides.append(new_guide)
 				first_point = Vector2.INF
 				is_mouse_held = false
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -174,8 +173,8 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 
 func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	var size = image.get_width()
-	var center = Vector2(size / 2, size / 2)
-	var radius = (size / 2) * radius_percentage
+	var image_center = Vector2(size / 2.0, size / 2.0)
+	var radius = (size / 2.0) * radius_percentage
 	
 	# Ensure image has an alpha channel
 	image.convert(Image.FORMAT_RGBA8)
@@ -183,7 +182,7 @@ func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	for y in range(size):
 		for x in range(size):
 			var pos = Vector2(x, y)
-			if pos.distance_to(center) > radius:
+			if pos.distance_to(image_center) > radius:
 				image.set_pixel(x, y, Color(0, 0, 0, 0))  # Make it transparent
 
 	return image
@@ -192,7 +191,7 @@ func save_to_disk():
 	var save_path = "res://GameData/chalk.png"
 	var img : Image = guide_viewer.texture.get_image()
 	print("saving... ", img)
-	await img.save_png(save_path)
+	img.save_png(save_path)
 	
 	guide_drawer.clear()
 

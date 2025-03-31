@@ -1,0 +1,101 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg40df11pdkm1"]
+
+[ext_resource type="PackedScene" uid="uid://p52avrbys6kv" path="res://Assets/dungeon/gltf/floor_wood_large.gltf" id="1_51ot1"]
+[ext_resource type="PackedScene" uid="uid://dqmnd6rrd28nd" path="res://Assets/dungeon/gltf/wall.gltf" id="2_e7fak"]
+
+[node name="room_structure" type="Node3D"]
+
+[node name="floor_wood_large1" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 4)
+
+[node name="floor_wood_large2" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="floor_wood_large3" parent="." instance=ExtResource("1_51ot1")]
+
+[node name="floor_wood_large4" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -8)
+
+[node name="floor_wood_large5" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="floor_wood_large6" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="floor_wood_large7" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -8)
+
+[node name="floor_wood_large8" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+
+[node name="floor_wood_large9" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0)
+
+[node name="floor_wood_large10" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -8)
+
+[node name="floor_wood_large11" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+
+[node name="floor_wood_large12" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
+
+[node name="floor_wood_large13" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="floor_wood_large14" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -4)
+
+[node name="floor_wood_large15" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -4)
+
+[node name="floor_wood_large16" parent="." instance=ExtResource("1_51ot1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
+
+[node name="wall1" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -8)
+
+[node name="wall2" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+
+[node name="wall3" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+
+[node name="wall4" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)
+
+[node name="wall5" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -10)
+
+[node name="wall6" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="wall7" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -10)
+
+[node name="wall8" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 4)
+
+[node name="wall9" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 0)
+
+[node name="wall10" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, -8)
+
+[node name="wall11" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, 4)
+
+[node name="wall12" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, 0)
+
+[node name="wall13" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 6)
+
+[node name="wall14" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -10)
+
+[node name="wall15" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, -4)
+
+[node name="wall16" parent="." instance=ExtResource("2_e7fak")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -4)

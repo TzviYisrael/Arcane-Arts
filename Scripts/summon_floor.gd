@@ -44,14 +44,14 @@ func _ready():
 	if TextureManager.ink_circle:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle)
 	
-	brush_size = brush_slider.value
+	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
 	
 	queue_redraw()
 
-func _process(delta):
+func _process(_delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	camera_2d.position += input_dir * cam_speed
 	
@@ -66,8 +66,6 @@ func _process(delta):
 	queue_redraw()
 
 func _draw():
-	var scale_factor: float = 0.2
-	
 	#center
 	draw_circle(center, 30.0, Color.RED)
 	
@@ -113,8 +111,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	var size = image.get_width()
-	var center = Vector2(size / 2, size / 2)
-	var radius = (size / 2) * radius_percentage
+	var image_center = Vector2(size / 2.0, size / 2.0)
+	var radius = (size / 2.0) * radius_percentage
 	
 	# Ensure image has an alpha channel
 	image.convert(Image.FORMAT_RGBA8)
@@ -122,7 +120,7 @@ func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	for y in range(size):
 		for x in range(size):
 			var pos = Vector2(x, y)
-			if pos.distance_to(center) > radius:
+			if pos.distance_to(image_center) > radius:
 				image.set_pixel(x, y, Color(0, 0, 0, 0))  # Make it transparent
 
 	return image
@@ -145,7 +143,7 @@ func mask_image(image1: Image, image2: Image) -> Image:
 	
 	return result_image
 
-func mask_circle(image1: Image, image2: Image, position: Vector2, radius: float) -> Image:
+func mask_circle(image1: Image, image2: Image, pos: Vector2, radius: float) -> Image:
 	if image2 == null:
 		image2 = image1.duplicate() 
 	if image1.get_size() != image2.get_size():
@@ -154,11 +152,11 @@ func mask_circle(image1: Image, image2: Image, position: Vector2, radius: float)
 
 	var result_image := image1.duplicate()
 
-	var x_zero = position.x - radius 
-	var y_zero = position.y - radius 
+	var x_zero = pos.x - radius 
+	var y_zero = pos.y - radius 
 	for y in range(radius * 2.0):
 		for x in range(radius * 2.0):
-			if position.distance_to(Vector2(x,y)) > radius:
+			if pos.distance_to(Vector2(x,y)) > radius:
 				continue	
 			var color1 := image1.get_pixel(x_zero + x, y_zero + y)
 			var color2 := image2.get_pixel(x_zero + x, y_zero + y)
@@ -166,10 +164,10 @@ func mask_circle(image1: Image, image2: Image, position: Vector2, radius: float)
 				result_image.set_pixel(x, y, Color(0, 0, 0, 0))
 	return result_image
 
-func clear_circle(position: Vector2, radius: float) -> void:
+func clear_circle(pos: Vector2, radius: float) -> void:
 	save_to_tex_men()
 	
-	TextureManager.ink_circle = mask_circle(TextureManager.ink_circle, TextureManager.chalk_line, position, radius)
+	TextureManager.ink_circle = mask_circle(TextureManager.ink_circle, TextureManager.chalk_line, pos, radius)
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	ink_drawer.clear()
 	get_tree().reload_current_scene()
@@ -178,7 +176,7 @@ func save_to_disk():
 	var save_path = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
-	await img.save_png(save_path)
+	img.save_png(save_path)
 	
 	ink_drawer.clear()
 
@@ -223,4 +221,4 @@ func _on_show_guides_pressed() -> void:
 		chalk_lines.show()
 
 func _on_h_slider_value_changed(value: float) -> void:
-	brush_size = value
+	brush_size = int(value)

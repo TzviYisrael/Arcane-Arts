@@ -13,7 +13,7 @@ viewport_path = NodePath("SubViewport")
 script = ExtResource("1_37vhg")
 cam_speed = 15.0
 line_thickness = 15.0
-tool = 2
+tool = 1
 
 [node name="background" type="Sprite2D" parent="."]
 z_index = -2

@@ -17,7 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TextureManager="*res://Scripts/Texture_manager.gd"
+TextureManager="*res://Scripts/Singletons/Texture_manager.gd"
+Signals="*res://Scripts/Singletons/signals.gd"
 
 [display]
 
