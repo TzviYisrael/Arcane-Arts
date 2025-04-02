@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+@export var max_hp = 100
+@export var max_mp = 100
 @export var hp = 100
 @export var mp = 100
 
@@ -34,7 +36,7 @@ func get_move_input(delta):
 		model.rotation.y = lerp_angle(model.rotation.y, spring_arm.rotation.y, rot_speed * delta)
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var cam_rot = Input.get_vector("camera_clockwise", "camera_anticlockwise", "null", "null").x
+	var cam_rot = Input.get_vector("ui_left", "ui_right", "null", "null").x
 	var angle = deg_to_rad(cam_rot)
 	spring_arm.rotate_y(angle)
 	
@@ -50,3 +52,4 @@ func _unhandled_input(event):
 		cast()
 	if event.is_action_pressed("summon"):
 		anim_state.travel("summon")
+		Signals.emit_signal("start_summon")

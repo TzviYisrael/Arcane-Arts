@@ -13,7 +13,7 @@ radius = 3.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_yrxju"]
 size = Vector3(2, 0.963867, 2)
 
-[node name="summoning_table" type="StaticBody3D" groups=["tap_to_enter"]]
+[node name="summoning_table" type="StaticBody3D"]
 script = ExtResource("1_yrxju")
 metadata/scene_path = ""
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=11 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://cg40df11pdkm1" path="res://Scenes/room_structure.tscn" id="2_8147l"]
+[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
-[ext_resource type="PackedScene" uid="uid://bpp0c3q5wldrr" path="res://Scenes/bull.tscn" id="4_7ykgi"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/work_desk.tscn" id="6_8147l"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_table.tscn" id="7_v1qvw"]
 
@@ -23,6 +24,54 @@ glow_enabled = true
 [node name="mainRoom" type="Node3D"]
 script = ExtResource("1_r033x")
 
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="touch_controls" parent="Control" instance=ExtResource("2_v1qvw")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -237.0
+offset_top = 20.0
+offset_bottom = 222.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="summon_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_v1qvw")
+text = "summon"
+metadata/_edit_use_anchors_ = true
+
+[node name="kill_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_v1qvw")
+theme_override_colors/font_color = Color(0.242129, 0.464629, 1, 1)
+text = "kill"
+metadata/_edit_use_anchors_ = true
+
+[node name="release_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_v1qvw")
+theme_override_colors/font_color = Color(0.122314, 0.358632, 1, 1)
+text = "release"
+metadata/_edit_use_anchors_ = true
+
+[node name="return_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_v1qvw")
+text = "return"
+metadata/_edit_use_anchors_ = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
 
@@ -33,16 +82,16 @@ shadow_enabled = true
 [node name="room_structure" parent="." instance=ExtResource("2_8147l")]
 
 [node name="Mage" parent="." instance=ExtResource("3_6mt2a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52548, 0, 0)
-
-[node name="Bull" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_7ykgi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.72601, 0.0888542, 1.89978)
-player = NodePath("../Mage")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52548, 0, 2.29738)
 
 [node name="work_desk" parent="." groups=["tap_to_enter"] instance=ExtResource("6_8147l")]
 transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 3.43227, 0.35306, -7.63029)
 metadata/scene_path = "res://Scenes/drawing_desk.tscn"
 
 [node name="summoning_table" parent="." instance=ExtResource("7_v1qvw")]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -5.51861, 0.065846, -5.2676)
-metadata/scene_path = "res://Scenes/summon_floor.tscn"
+transform = Transform3D(1.41421, 0, -1.41421, 0, 2, 0, 1.41421, 0, 1.41421, -5.51861, 0.065846, -5.2676)
+metadata/scene_path = "summon"
+
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/summon_b" to="." method="_on_summon_b_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/kill_b" to="." method="_on_kill_b_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/release_b" to="." method="_on_release_b_pressed"]

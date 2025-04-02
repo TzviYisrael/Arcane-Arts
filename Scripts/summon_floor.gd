@@ -176,6 +176,7 @@ func save_to_disk():
 	var save_path = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
+	img = mask_image(img, TextureManager.chalk_line)
 	img.save_png(save_path)
 	
 	ink_drawer.clear()
@@ -194,6 +195,7 @@ func _on_tool_pressed() -> void:
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 
 func _on_save_pressed() -> void:
+	#save_to_disk()
 	save_to_tex_men()
 	reload_scene()
 
