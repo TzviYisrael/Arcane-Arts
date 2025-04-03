@@ -80,7 +80,7 @@ func enter_summon_floor():
 
 func start_summon() -> void:
 	if TextureManager.ink_circle:
-		var circle_param = evaluate_circle(TextureManager.ink_circle)
+		var circle_param = Ink_circle.evaluate_circle(TextureManager.ink_circle)
 		print(circle_param)
 		if circle_param[0] > 2000:
 			print("bull")
@@ -94,29 +94,6 @@ func start_summon() -> void:
 			print("nope")
 	else:
 		print("no circle")
-
-func evaluate_circle(circle: Image):
-	var ink_counter := 0.0
-	var xsim = 0.0
-	var ysim = 0.0
-	if circle == null:
-		return 0
-	for y in range(circle.get_height()):
-		for x in range(circle.get_width()):
-			var color := circle.get_pixel(x, y)
-			if color == Color.BLACK:
-				ink_counter += 1
-				if color == circle.get_pixel(circle.get_width() - x, y): xsim += 1
-				if color == circle.get_pixel(x, circle.get_height() - y): ysim += 1
-	print(xsim, " : ", ysim)
-	var res = ink_counter
-	if xsim / ink_counter > 0.7:
-		ink_counter *= 2
-	print("x ", xsim / ink_counter)
-	if ysim / ink_counter > 0.7:
-		ink_counter *= 2
-	print("y ", ysim / ink_counter)
-	return [res, ink_counter]
 
 func _on_summon_b_pressed() -> void:
 	start_summon()

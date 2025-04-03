@@ -171,22 +171,6 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 	
 	return closest_point
 
-func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
-	var size = image.get_width()
-	var image_center = Vector2(size / 2.0, size / 2.0)
-	var radius = (size / 2.0) * radius_percentage
-	
-	# Ensure image has an alpha channel
-	image.convert(Image.FORMAT_RGBA8)
-
-	for y in range(size):
-		for x in range(size):
-			var pos = Vector2(x, y)
-			if pos.distance_to(image_center) > radius:
-				image.set_pixel(x, y, Color(0, 0, 0, 0))  # Make it transparent
-
-	return image
-
 func save_to_disk():
 	var save_path = "res://GameData/chalk.png"
 	var img : Image = guide_viewer.texture.get_image()
@@ -196,7 +180,7 @@ func save_to_disk():
 	guide_drawer.clear()
 
 func save_to_tex_men():
-	var img : Image = crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
+	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	TextureManager.chalk_line = img
 	guide_drawer.clear()
 
@@ -206,7 +190,7 @@ func _on_tool_pressed() -> void:
 
 func _on_save_pressed() -> void:
 	save_to_tex_men()
-
+	
 func _on_return_pressed() -> void:
 	save_to_tex_men()
 	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")

@@ -109,65 +109,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
 			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
-func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
-	var size = image.get_width()
-	var image_center = Vector2(size / 2.0, size / 2.0)
-	var radius = (size / 2.0) * radius_percentage
-	
-	# Ensure image has an alpha channel
-	image.convert(Image.FORMAT_RGBA8)
-
-	for y in range(size):
-		for x in range(size):
-			var pos = Vector2(x, y)
-			if pos.distance_to(image_center) > radius:
-				image.set_pixel(x, y, Color(0, 0, 0, 0))  # Make it transparent
-
-	return image
-
-func mask_image(image1: Image, image2: Image) -> Image:
-	if image2 == null:
-		image2 = image1.duplicate()
-	if image1.get_size() != image2.get_size():
-		push_error("Images must be the same size")
-		return image1.duplicate()  # Return a copy of the first image as a fallback
-
-	var result_image := image1.duplicate()
-
-	for y in range(image1.get_height()):
-		for x in range(image1.get_width()):
-			var color1 := image1.get_pixel(x, y)
-			var color2 := image2.get_pixel(x, y)
-			if color2.a == 0.0 or color1 == Color.WHITE:
-				result_image.set_pixel(x, y, Color(0, 0, 0, 0))
-	
-	return result_image
-
-func mask_circle(image1: Image, image2: Image, pos: Vector2, radius: float) -> Image:
-	if image2 == null:
-		image2 = image1.duplicate() 
-	if image1.get_size() != image2.get_size():
-		push_error("Images must be the same size")
-		return image1.duplicate()  # Return a copy of the first image as a fallback
-
-	var result_image := image1.duplicate()
-
-	var x_zero = pos.x - radius 
-	var y_zero = pos.y - radius 
-	for y in range(radius * 2.0):
-		for x in range(radius * 2.0):
-			if pos.distance_to(Vector2(x,y)) > radius:
-				continue	
-			var color1 := image1.get_pixel(x_zero + x, y_zero + y)
-			var color2 := image2.get_pixel(x_zero + x, y_zero + y)
-			if color2.a == 0.0 || color1 != Color.BLACK:
-				result_image.set_pixel(x, y, Color(0, 0, 0, 0))
-	return result_image
-
 func clear_circle(pos: Vector2, radius: float) -> void:
 	save_to_tex_men()
 	
-	TextureManager.ink_circle = mask_circle(TextureManager.ink_circle, TextureManager.chalk_line, pos, radius)
+	TextureManager.ink_circle = Ink_circle.mask_circle(TextureManager.ink_circle, TextureManager.chalk_line, pos, radius)
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	ink_drawer.clear()
 	get_tree().reload_current_scene()
@@ -176,15 +121,15 @@ func save_to_disk():
 	var save_path = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
-	img = mask_image(img, TextureManager.chalk_line)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line)
 	img.save_png(save_path)
 	
 	ink_drawer.clear()
 
 func save_to_tex_men():
-	var img : Image = crop_image_to_circle(ink_viewer.texture.get_image(), 1.0)
+	var img : Image = Ink_circle.crop_image_to_circle(ink_viewer.texture.get_image(), 1.0)
 	
-	img = mask_image(img, TextureManager.chalk_line)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line)
 	
 	TextureManager.ink_circle = img
 	ink_drawer.clear()

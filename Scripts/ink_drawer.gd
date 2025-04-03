@@ -13,7 +13,7 @@ func _draw():
 				draw_circle(Vector2(p.x, p.y), p.z,Color.BLACK)
 			root.tools.COVER:
 				draw_circle(Vector2(p.x, p.y), p.z,Color.WHITE)
-func _process(delta):
+func _process(_delta):
 	queue_redraw()
 
 func clear() -> void:
