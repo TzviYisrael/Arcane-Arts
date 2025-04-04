@@ -6,6 +6,7 @@ const MAX_D = 1000
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
+var run_sim: bool
 
 @onready var root: Node3D = $"."
 @onready var summoning_table: StaticBody3D = $summoning_table
@@ -25,7 +26,11 @@ func _ready() -> void:
 		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
 	else:
-		pass#print("chalk null")
+		pass
+
+func _process(delta: float) -> void:
+	if TextureManager.ink_circle && run_sim:
+		Ink_circle.ca_genretion(TextureManager.ink_circle)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -80,18 +85,19 @@ func enter_summon_floor():
 
 func start_summon() -> void:
 	if TextureManager.ink_circle:
-		var circle_param = Ink_circle.evaluate_circle(TextureManager.ink_circle)
-		print(circle_param)
-		if circle_param[0] > 2000:
-			print("bull")
-			var scene = preload("res://Scenes/bull.tscn")
-			summoned = scene.instantiate()
-			summoned.position = summoning_table.decal.global_position
-			root.add_child(summoned)
-			state = states.CAPTURED
-			ui_change_state(state)
-		else:
-			print("nope")
+		run_sim = true
+		#var count_ink = Ink_circle.count_color(TextureManager.ink_circle, Color.BLACK)
+		#print(count_ink)
+		#if count_ink > 2000:
+			#print("bull")
+			#var scene = preload("res://Scenes/bull.tscn")
+			#summoned = scene.instantiate()
+			#summoned.position = summoning_table.decal.global_position
+			#root.add_child(summoned)
+			#state = states.CAPTURED
+			#ui_change_state(state)
+		#else:
+			#print("nope")
 	else:
 		print("no circle")
 

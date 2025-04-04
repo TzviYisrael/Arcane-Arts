@@ -90,3 +90,17 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 	var vertical_ratio = float(vertical_matches) / (int(height / 2) * width)
 
 	return [horizontal_ratio >= threshold, vertical_ratio >= threshold]
+	
+static func ca_genretion(img: Image) -> void:
+	var width = img.get_width()
+	var height = img.get_height()
+	
+	for y in range(height - 2):
+		for x in range(width - 2):
+			#var color := img.get_pixel(x + 1, y + 1)
+			var c = img.get_pixel(x + 1, y).blend(
+					img.get_pixel(x + 2, y + 1).blend(
+					img.get_pixel(x + 1, y + 2).blend(
+					img.get_pixel(x, y + 1))))
+			img.set_pixel(x, y, c)
+	print("done", randi())
