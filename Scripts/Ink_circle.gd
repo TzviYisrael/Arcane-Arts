@@ -2,6 +2,13 @@ class_name Ink_circle
 
 extends Object
 
+static func resize_image(image: Image, factor: int) -> Image:
+	var new_image := image.duplicate()
+	var new_width := image.get_width() / factor
+	var new_height := image.get_height() / factor
+	new_image.resize(new_width, new_height, Image.INTERPOLATE_LANCZOS)
+	return new_image
+
 static func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	var size = image.get_width()
 	var image_center = Vector2(size / 2.0, size / 2.0)
@@ -102,5 +109,6 @@ static func ca_genretion(img: Image) -> void:
 					img.get_pixel(x + 2, y + 1).blend(
 					img.get_pixel(x + 1, y + 2).blend(
 					img.get_pixel(x, y + 1))))
+			c /= 2
 			img.set_pixel(x, y, c)
-	print("done", randi())
+	print("gen", randi())

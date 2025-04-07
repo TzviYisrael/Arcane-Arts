@@ -48,8 +48,8 @@ func _ready():
 	
 	texture = load("res://Assets/textures/point.png")
 	
-	if TextureManager.chalk_line:
-		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line)
+	if TextureManager.chalk_line_org:
+		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
 	
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
@@ -181,7 +181,8 @@ func save_to_disk():
 
 func save_to_tex_men():
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
-	TextureManager.chalk_line = img
+	TextureManager.chalk_line_org = img
+	TextureManager.chalk_line = Ink_circle.resize_image(img, 4)
 	guide_drawer.clear()
 
 func _on_tool_pressed() -> void:
@@ -200,6 +201,7 @@ func _on_move_to_floor_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/summon_floor.tscn")
 
 func _on_clear_pressed() -> void:
+	TextureManager.chalk_line_org = null
 	TextureManager.chalk_line = null
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	guide_drawer.clear()

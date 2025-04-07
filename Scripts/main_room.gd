@@ -10,6 +10,7 @@ var run_sim: bool
 
 @onready var root: Node3D = $"."
 @onready var summoning_table: StaticBody3D = $summoning_table
+@onready var ink_circle: Sprite3D = $ink_circle
 @onready var work_desk: StaticBody3D = $work_desk
 
 enum states{ROOM, SUMMONING, CAPTURED}
@@ -22,6 +23,11 @@ func _ready() -> void:
 	state = states.ROOM	
 	ui_change_state(state)
 	
+	ink_circle.position = summoning_table.find_child("ink_circle").global_position
+	if TextureManager.ink_circle:
+		var ink = ImageTexture.create_from_image(TextureManager.ink_circle)
+		ink_circle.texture = ink
+	
 	if TextureManager.chalk_line:
 		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
@@ -31,6 +37,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if TextureManager.ink_circle && run_sim:
 		Ink_circle.ca_genretion(TextureManager.ink_circle)
+		update_texture()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -56,7 +63,7 @@ func get_mouse_collider(_mouse:Vector2) -> Node:
 	var coll = space.intersect_ray(params)
 	if (coll != null) and (coll.size() != 0):
 		coll = coll["collider"]
-		print(coll.name)
+		print("ray coll: ", coll.name)
 		return coll
 	else:
 		return null
@@ -67,11 +74,13 @@ func ui_change_state(_state: int):
 			button_con.hide()
 		states.SUMMONING:
 			button_con.show()
+			button_con.find_child("load_ink_b").show()
 			button_con.find_child("summon_b").show()
 			button_con.find_child("kill_b").hide()
 			button_con.find_child("release_b").hide()
 		states.CAPTURED:
 			button_con.show()
+			button_con.find_child("load_in_bk").hide()
 			button_con.find_child("summon_b").hide()
 			button_con.find_child("kill_b").show()
 			button_con.find_child("release_b").show()
@@ -81,12 +90,14 @@ func enter_summon_floor():
 	ui_change_state(state)
 	mage.position = summoning_table.find_child("mage_circle").global_position
 	mage.find_child("Rig").rotation.y = summoning_table.rotation.y + PI / 2
-	mage.find_child("SpringArm3D").rotation.y = summoning_table.rotation.y + PI / 2
+	mage.find_child("SpringArm3D").rotation.y = \
+	summoning_table.rotation.y + PI / 2
 
 func start_summon() -> void:
 	if TextureManager.ink_circle:
 		run_sim = true
-		#var count_ink = Ink_circle.count_color(TextureManager.ink_circle, Color.BLACK)
+		#var count_ink = Ink_circle.count_color(TextureManager.ink_circle,
+		 #Color.BLACK)
 		#print(count_ink)
 		#if count_ink > 2000:
 			#print("bull")
@@ -101,6 +112,9 @@ func start_summon() -> void:
 	else:
 		print("no circle")
 
+func update_texture():
+	ink_circle.texture.update(TextureManager.ink_circle)
+
 func _on_summon_b_pressed() -> void:
 	start_summon()
 
@@ -112,3 +126,14 @@ func _on_release_b_pressed() -> void:
 
 func _on_kill_b_pressed() -> void:
 	_on_release_b_pressed()
+	
+func _on_return_b_pressed() -> void:
+	state = states.SUMMONING
+	ui_change_state(state)
+
+func _on_load_ink_pressed() -> void:
+	var ink = Image.load_from_file("res://GameData/ink.png")
+	if ink:
+		TextureManager.ink_circle = ink
+	else:
+		print("missing texture")

@@ -38,11 +38,11 @@ func _ready():
 					background.position.y + (rect.size.y) * 0.5)
 	camera_2d.position = center
 	
-	if TextureManager.chalk_line:
-		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line)
+	if TextureManager.chalk_line_org:
+		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
 	
-	if TextureManager.ink_circle:
-		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle)
+	if TextureManager.ink_circle_org:
+		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_org)
 	
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
@@ -112,7 +112,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func clear_circle(pos: Vector2, radius: float) -> void:
 	save_to_tex_men()
 	
-	TextureManager.ink_circle = Ink_circle.mask_circle(TextureManager.ink_circle, TextureManager.chalk_line, pos, radius)
+	TextureManager.ink_circle_org = Ink_circle.mask_circle(TextureManager.ink_circle_org, TextureManager.chalk_line_org, pos, radius)
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	ink_drawer.clear()
 	get_tree().reload_current_scene()
@@ -121,7 +121,8 @@ func save_to_disk():
 	var save_path = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
-	img = Ink_circle.mask_image(img, TextureManager.chalk_line)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
+	img = Ink_circle.resize_image(img, 4)
 	img.save_png(save_path)
 	
 	ink_drawer.clear()
@@ -129,9 +130,10 @@ func save_to_disk():
 func save_to_tex_men():
 	var img : Image = Ink_circle.crop_image_to_circle(ink_viewer.texture.get_image(), 1.0)
 	
-	img = Ink_circle.mask_image(img, TextureManager.chalk_line)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
 	
-	TextureManager.ink_circle = img
+	TextureManager.ink_circle_org = img
+	TextureManager.ink_circle = Ink_circle.resize_image(img, 4)
 	ink_drawer.clear()
 
 func _on_tool_pressed() -> void:
@@ -140,7 +142,7 @@ func _on_tool_pressed() -> void:
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 
 func _on_save_pressed() -> void:
-	#save_to_disk()
+	save_to_disk()
 	save_to_tex_men()
 	reload_scene()
 
@@ -153,6 +155,7 @@ func _on_move_to_desk_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/drawing_desk.tscn")
 
 func _on_clear_pressed() -> void:
+	TextureManager.ink_circle_org = null
 	TextureManager.ink_circle = null
 	reload_scene()
 

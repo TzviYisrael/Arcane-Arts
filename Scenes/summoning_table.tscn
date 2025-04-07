@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvupg85kqgibk"]
+[gd_scene load_steps=6 format=3 uid="uid://bvupg85kqgibk"]
 
 [ext_resource type="PackedScene" uid="uid://c4co5akqghtwt" path="res://Assets/models/summon_platform.glb" id="1_iu8to"]
 [ext_resource type="Script" uid="uid://covbydnercguq" path="res://Scripts/summoning_table.gd" id="1_yrxju"]
@@ -7,8 +7,6 @@
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_iu8to"]
 height = 1.05859
 radius = 3.0
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fvjp3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yrxju"]
 size = Vector3(2, 0.963867, 2)
@@ -24,12 +22,12 @@ metadata/scene_path = "res://Scenes/summon_floor.tscn"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.173776, 0.470703, 0)
 shape = SubResource("CylinderShape3D_iu8to")
 
-[node name="Decal" type="Decal" parent="."]
-transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0.85, 0)
-texture_albedo = SubResource("PlaceholderTexture2D_fvjp3")
-
 [node name="mage_circle" type="Sprite3D" parent="."]
 transform = Transform3D(-4.37114e-09, -0.1, 4.37114e-09, 0, -4.37114e-09, -0.1, 0.1, -4.37114e-09, 1.91069e-16, 2.5, 0.85, 0)
+texture = ExtResource("3_yrxju")
+
+[node name="ink_circle" type="Sprite3D" parent="."]
+transform = Transform3D(-4.37114e-09, -0.1, 4.37114e-09, 0, -4.37114e-09, -0.1, 0.1, -4.37114e-09, 1.91069e-16, 0, 0.85, 0)
 texture = ExtResource("3_yrxju")
 
 [node name="stairs" type="Area3D" parent="."]
