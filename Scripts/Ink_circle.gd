@@ -4,8 +4,8 @@ extends Object
 
 static func resize_image(image: Image, factor: int) -> Image:
 	var new_image := image.duplicate()
-	var new_width := image.get_width() / factor
-	var new_height := image.get_height() / factor
+	var new_width := image.get_width() / float(factor)
+	var new_height := image.get_height() / float(factor)
 	new_image.resize(new_width, new_height, Image.INTERPOLATE_LANCZOS)
 	return new_image
 
@@ -64,6 +64,69 @@ static func mask_circle(image1: Image, mask: Image, pos: Vector2, radius: float)
 				result_image.set_pixel(x, y, Color(0, 0, 0, 0))
 	return result_image
 
+#static func init_ink_colors(img: Image) -> void:
+	#if img.is_empty():
+		#return
+#
+	#var width = img.get_width()
+	#var height = img.get_height()
+	#var border_color = Color.GREEN
+	#var summon_color = Color.RED
+	#
+	##set the center pixel to red
+	#for i in range(width / 2.0 - 5, width / 2.0 + 5):
+		#for j in range(height / 2.0 - 5, height / 2.0 + 5):
+			#img.set_pixel(i, j, summon_color)
+	#
+	## Top and bottom rows to green
+	#for x in range(width):
+		#img.set_pixel(x, 0, border_color) # Top
+		#img.set_pixel(x, height - 1, border_color) # Bottom
+#
+	## Left and right columns to green
+	#for y in range(1, height - 1): # Avoid corners (already set above)
+		#img.set_pixel(0, y, border_color) # Left
+		#img.set_pixel(width - 1, y, border_color) # Right
+		
+	#for y in range(height - 2):
+		#for x in range(width - 2):
+			#var this = img.get_pixel(x + 1, y + 1)
+			#if this == Color.BLACK:
+				#img.set_pixel(x, y, Color(this.r,this.g,this.b,this.a * SceneManager.mage_mana))
+				#print(img.get_pixel(x, y))
+
+static func init_ink_colors(img: Image) -> void:
+	if img.is_empty():
+		return
+
+	var width = img.get_width()
+	var height = img.get_height()
+	var border_color = Color.GREEN
+	var summon_color = Color.RED
+
+	var center = Vector2(width / 2.0, height / 2.0)
+	var radius = min(width, height) / 2.0 - 1.0
+
+	# Draw center circle in red
+	var inner_radius = 5.0
+	for y in range(int(center.y - inner_radius), int(center.y + inner_radius) + 1):
+		for x in range(int(center.x - inner_radius), int(center.x + inner_radius) + 1):
+			var pos = Vector2(x, y)
+			if center.distance_to(pos) <= inner_radius:
+					img.set_pixel(x, y, summon_color)
+
+	# Draw circular border in green using polar coordinates
+	var steps = int(2 * PI * radius)  # Approximate number of pixels on the circle
+	for i in range(steps):
+		var angle = i * 2 * PI / steps
+		var x = int(center.x + cos(angle) * radius)
+		var y = int(center.y + sin(angle) * radius)
+
+		# Ensure we're in bounds
+		if x >= 0 and x < width and y >= 0 and y < height:
+			img.set_pixel(x, y, border_color)
+
+
 static func count_color(circle: Image, ink_color:Color):
 	var ink_counter := 0
 	if circle == null:
@@ -86,29 +149,81 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 
 	for y in range(height):
 		for x in range(width):
-			if x < width / 2:  # Horizontal check
+			if x < width / 2.0:  # Horizontal check
 				if img.get_pixel(x, y) == img.get_pixel(width - 1 - x, y):
 					horizontal_matches += 1
-			if y < height / 2:  # Vertical check
+			if y < height / 2.0:  # Vertical check
 				if img.get_pixel(x, y) == img.get_pixel(x, height - 1 - y):
 					vertical_matches += 1
 
-	var horizontal_ratio = float(horizontal_matches) / (int(width / 2) * height)
-	var vertical_ratio = float(vertical_matches) / (int(height / 2) * width)
+	var horizontal_ratio = float(horizontal_matches) / (int(width / 2.0) * height)
+	var vertical_ratio = float(vertical_matches) / (int(height / 2.0) * width)
 
 	return [horizontal_ratio >= threshold, vertical_ratio >= threshold]
-	
-static func ca_genretion(img: Image) -> void:
+
+static func ca_genretion(img: Image) -> bool:
+	var buffer = img.duplicate()
 	var width = img.get_width()
 	var height = img.get_height()
+	var changed: bool = false
 	
 	for y in range(height - 2):
 		for x in range(width - 2):
-			#var color := img.get_pixel(x + 1, y + 1)
-			var c = img.get_pixel(x + 1, y).blend(
-					img.get_pixel(x + 2, y + 1).blend(
-					img.get_pixel(x + 1, y + 2).blend(
-					img.get_pixel(x, y + 1))))
-			c /= 2
-			img.set_pixel(x, y, c)
-	print("gen", randi())
+			var this = buffer.get_pixel(x + 1, y + 1)
+			if compre_rgb(this, Color.BLACK):
+				if this.a <= 0.2:
+					var nei = [buffer.get_pixel(x + 1, y),
+							buffer.get_pixel(x + 2, y + 1),
+							buffer.get_pixel(x + 1, y + 2),
+							buffer.get_pixel(x, y + 1)]
+					if Color.RED in nei:
+						img.set_pixel(x + 1, y + 1, Color.RED)
+						changed = true
+					elif Color.GREEN in nei:
+						img.set_pixel(x + 1, y + 1, Color.GREEN)
+						changed = true
+					continue  
+				else:
+					var nei = [buffer.get_pixel(x + 1, y),
+							buffer.get_pixel(x + 2, y + 1),
+							buffer.get_pixel(x + 1, y + 2),
+							buffer.get_pixel(x, y + 1)]
+					if Color.RED in nei:
+						img.set_pixel(x + 1, y + 1, this - Color(0.0, 0.0, 0.0, 0.05))
+						changed = true
+						
+	print("gen - ", Time.get_ticks_usec())
+	return changed
+	
+static func fast_ca_genretion(img: Image) -> bool:
+	if img == null:
+		TextureManager.pos = []
+	
+	var buffer = img.duplicate()
+	var width = img.get_width()
+	var height = img.get_height()
+	var changed: bool = false
+	
+	if TextureManager.pos.is_empty():
+		for y in range(height - 2):
+			for x in range(width - 2):
+				var this = img.get_pixel(x + 1, y + 1)
+				if compre_rgb(this, Color.BLACK):
+					var nei = [buffer.get_pixel(x + 1, y),
+							buffer.get_pixel(x + 2, y + 1),
+							buffer.get_pixel(x + 1, y + 2),
+							buffer.get_pixel(x, y + 1)]
+					if Color.RED in nei or Color.GREEN in nei:
+						TextureManager.pos.append(Vector2(x + 1, y + 1))
+					continue
+	else:
+		var new: Array[Vector2] = []
+		for p in TextureManager.pos:
+			img.set_pixel(p.x, p.y, Color.DARK_BLUE)
+			
+			
+	print("pos - ", TextureManager.pos.size())
+	return true
+
+static func compre_rgb(color1: Color, color2: Color):
+	return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b

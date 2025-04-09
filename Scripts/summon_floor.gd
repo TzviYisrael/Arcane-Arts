@@ -122,7 +122,7 @@ func save_to_disk():
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
 	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
-	img = Ink_circle.resize_image(img, 4)
+	img = Ink_circle.resize_image(img, TextureManager.resize_factor)
 	img.save_png(save_path)
 	
 	ink_drawer.clear()
@@ -133,7 +133,7 @@ func save_to_tex_men():
 	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
 	
 	TextureManager.ink_circle_org = img
-	TextureManager.ink_circle = Ink_circle.resize_image(img, 4)
+	TextureManager.ink_circle = Ink_circle.resize_image(img, TextureManager.resize_factor)
 	ink_drawer.clear()
 
 func _on_tool_pressed() -> void:
@@ -142,7 +142,7 @@ func _on_tool_pressed() -> void:
 	tool_button.text = str(tools.keys()[tool]).to_lower()
 
 func _on_save_pressed() -> void:
-	save_to_disk()
+	#save_to_disk()
 	save_to_tex_men()
 	reload_scene()
 

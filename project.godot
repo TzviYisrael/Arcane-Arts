@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 TextureManager="*res://Scripts/Singletons/Texture_manager.gd"
 Signals="*res://Scripts/Singletons/signals.gd"
+SceneManager="*res://Scripts/Singletons/Scene_manager.gd"
 
 [display]
 

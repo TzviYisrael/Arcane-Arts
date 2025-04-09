@@ -182,7 +182,7 @@ func save_to_disk():
 func save_to_tex_men():
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	TextureManager.chalk_line_org = img
-	TextureManager.chalk_line = Ink_circle.resize_image(img, 4)
+	TextureManager.chalk_line = Ink_circle.resize_image(img, TextureManager.resize_factor)
 	guide_drawer.clear()
 
 func _on_tool_pressed() -> void:

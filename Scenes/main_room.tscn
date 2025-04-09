@@ -48,10 +48,9 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="load_ink_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("3_v1qvw")
-text = "load"
+text = "init"
 metadata/_edit_use_anchors_ = true
 
 [node name="summon_b" type="Button" parent="Control/touch_controls/VBoxContainer"]

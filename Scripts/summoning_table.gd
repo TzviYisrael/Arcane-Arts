@@ -1,6 +1,5 @@
 extends StaticBody3D
 
-@onready var decal: Decal = $Decal
 @onready var mage_circle: Sprite3D = $mage_circle
 @onready var root: StaticBody3D = $"."
 

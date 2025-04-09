@@ -36,7 +36,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if TextureManager.ink_circle && run_sim:
-		Ink_circle.ca_genretion(TextureManager.ink_circle)
+		run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle)
 		update_texture()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -132,8 +132,6 @@ func _on_return_b_pressed() -> void:
 	ui_change_state(state)
 
 func _on_load_ink_pressed() -> void:
-	var ink = Image.load_from_file("res://GameData/ink.png")
-	if ink:
-		TextureManager.ink_circle = ink
-	else:
-		print("missing texture")
+	if TextureManager.ink_circle:
+		Ink_circle.init_ink_colors(TextureManager.ink_circle)
+		update_texture()
