@@ -170,7 +170,7 @@ static func ca_genretion(img: Image) -> bool:
 	for y in range(height - 2):
 		for x in range(width - 2):
 			var this = buffer.get_pixel(x + 1, y + 1)
-			if compre_rgb(this, Color.BLACK):
+			if compare_rgb(this, Color.BLACK):
 				if this.a <= 0.2:
 					var nei = [buffer.get_pixel(x + 1, y),
 							buffer.get_pixel(x + 2, y + 1),
@@ -202,13 +202,14 @@ static func fast_ca_genretion(img: Image) -> bool:
 	var buffer = img.duplicate()
 	var width = img.get_width()
 	var height = img.get_height()
+	var is_in_border = func borders(v: Vector2) -> bool: return v == \
+			v.clamp(Vector2.ZERO, Vector2(width - 1, height - 1))
 	var changed: bool = false
-	
 	if TextureManager.pos.is_empty():
 		for y in range(height - 2):
 			for x in range(width - 2):
 				var this = img.get_pixel(x + 1, y + 1)
-				if compre_rgb(this, Color.BLACK):
+				if compare_rgb(this, Color.BLACK):
 					var nei = [buffer.get_pixel(x + 1, y),
 							buffer.get_pixel(x + 2, y + 1),
 							buffer.get_pixel(x + 1, y + 2),
@@ -217,13 +218,38 @@ static func fast_ca_genretion(img: Image) -> bool:
 						TextureManager.pos.append(Vector2(x + 1, y + 1))
 					continue
 	else:
-		var new: Array[Vector2] = []
+		var new_pos: Array[Vector2] = []
 		for p in TextureManager.pos:
-			img.set_pixel(p.x, p.y, Color.DARK_BLUE)
-			
-			
-	print("pos - ", TextureManager.pos.size())
+			var x = p.x
+			var y = p.y
+			#img.set_pixel(x, y, Color.PURPLE)
+			var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
+			 Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border)
+			var this = buffer.get_pixelv(p)
+			for n in nei:
+				var n_color = buffer.get_pixelv(n)
+				if compare_rgb(n_color, Color.BLACK): 
+					if not n in new_pos:
+						new_pos.append(n)
+						
+				if compare_rgb(n_color, Color.RED):
+					if this.a > 0.2:
+						img.set_pixelv(p, this - Color(0.0, 0.0, 0.0, 0.05))
+					else:
+						img.set_pixelv(p, Color.RED)
+				elif compare_rgb(n_color, Color.GREEN):
+					if this.a > 0.2:
+						pass
+					else:
+						img.set_pixelv(p, Color.GREEN)
+		
+		TextureManager.pos = new_pos
+		if new_pos.size() < 10: print(new_pos)
+		print("pos size - ", TextureManager.pos.size())
+
 	return true
 
-static func compre_rgb(color1: Color, color2: Color):
-	return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b
+static func compare_rgb(color1: Color, color2: Color = Color.BLACK):
+	return color1.clamp(Color(0.,0.,0.,1.),Color(1.,1.,1.,1.)) == \
+	color2.clamp(Color(0.,0.,0.,1.),Color(1.,1.,1.,1.))
+	#return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b
