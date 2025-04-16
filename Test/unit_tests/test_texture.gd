@@ -17,7 +17,9 @@ func test_is_mirror_symmetry_chatgpt():
 func test_ca():
 	var img = Image.load_from_file("res://Test/unit_tests/small.png")
 	for i in range(5):
+		prints("test: ", i)
 		Ink_circle.fast_ca_genretion(img)
+		#img.save_png("res://Test/unit_tests/small.png")
 		img.save_png("res://Test/unit_tests/small_after_%d.png" % i)
 
 func test_rgb_c():
