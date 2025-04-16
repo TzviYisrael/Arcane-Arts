@@ -6,7 +6,11 @@ const MAX_D = 1000
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
+var target_summoned: Node3D
+var bull_scene = preload("res://Scenes/bull.tscn")
 var run_sim: bool
+var target_power := 0
+var summon_power := 0
 
 @onready var root: Node3D = $"."
 @onready var summoning_table: StaticBody3D = $summoning_table
@@ -17,8 +21,10 @@ enum states{ROOM, SUMMONING, CAPTURED}
 @export_enum("room", "summoning", "captured") var state: int = 0;
 
 func _ready() -> void:
-	Signals.connect("start_summon", start_summon)
+	Signals.connect("init_summon", init_summon)
 	Signals.connect("enter_summon_floor", enter_summon_floor)
+	Signals.connect("add_summon_power", add_summon_power)
+	Signals.connect("breach", breach)
 	
 	state = states.ROOM	
 	ui_change_state(state)
@@ -31,13 +37,19 @@ func _ready() -> void:
 	if TextureManager.chalk_line:
 		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
-	else:
-		pass
 
 func _process(delta: float) -> void:
-	if TextureManager.ink_circle && run_sim:
+	if run_sim and TextureManager.ink_circle:
 		run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle)
 		update_texture()
+	
+	if run_sim and summon_power >= target_power and state == states.SUMMONING:
+		print("fight!")
+		summoned = target_summoned
+		summoned.position = ink_circle.position
+		root.add_child(summoned)
+		state = states.CAPTURED
+		ui_change_state(state)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -74,13 +86,13 @@ func ui_change_state(_state: int):
 			button_con.hide()
 		states.SUMMONING:
 			button_con.show()
-			button_con.find_child("load_ink_b").show()
+			#button_con.find_child("load_ink_b").show()
 			button_con.find_child("summon_b").show()
 			button_con.find_child("kill_b").hide()
 			button_con.find_child("release_b").hide()
 		states.CAPTURED:
 			button_con.show()
-			button_con.find_child("load_in_bk").hide()
+			#button_con.find_child("load_ink_b").hide()
 			button_con.find_child("summon_b").hide()
 			button_con.find_child("kill_b").show()
 			button_con.find_child("release_b").show()
@@ -93,45 +105,46 @@ func enter_summon_floor():
 	mage.find_child("SpringArm3D").rotation.y = \
 	summoning_table.rotation.y + PI / 2
 
-func start_summon() -> void:
+func init_summon() -> void:
 	if TextureManager.ink_circle:
+		Ink_circle.init_ink_colors(TextureManager.ink_circle)
+		update_texture()
+		target_summoned = bull_scene.instantiate()
+		target_power = target_summoned.power
 		run_sim = true
-		#var count_ink = Ink_circle.count_color(TextureManager.ink_circle,
-		 #Color.BLACK)
-		#print(count_ink)
-		#if count_ink > 2000:
-			#print("bull")
-			#var scene = preload("res://Scenes/bull.tscn")
-			#summoned = scene.instantiate()
-			#summoned.position = summoning_table.decal.global_position
-			#root.add_child(summoned)
-			#state = states.CAPTURED
-			#ui_change_state(state)
-		#else:
-			#print("nope")
+		
 	else:
 		print("no circle")
+
+func add_summon_power(power: int):
+	summon_power += power
+	prints("summon_power:", summon_power)
+
+func breach(pos):
+	run_sim = false
+	print("game over", pos)
 
 func update_texture():
 	ink_circle.texture.update(TextureManager.ink_circle)
 
 func _on_summon_b_pressed() -> void:
-	start_summon()
+	init_summon()
 
 func _on_release_b_pressed() -> void:
 	if summoned:
 		summoned.queue_free()
 	state = states.SUMMONING
 	ui_change_state(state)
+	summon_power = 0
+	run_sim = false
 
 func _on_kill_b_pressed() -> void:
 	_on_release_b_pressed()
-	
+
 func _on_return_b_pressed() -> void:
 	state = states.SUMMONING
 	ui_change_state(state)
 
 func _on_load_ink_pressed() -> void:
 	if TextureManager.ink_circle:
-		Ink_circle.init_ink_colors(TextureManager.ink_circle)
-		update_texture()
+		pass

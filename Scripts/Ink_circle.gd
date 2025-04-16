@@ -131,18 +131,24 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 
 static func fast_ca_genretion(img: Image) -> bool:
 	var COLOR_STEP := 0.01
+	var power := 0
+	var changed: bool = false
 	if img == null:
-		TextureManager.pos = []
+		TextureManager.surface_pos = []
 	
 	var buffer = img.duplicate()
 	var width = img.get_width()
 	var height = img.get_height()
 	
-	## check if the image boreders
-	var is_in_border = func borders(v: Vector2) -> bool: return v == \
-			v.clamp(Vector2.ZERO, Vector2(width - 1, height - 1))
+	var center = Vector2(width / 2, height / 2)
+	var radius = height / 2
+	## check if the image boreders and in side the circle
+	var is_in_border = func borders(v: Vector2) -> bool: 
+		return center.distance_to(v) <= radius - 0.5
+	#var is_in_border = func borders(v: Vector2) -> bool: return v == \
+			#v.clamp(Vector2.ZERO, Vector2(width - 1, height - 1))
 			
-	if TextureManager.pos.is_empty():
+	if TextureManager.surface_pos.is_empty():
 		for y in range(height):
 			for x in range(width):
 				if not compare_rgb(buffer.get_pixel(x, y), Color.BLACK):
@@ -151,12 +157,12 @@ static func fast_ca_genretion(img: Image) -> bool:
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
 				#prints(x, y, nei, Color.RED in nei, Color.GREEN in nei)
 				if Color.RED in nei or Color.GREEN in nei:
-						TextureManager.pos.append(Vector2(x, y))
+						TextureManager.surface_pos.append(Vector2(x, y))
 						
-		return not TextureManager.pos.is_empty()
+		return not TextureManager.surface_pos.is_empty()
 	
 	else:
-		for p in TextureManager.pos:
+		for p in TextureManager.surface_pos:
 			var x = p.x
 			var y = p.y
 			var p_color = buffer.get_pixelv(p)
@@ -164,43 +170,51 @@ static func fast_ca_genretion(img: Image) -> bool:
 			var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
 			
-			if p_color.a < COLOR_STEP:
+			if p_color.a < COLOR_STEP * 2:
 				if Color.RED in nei:
 					new_color = Color.RED
+					power += 1
+					changed = true
+					if Color.GREEN in nei: 
+						Signals.emit_signal("breach", p)
+						return false
 				elif Color.GREEN in nei:
 					new_color = Color.GREEN
+					changed = true
 				
 			else:
 				if Color.RED in nei:
 					new_color = new_color - Color(0.0, 0.0, 0.0, COLOR_STEP)
+					changed = true
 				
 			img.set_pixelv(p, new_color)
 			
-		var new_pos: Array[Vector2] = []
-		for p in TextureManager.pos:
+		
+		var new_surface_pos: Array[Vector2] = []
+		for p in TextureManager.surface_pos:
 			var x = p.x
 			var y = p.y
 			if compare_rgb(img.get_pixelv(p), Color.BLACK):
-				if not p in new_pos: new_pos.append(p)
+				if not p in new_surface_pos: new_surface_pos.append(p)
 				continue
 			var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border)
 			for n in nei:
 				if compare_rgb(img.get_pixelv(n), Color.BLACK):
-					if not n in new_pos: new_pos.append(n)
+					if not n in new_surface_pos: new_surface_pos.append(n)
 
-		if new_pos.is_empty():
-			TextureManager.pos = []
-			return false
+		if new_surface_pos.is_empty():
+			TextureManager.surface_pos = []
+			return changed
 		else:
-			#for p in TextureManager.pos:
+			#for p in TextureManager.surface_pos:
 				#img.set_pixelv(p, img.get_pixelv(p).blend(Color(0.627451, 0.12549, 0.941176, 0.75)))
-			#print(new_pos)
-			TextureManager.pos = new_pos
-			print("pos size - ", TextureManager.pos.size())
-			return true
+			TextureManager.surface_pos = new_surface_pos
+			#print("surface_pos size: ", TextureManager.surface_pos.size())
+			Signals.emit_signal("add_summon_power", power)
+			#power = 0
+			return changed
 
 static func compare_rgb(color1: Color, color2: Color = Color.BLACK):
-	return color1.clamp(Color(0.,0.,0.,1.),Color(1.,1.,1.,1.)) == \
-	color2.clamp(Color(0.,0.,0.,1.),Color(1.,1.,1.,1.))
-	#return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b
+	return color1.clamp(Color(0.0, 0.0, 0.0, 1.0),Color(1.0, 1.0, 1.0, 1.0)) == \
+	color2.clamp(Color(0.0, 0.0, 0.0, 1.0),Color(1.0, 1.0, 1.0, 1.0))

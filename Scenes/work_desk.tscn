@@ -18,4 +18,5 @@ shape = SubResource("BoxShape3D_0c4bl")
 
 [node name="chalk" type="Sprite3D" parent="."]
 transform = Transform3D(0.32, 0, 0, 0, 0.218786, -0.233522, 0, 0.233522, 0.218786, 0, 1.9058, -0.00678161)
+flip_h = true
 texture = SubResource("PlaceholderTexture2D_y4lli")

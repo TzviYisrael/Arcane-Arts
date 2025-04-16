@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func _draw():
 	for c in circle_guides:
-			draw_ring(self, Vector2(c.x, c.y), c.z, root.line_thickness, 16.0 + c.z / 20.0, 0.0, Color.WHEAT)
+			draw_ring(self, Vector2(c.x, c.y), c.z, root.line_thickness, int(16.0 + c.z / 20.0), 0.0, Color.WHEAT)
 		
 	for l in line_guides:
 		draw_line(Vector2(l.x, l.y), Vector2(l.z, l.w), Color.WHEAT, root.line_thickness)

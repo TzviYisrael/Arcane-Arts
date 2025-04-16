@@ -4,7 +4,7 @@ class_name Summon
 
 @export var hp = 100
 @export var mp = 100
-
+@export var power = 10000
 @export var player: Node3D  # Drag and drop the player in the Inspector
 
 # Called when the node enters the scene tree for the first time.
