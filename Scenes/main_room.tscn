@@ -1,13 +1,13 @@
 [gd_scene load_steps=12 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
-[ext_resource type="PackedScene" uid="uid://cg40df11pdkm1" path="res://Scenes/room_structure.tscn" id="2_8147l"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/work_desk.tscn" id="6_8147l"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_table.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
+[ext_resource type="PackedScene" uid="uid://c3877y0a5adm7" path="res://Assets/models/main_room.glb" id="10_oool8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -85,15 +85,17 @@ environment = SubResource("Environment_lkk8e")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 8.73972, 0)
+layers = 3
 shadow_enabled = true
 
-[node name="room_structure" parent="." instance=ExtResource("2_8147l")]
+[node name="room_structure" parent="." instance=ExtResource("10_oool8")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, -3, 0, -3)
 
 [node name="Mage" parent="." instance=ExtResource("3_6mt2a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52548, 0, 2.29738)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.35673, 0.191746, -1.20246)
 
 [node name="work_desk" parent="." groups=["tap_to_enter"] instance=ExtResource("6_8147l")]
-transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 3.43227, 0.35306, -7.63029)
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 3.43227, 0.35306, -7.64092)
 metadata/scene_path = "res://Scenes/drawing_desk.tscn"
 
 [node name="summoning_table" parent="." instance=ExtResource("7_v1qvw")]

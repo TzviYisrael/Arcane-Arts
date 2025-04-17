@@ -47,6 +47,7 @@ func _process(delta: float) -> void:
 		print("fight!")
 		summoned = target_summoned
 		summoned.position = ink_circle.position
+		summoned.look_at(mage.global_position) 
 		root.add_child(summoned)
 		state = states.CAPTURED
 		ui_change_state(state)
@@ -108,6 +109,7 @@ func enter_summon_floor():
 func init_summon() -> void:
 	if TextureManager.ink_circle:
 		Ink_circle.init_ink_colors(TextureManager.ink_circle)
+		TextureManager.surface_pos.clear()
 		update_texture()
 		target_summoned = bull_scene.instantiate()
 		target_power = target_summoned.power
@@ -133,6 +135,7 @@ func _on_summon_b_pressed() -> void:
 func _on_release_b_pressed() -> void:
 	if summoned:
 		summoned.queue_free()
+		summoned = null
 	state = states.SUMMONING
 	ui_change_state(state)
 	summon_power = 0

@@ -14,14 +14,9 @@ extends CharacterBody3D
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = $AnimationTree.get("parameters/playback")
 
-func cast():
-	var fire_ball_scene = preload("res://Scenes/fireball.tscn")
-	var fireball = fire_ball_scene.instantiate()
-	fireball.position = model.position + Vector3(0.0, 1.5, 0.0)
-	fireball.dir = -model.global_transform.basis.z
-	fireball.speed = 0.5
-	add_child(fireball)
 
+func  _ready() -> void:
+	SceneManager.set_mage(self)
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -53,3 +48,12 @@ func _unhandled_input(event):
 	if event.is_action_pressed("summon"):
 		anim_state.travel("summon")
 		Signals.emit_signal("start_summon")
+		
+
+func cast():
+	var fire_ball_scene = preload("res://Scenes/fireball.tscn")
+	var fireball = fire_ball_scene.instantiate()
+	fireball.position = model.position + Vector3(0.0, 1.5, 0.0)
+	fireball.dir = -model.global_transform.basis.z
+	fireball.speed = 0.5
+	add_child(fireball)

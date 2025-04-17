@@ -1,3 +1,6 @@
 extends Node
 
-var mage_mana: float = 3.0
+var mage: Node
+
+func set_mage(mage_node):
+	mage = mage_node
