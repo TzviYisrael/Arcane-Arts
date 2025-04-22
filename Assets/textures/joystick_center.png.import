@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dshx3p0gy6ccm"
 path.s3tc="res://.godot/imported/joystick_center.png-33b8fe7fea00977d442b694c6fa374a8.s3tc.ctex"
+path.etc2="res://.godot/imported/joystick_center.png-33b8fe7fea00977d442b694c6fa374a8.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/textures/joystick_center.png"
-dest_files=["res://.godot/imported/joystick_center.png-33b8fe7fea00977d442b694c6fa374a8.s3tc.ctex"]
+dest_files=["res://.godot/imported/joystick_center.png-33b8fe7fea00977d442b694c6fa374a8.s3tc.ctex", "res://.godot/imported/joystick_center.png-33b8fe7fea00977d442b694c6fa374a8.etc2.ctex"]
 
 [params]
 

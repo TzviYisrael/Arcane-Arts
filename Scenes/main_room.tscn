@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=19 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/work_desk.tscn" id="6_8147l"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_table.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
+[ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
+[ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
 [ext_resource type="PackedScene" uid="uid://c3877y0a5adm7" path="res://Assets/models/main_room.glb" id="10_oool8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
@@ -21,6 +23,54 @@ background_mode = 2
 sky = SubResource("Sky_g8gpf")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oool8"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("8_w1vw5")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 8
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_aorri"]
+offsets = PackedFloat32Array(0, 0.0470588, 0.157647, 0.404706, 0.552381, 0.724706, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.999823, 0.946855, 0.935836, 1, 1, 0.254902, 0, 1, 0.962553, 0.293472, 0.0338416, 1, 0.581187, 0.686274, 0.378489, 1, 0.296142, 0.39348, 0.612881, 1, 0.0689348, 0.00294666, 0.00720697, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jgpsw"]
+gradient = SubResource("Gradient_aorri")
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dxdgq"]
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.9
+emission_ring_cone_angle = 80.0
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.8
+initial_velocity_max = 1.5
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 9.49949e-08
+orbit_velocity_max = 9.49949e-08
+gravity = Vector3(0, 0, 0)
+scale_min = 0.9
+scale_max = 2.2
+color = Color(1.4, 1.4, 1.4, 1)
+color_ramp = SubResource("GradientTexture1D_jgpsw")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_xqkij"]
 
 [node name="mainRoom" type="Node3D"]
 script = ExtResource("1_r033x")
@@ -77,8 +127,26 @@ metadata/_edit_use_anchors_ = true
 [node name="return_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_v1qvw")
-text = "return"
+text = "reload"
 metadata/_edit_use_anchors_ = true
+
+[node name="massege" type="Label" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.70271, 0.12445, 0.193261, 1)
+theme_override_font_sizes/font_size = 150
+text = "game over!"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
@@ -102,10 +170,25 @@ metadata/scene_path = "res://Scenes/drawing_desk.tscn"
 transform = Transform3D(1.41421, 0, -1.41421, 0, 2, 0, 1.41421, 0, 1.41421, -3.51861, 0.065846, -3.2676)
 metadata/scene_path = "summon"
 
-[node name="ink_circle" type="Sprite3D" parent="."]
-transform = Transform3D(-1.23744, -1.23744, 5.40901e-08, 0, -7.64949e-08, -1.75, 1.23744, -1.23744, 5.40901e-08, 0, 0, 0)
+[node name="ink_circle2" type="Sprite3D" parent="summoning_table"]
+transform = Transform3D(0, -0.875004, 3.82476e-08, 0, -3.82474e-08, -0.875, 0.875004, 0, 0, 0, 0.85, 0)
 flip_h = true
 texture = ExtResource("8_crhwu")
+script = ExtResource("9_oool8")
+
+[node name="smoke_puff" type="GPUParticles3D" parent="summoning_table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.929592, 0)
+material_override = SubResource("StandardMaterial3D_oool8")
+emitting = false
+amount = 100
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+use_fixed_seed = true
+seed = 815906024
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_dxdgq")
+draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/load_ink_b" to="." method="_on_load_ink_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/summon_b" to="." method="_on_summon_b_pressed"]

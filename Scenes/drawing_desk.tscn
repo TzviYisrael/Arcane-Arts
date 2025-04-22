@@ -45,10 +45,12 @@ metadata/_edit_use_anchors_ = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -237.0
+offset_left = -420.0
 offset_top = 20.0
+offset_right = -183.0
 offset_bottom = 222.0
 grow_horizontal = 0
+scale = Vector2(1.5, 1.5)
 theme_override_constants/separation = 10
 alignment = 1
 
@@ -83,6 +85,19 @@ theme = ExtResource("4_kgh23")
 text = "move to the floor"
 metadata/_edit_use_anchors_ = true
 
+[node name="debug_label" type="Label" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1012, 1012)
 limit_left = -1000
@@ -90,7 +105,6 @@ limit_top = -1000
 limit_right = 2500
 limit_bottom = 2500
 limit_smoothed = true
-position_smoothing_enabled = true
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true

@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://th7jt0wnioms"
-path.s3tc="res://.godot/imported/point.png-0c9fcd59dee11e6a7f9364101b5946c1.s3tc.ctex"
-path.etc2="res://.godot/imported/point.png-0c9fcd59dee11e6a7f9364101b5946c1.etc2.ctex"
+uid="uid://dghw251vmms3t"
+path.s3tc="res://.godot/imported/T_smoke_flipbook.png-89aa2e96682a349b8d449e4f5f58924a.s3tc.ctex"
+path.etc2="res://.godot/imported/T_smoke_flipbook.png-89aa2e96682a349b8d449e4f5f58924a.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/textures/point.png"
-dest_files=["res://.godot/imported/point.png-0c9fcd59dee11e6a7f9364101b5946c1.s3tc.ctex", "res://.godot/imported/point.png-0c9fcd59dee11e6a7f9364101b5946c1.etc2.ctex"]
+source_file="res://Assets/textures/T_smoke_flipbook.png"
+dest_files=["res://.godot/imported/T_smoke_flipbook.png-89aa2e96682a349b8d449e4f5f58924a.s3tc.ctex", "res://.godot/imported/T_smoke_flipbook.png-89aa2e96682a349b8d449e4f5f58924a.etc2.ctex"]
 
 [params]
 

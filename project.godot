@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="summon"
-run/main_scene="res://Scenes/main_room.tscn"
+run/main_scene="uid://c7jlh34oe660m"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
@@ -90,9 +90,10 @@ attack={
 
 [input_devices]
 
+pointing/android/enable_pan_and_scale_gestures=true
 pointing/emulate_touch_from_mouse=true
-pointing/emulate_mouse_from_touch=false
 
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

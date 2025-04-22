@@ -2,6 +2,8 @@ class_name Ink_circle
 
 extends Object
 
+@export var something = 5
+
 static func resize_image(image: Image, factor: int) -> Image:
 	var new_image := image.duplicate()
 	var new_width := image.get_width() / float(factor)
@@ -94,6 +96,7 @@ static func init_ink_colors(img: Image) -> void:
 		# Ensure we're in bounds
 		if x >= 0 and x < width and y >= 0 and y < height:
 			img.set_pixel(x, y, border_color)
+
 
 static func count_color(circle: Image, ink_color:Color):
 	var ink_counter := 0

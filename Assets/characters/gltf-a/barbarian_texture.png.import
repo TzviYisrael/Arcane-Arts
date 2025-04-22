@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2pwj5rn0niik"
 path.s3tc="res://.godot/imported/barbarian_texture.png-27fad29650b7236058a4d43f18657e24.s3tc.ctex"
+path.etc2="res://.godot/imported/barbarian_texture.png-27fad29650b7236058a4d43f18657e24.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/characters/gltf-a/barbarian_texture.png"
-dest_files=["res://.godot/imported/barbarian_texture.png-27fad29650b7236058a4d43f18657e24.s3tc.ctex"]
+dest_files=["res://.godot/imported/barbarian_texture.png-27fad29650b7236058a4d43f18657e24.s3tc.ctex", "res://.godot/imported/barbarian_texture.png-27fad29650b7236058a4d43f18657e24.etc2.ctex"]
 
 [params]
 
