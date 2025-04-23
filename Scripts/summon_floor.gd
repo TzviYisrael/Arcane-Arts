@@ -1,8 +1,7 @@
 extends Node2D
 
-@onready var camera_2d = $Camera2D
+@onready var camera = $Camera2D
 @export var cam_speed = 5.0
-@export var cam_acceleration = 5.0
 
 @onready var background = $background
 @onready var chalk_lines: Sprite2D = $chalk_lines
@@ -16,10 +15,10 @@ var center = Vector2()
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
 
-var first_point : Vector2 = Vector2.INF
-var current_point : Vector2 = Vector2.INF
-const SNAP_DISTANSE : float = 50
-var is_mouse_held = false
+#var first_point : Vector2 = Vector2.INF
+var touch_point : Vector2 = Vector2.INF
+#const SNAP_DISTANSE : float = 50
+#var is_finger_held = false
 
 @export var brush_size : int = 10
 @export var max_clear: float = 100
@@ -36,7 +35,7 @@ func _ready():
 	var rect = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
-	camera_2d.position = center
+	camera.position = center
 	
 	if TextureManager.chalk_line_org:
 		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
@@ -53,61 +52,39 @@ func _ready():
 
 func _process(_delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	camera_2d.position += input_dir * cam_speed
-	
-	if is_mouse_held:
-		var mp = get_global_mouse_position()
-		match tool:
-			tools.INK:
-				ink_drawer.points.append(Vector4(mp.x, mp.y, brush_size, tools.INK))
-			tools.COVER:
-				ink_drawer.points.append(Vector4(mp.x, mp.y, brush_size, tools.COVER))
-	
+	camera.position += input_dir * cam_speed
 	queue_redraw()
 
 func _draw():
 	#center
-	draw_circle(center, 30.0, Color.RED)
+	draw_circle(center, 20.0, Color.RED)
 	
-	#mouse position
-	draw_circle(current_point, brush_size,Color.GREEN if tool == tools.INK else Color.WHITE, false, 3.0)
-	
-	#if tool == tools.CLEAR and is_mouse_held:
-		#draw_circle(first_point, min(first_point.distance_to(current_point), max_clear), Color.AQUAMARINE, true)
-
 func _unhandled_input(event: InputEvent) -> void:
-	
-	if is_mouse_held:
-		var mp = get_global_mouse_position()
+	if event is InputEventScreenDrag or event is InputEventScreenTouch:
+		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		queue_redraw()
+		if event.index < 1:
+			_handle_touch(touch_point)
+	elif event is InputEventPanGesture:
+		camera.position += event.delta
+	elif event is InputEventMagnifyGesture:
+		camera.zoom = camera.zoom * event.factor
+		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+		
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
+			camera.zoom = camera.zoom * (1 + zoom_speed)
+			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			camera.zoom = camera.zoom * (1 - zoom_speed) # Zoom out
+			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+
+func _handle_touch(pos: Vector2) -> void:
 		match tool:
 			tools.INK:
-				ink_drawer.points.append(Vector4(mp.x, mp.y, brush_size, tools.INK))
+				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.INK))
 			tools.COVER:
-				ink_drawer.points.append(Vector4(mp.x, mp.y, brush_size, tools.COVER))				
-	# Track mouse position when it moves
-	if event is InputEventMouseMotion:
-		current_point = get_global_mouse_position()
-		queue_redraw()
-	
-	if event is InputEventMouseButton:
-		
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				first_point = current_point
-				is_mouse_held = true
-			else: #release LMB
-				#if tool == tools.CLEAR:
-					#clear_circle(first_point, min(first_point.distance_to(current_point), max_clear))
-				first_point = Vector2.INF
-				is_mouse_held = false
-		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			# Zoom in
-			camera_2d.zoom = camera_2d.zoom * (1 + zoom_speed)
-			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			# Zoom out
-			camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
-			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))				
 
 func clear_circle(pos: Vector2, radius: float) -> void:
 	save_to_tex_men()

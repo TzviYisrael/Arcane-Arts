@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var camera_2d = $Camera2D
+@onready var camera = $Camera2D
 @export var cam_speed = 2.0
 @export var min_zoom = 0.5
 @export var max_zoom = 2.0
@@ -25,8 +25,8 @@ var line_guides : Array[Vector4] = []
 
 var first_point : Vector2 = Vector2.INF
 var current_point : Vector2 = Vector2.INF
-const SNAP_DISTANSE : float = 50
-var is_mouse_held = false
+const SNAP_DISTANSE : float = 70
+var is_finger_held = false
 
 @export var line_thickness : float = 9
 
@@ -40,7 +40,7 @@ func _ready():
 	var rect = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
-	camera_2d.position = center
+	camera.position = center
 	for i in range(11):
 		for j in range(11):
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
@@ -56,22 +56,24 @@ func _ready():
 
 func _process(_delta):
 	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	#camera_2d.position += input_dir * cam_speed
+	#camera.position += input_dir * cam_speed
+	if not is_finger_held:
+		current_point = Vector2.INF
 	queue_redraw()
 
 func _draw():
-	var scale_factor: float = 0.15
+	var dots_scale_factor: float = 0.15
 	
 	#center
-	draw_circle(center, 30.0, Color.RED)
+	draw_circle(center, 20.0, Color.RED)
 	#dots
-	var offset = texture.get_width() * 0.5 * scale_factor
+	var offset = texture.get_width() * 0.5 * dots_scale_factor
 	var original_size = Vector2(texture.get_width(), texture.get_height())
-	var scaled_size = original_size * scale_factor
+	var scaled_size = original_size * dots_scale_factor
 	for p in points:
 		draw_texture_rect(texture, Rect2(Vector2(p.x - offset, p.y - offset), scaled_size), false, Color.WHITE)
 		
-	#mouse position + 
+	#drawing position
 	draw_circle(first_point, 10.0, Color.GREEN_YELLOW)
 	draw_circle(current_point, 10.0, Color.GREEN)
 	
@@ -81,8 +83,6 @@ func _draw():
 			tools.CIRCLE:
 				var radius = (first_point-current_point).length()
 				draw_ring(self, first_point, radius, line_thickness / 2, 16 + radius / 20, 0.0, Color.WHITE_SMOKE)
-			#tools.INF_LINE:
-				#draw_line(first_point, current_point, Color.WHITE_SMOKE, line_thickness / 2)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
 		
@@ -101,7 +101,7 @@ func _draw():
 			#if event.pressed:
 				#if closest_point.distance_to(mp) < SNAP_DISTANSE:
 					#first_point = closest_point
-					#is_mouse_held = true
+					#is_finger_held = true
 			#else: #release LMB
 				#match tool:
 					#tools.CIRCLE:
@@ -117,53 +117,43 @@ func _draw():
 							#var new_guide = Vector4(first_point.x, first_point.y,closest_point.x, closest_point.y)
 							#if not new_guide in guide_drawer.line_guides: guide_drawer.line_guides.append(new_guide)
 				#first_point = Vector2.INF
-				#is_mouse_held = false
+				#is_finger_held = false
 		#elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			## Zoom in
-			#camera_2d.zoom = camera_2d.zoom * (1 + zoom_speed)
-			#camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+			#camera.zoom = camera.zoom * (1 + zoom_speed)
+			#camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 		#elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			## Zoom out
-			#camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
-			#camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+			#camera.zoom = camera.zoom * (1 - zoom_speed)
+			#camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 	#
 
 func _unhandled_input(event: InputEvent) -> void:
-	
-	if event is InputEventPanGesture:
-		#debug_label.text = "%d,%d" % [event.delta.x, event.delta.y]
-		camera_2d.position += event.delta
-	elif event is InputEventMagnifyGesture:
-		camera_2d.zoom = camera_2d.zoom * event.factor
-		camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
-		
 	if event is InputEventScreenDrag or event is InputEventScreenTouch:
-		if event.index < 1:
-			current_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
-			queue_redraw()
-			if event is InputEventScreenTouch:
-				_handle_pointer(current_point, event.pressed)
-
-	# Handle input (mouse click or screen touch)
+		current_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		queue_redraw()
+		if event is InputEventScreenTouch and event.index < 1:
+			_handle_touch(current_point, event.pressed)
+	elif event is InputEventPanGesture:
+		camera.position += event.delta
+	elif event is InputEventMagnifyGesture:
+		camera.zoom = camera.zoom * event.factor
+		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+			
 	if event is InputEventMouseButton:
-		#if event.button_index == MOUSE_BUTTON_LEFT:
-			#_handle_pointer(current_point, event.pressed)
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			# Zoom in
-			camera_2d.zoom = camera_2d.zoom * (1 + zoom_speed)
-			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
+			camera.zoom = camera.zoom * (1 + zoom_speed)
+			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			# Zoom out
-			camera_2d.zoom = camera_2d.zoom * (1 - zoom_speed)
-			camera_2d.zoom = camera_2d.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+			camera.zoom = camera.zoom * (1 - zoom_speed) # Zoom out
+			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
-func _handle_pointer(pos: Vector2, pressed: bool) -> void:
-
+func _handle_touch(pos: Vector2, pressed: bool) -> void:
 	var closest_point = find_closest_point(pos, points)
-	if pressed and not is_mouse_held:
+	if pressed and not is_finger_held:
 		if closest_point.distance_to(pos) < SNAP_DISTANSE:
 			first_point = closest_point
-			is_mouse_held = true
+			is_finger_held = true
 	else: # release
 		match tool:
 			tools.CIRCLE:
@@ -178,7 +168,7 @@ func _handle_pointer(pos: Vector2, pressed: bool) -> void:
 						guide_drawer.line_guides.append(new_guide)
 		first_point = Vector2.INF
 		current_point = Vector2.INF
-		is_mouse_held = false
+		is_finger_held = false
 
 
 static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float, resolution:int, rotated:float, color:Color)->void:

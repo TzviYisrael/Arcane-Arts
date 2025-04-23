@@ -76,6 +76,7 @@ anim_speed_max = 2.0
 script = ExtResource("1_r033x")
 
 [node name="Control" type="Control" parent="."]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -95,12 +95,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Handle tap or mouse click
 	if event is InputEventMouseButton:
 		if not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			_handle_input_at(event.position)
+			_handle_pressed_at(event.position)
 	elif event is InputEventScreenTouch:
 		if not event.pressed:
-			_handle_input_at(event.position)
+			_handle_pressed_at(event.position)
 
-func _handle_input_at(pos: Vector2) -> void:
+func _handle_pressed_at(pos: Vector2) -> void:
 	var coll = get_mouse_collider(pos)
 	if coll and coll.is_in_group("tap_to_enter"):
 		var path = coll.get_meta("scene_path")
