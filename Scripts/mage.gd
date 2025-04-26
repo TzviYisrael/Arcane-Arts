@@ -14,6 +14,14 @@ extends CharacterBody3D
 @onready var anim_tree = $AnimationTree
 @onready var anim_state = $AnimationTree.get("parameters/playback")
 
+enum CAMERA_STATES{ROOM, SUMMONING, OFFSIDE}
+var camera_state: int = CAMERA_STATES.ROOM:
+	set(new_state):
+		camera_state_exit(camera_state)
+		camera_state = new_state
+		camera_state_enter(camera_state)
+	get: return camera_state
+
 var fire_ball_scene
 
 func  _ready() -> void:
@@ -32,14 +40,12 @@ func get_move_input(delta):
 	if velocity.length() > 1.0:
 		model.rotation.y = lerp_angle(model.rotation.y, spring_arm.rotation.y, rot_speed * delta)
 	
-	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var cam_rot = Input.get_vector("ui_left", "ui_right", "null", "null").x
-	var angle = deg_to_rad(cam_rot)
-	spring_arm.rotate_y(angle)
+	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	var direction = Vector3(input_dir.x, 0, input_dir.y).normalized().rotated(Vector3.UP, spring_arm.rotation.y)
 	velocity = lerp(velocity, direction * speed, acceleration * delta)
 	
+	if input_dir != Vector2.ZERO: camera_state = CAMERA_STATES.ROOM
 	var vl = velocity * model.transform.basis
 	anim_tree.set("parameters/IWR/blend_position", Vector2(vl.x, -vl.z) / speed)
 
@@ -51,6 +57,9 @@ func _unhandled_input(event):
 		anim_state.travel("summon")
 		Signals.emit_signal("start_summon")
 		
+func rotate_camera(deg):
+	var angle = deg_to_rad(deg)
+	spring_arm.rotate_y(angle)
 
 func cast():
 	var fireball = fire_ball_scene.instantiate()
@@ -58,3 +67,20 @@ func cast():
 	fireball.dir = -model.global_transform.basis.z
 	fireball.speed = 0.5
 	add_child(fireball)
+
+func camera_state_exit(CAMERA_STATE: int):
+	var tween := create_tween()
+	match CAMERA_STATE:
+		CAMERA_STATES.ROOM: pass
+		CAMERA_STATES.SUMMONING: 
+			tween.tween_property(spring_arm, "rotation_degrees:x", -20, 0.5)
+		CAMERA_STATES.OFFSIDE: 
+			tween.tween_property(spring_arm, "position:x", 0, 0.5)
+func camera_state_enter(CAMERA_STATE: int): 
+	var tween := create_tween()
+	match CAMERA_STATE:
+		CAMERA_STATES.ROOM: pass
+		CAMERA_STATES.SUMMONING: 
+			tween.tween_property(spring_arm, "rotation_degrees:x", -40, 0.5)
+		CAMERA_STATES.OFFSIDE: 
+			tween.tween_property(spring_arm, "position:x", 1, 0.5)

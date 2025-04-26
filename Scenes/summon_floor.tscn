@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cbw7pmrwoar5r"]
 
 [ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summon_floor.gd" id="1_f68f3"]
-[ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="2_pgytx"]
+[ext_resource type="Texture2D" uid="uid://b32f2mmc3jsk4" path="res://Assets/textures/clay_floor_001_rough_2k.jpg" id="2_f68f3"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_mq1gj"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_p16ct"]
 [ext_resource type="Script" uid="uid://cgnacxk5m2e56" path="res://Scripts/ink_drawer.gd" id="5_f68f3"]
@@ -16,7 +16,7 @@ brush_size = 300
 [node name="background" type="Sprite2D" parent="."]
 z_index = -2
 texture_repeat = 2
-texture = ExtResource("2_pgytx")
+texture = ExtResource("2_f68f3")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 2024, 2024)

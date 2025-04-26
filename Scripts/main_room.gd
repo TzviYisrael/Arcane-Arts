@@ -21,7 +21,8 @@ var summon_power := 0
 @onready var work_desk: StaticBody3D = $work_desk
 
 enum states{ROOM, SUMMONING, CAPTURED}
-@export_enum("room", "summoning", "captured") var state: int = 0;
+@export_enum("room", "summoning", "captured")
+var state: int = 0
 
 func _ready() -> void:
 	Signals.connect("init_summon", init_summon)
@@ -41,7 +42,7 @@ func _ready() -> void:
 		var chalk = ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if run_sim and TextureManager.ink_circle:
 		run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle)
 		update_texture()
@@ -56,41 +57,12 @@ func _process(delta: float) -> void:
 		state = states.CAPTURED
 		ui_change_state(state)
 
-#func _unhandled_input(event: InputEvent) -> void:
-	#if event is InputEventMouseMotion:
-		#mouse = event.position
-	#if event is InputEventMouseButton:
-		#if event.pressed == false and event.button_index == MOUSE_BUTTON_LEFT:
-			#var coll = get_mouse_collider(mouse)
-			#if coll and coll.is_in_group("tap_to_enter"):
-				#var path =  coll.get_meta("scene_path")
-				#if path == "summon":
-					#Signals.emit_signal("start_summon")
-				#else:
-					#get_tree().change_scene_to_file(path)
-#
-#func get_mouse_collider(_mouse:Vector2) -> Node:
-	#var space = get_world_3d().direct_space_state
-	#var start = get_viewport().get_camera_3d().project_ray_origin(_mouse)
-	#var end = get_viewport().get_camera_3d().project_position(mouse, MAX_D)
-	#var params = PhysicsRayQueryParameters3D.new()
-	#params.from = start
-	#params.to = end
-	#
-	#var coll = space.intersect_ray(params)
-	#if (coll != null) and (coll.size() != 0):
-		#coll = coll["collider"]
-		#print("ray coll: ", coll.name)
-		#return coll
-	#else:
-		#return null
-
 func _unhandled_input(event: InputEvent) -> void:
 	# Track pointer position (mouse or touch)
 	if event is InputEventMouseMotion:
 		mouse = event.position
 	elif event is InputEventScreenDrag:
-		mouse = event.position
+		SceneManager.mage.rotate_camera(-event.screen_relative.x / 10)
 
 	# Handle tap or mouse click
 	if event is InputEventMouseButton:
@@ -150,6 +122,7 @@ func enter_summon_floor():
 	mage.find_child("Rig").rotation.y = summoning_table.rotation.y + PI / 2
 	mage.find_child("SpringArm3D").rotation.y = \
 	summoning_table.rotation.y + PI / 2
+	mage.camera_state = mage.CAMERA_STATES.SUMMONING
 
 func init_summon() -> void:
 	if TextureManager.ink_circle:
@@ -198,3 +171,8 @@ func _on_return_b_pressed() -> void:
 func _on_load_ink_pressed() -> void:
 	if TextureManager.ink_circle:
 		pass
+
+func _on_notebook_b_toggled(toggled_on: bool) -> void:
+	$Control/touch_controls/notebook.visible = toggled_on
+	mage.camera_state = \
+		mage.CAMERA_STATES.OFFSIDE if toggled_on else mage.CAMERA_STATES.ROOM
