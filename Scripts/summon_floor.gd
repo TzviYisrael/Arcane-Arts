@@ -149,3 +149,10 @@ func _on_show_guides_pressed() -> void:
 
 func _on_h_slider_value_changed(value: float) -> void:
 	brush_size = int(value)
+
+func _on_spell_chanted(spell: String) -> void:
+	match spell:
+		"reset": _on_clear_pressed()
+		"save": _on_save_pressed()
+		_: prints("error, unknown spell in", 
+		get_tree().get_current_scene())

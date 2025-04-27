@@ -240,9 +240,15 @@ func _on_move_to_floor_pressed() -> void:
 	save_to_tex_men()
 	get_tree().change_scene_to_file("res://Scenes/summon_floor.tscn")
 
-func _on_clear_pressed() -> void:
+func reset() -> void:
 	TextureManager.chalk_line_org = null
 	TextureManager.chalk_line = null
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	guide_drawer.clear()
 	get_tree().reload_current_scene()
+
+func _on_spell_chanted(spell: String) -> void:
+	match spell:
+		"reset": reset()
+		_: prints("error, unknown spell in", 
+		get_tree().get_current_scene())

@@ -30,9 +30,7 @@ func _ready() -> void:
 	Signals.connect("add_summon_power", add_summon_power)
 	Signals.connect("breach", breach)
 	
-	state = states.ROOM	
-	ui_change_state(state)
-	
+	state = states.ROOM		
 	#ink_circle.position = summoning_table.find_child("ink_circle").global_position
 	if TextureManager.ink_circle:
 		var ink = ImageTexture.create_from_image(TextureManager.ink_circle)
@@ -55,7 +53,6 @@ func _process(_delta: float) -> void:
 		summoned.look_at_from_position(ink_circle.global_position, mage.global_position) 
 		root.add_child(summoned)
 		state = states.CAPTURED
-		ui_change_state(state)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Track pointer position (mouse or touch)
@@ -97,27 +94,8 @@ func get_mouse_collider(_mouse: Vector2) -> Node:
 	else:
 		return null
 
-
-func ui_change_state(_state: int):
-	match _state:
-		states.ROOM:
-			button_con.hide()
-		states.SUMMONING:
-			button_con.show()
-			#button_con.find_child("load_ink_b").show()
-			button_con.find_child("summon_b").show()
-			button_con.find_child("kill_b").hide()
-			button_con.find_child("release_b").hide()
-		states.CAPTURED:
-			button_con.show()
-			#button_con.find_child("load_ink_b").hide()
-			button_con.find_child("summon_b").hide()
-			button_con.find_child("kill_b").show()
-			button_con.find_child("release_b").show()
-
 func enter_summon_floor():
 	state = states.SUMMONING
-	ui_change_state(state)
 	mage.position = summoning_table.find_child("mage_circle").global_position
 	mage.find_child("Rig").rotation.y = summoning_table.rotation.y + PI / 2
 	mage.find_child("SpringArm3D").rotation.y = \
@@ -125,7 +103,7 @@ func enter_summon_floor():
 	mage.camera_state = mage.CAMERA_STATES.SUMMONING
 
 func init_summon() -> void:
-	if TextureManager.ink_circle:
+	if TextureManager.ink_circle and state == states.SUMMONING:
 		Ink_circle.init_ink_colors(TextureManager.ink_circle)
 		TextureManager.surface_pos.clear()
 		update_texture()
@@ -134,7 +112,7 @@ func init_summon() -> void:
 		run_sim = true
 		
 	else:
-		print("no circle")
+		print("can't init summon")
 
 func add_summon_power(power: int):
 	summon_power += power
@@ -149,30 +127,26 @@ func breach(pos):
 func update_texture():
 	ink_circle.texture.update(TextureManager.ink_circle)
 
-func _on_summon_b_pressed() -> void:
-	init_summon()
-
-func _on_release_b_pressed() -> void:
+func release_summon() -> void:
 	if summoned:
 		summoned.queue_free()
 		summoned = null
 	state = states.SUMMONING
-	ui_change_state(state)
 	summon_power = 0
 	run_sim = false
 
-func _on_kill_b_pressed() -> void:
-	_on_release_b_pressed()
+func kill_summon() -> void:
+	release_summon()
 
 func _on_return_b_pressed() -> void:
 	root.process_mode = Node.PROCESS_MODE_INHERIT
 	get_tree().reload_current_scene()
 
-func _on_load_ink_pressed() -> void:
-	if TextureManager.ink_circle:
-		pass
-
-func _on_notebook_b_toggled(toggled_on: bool) -> void:
-	$Control/touch_controls/notebook.visible = toggled_on
-	mage.camera_state = \
-		mage.CAMERA_STATES.OFFSIDE if toggled_on else mage.CAMERA_STATES.ROOM
+func _on_spell_chanted(spell: String) -> void:
+	match spell:
+		"zamen shor": init_summon()
+			 #"zamen shunra", "zamen mazzik",
+		"kill": kill_summon()
+		"release": release_summon()
+		_: prints("error, unknown spell in", 
+		get_tree().get_current_scene())

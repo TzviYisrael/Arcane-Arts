@@ -99,33 +99,6 @@ grow_horizontal = 0
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="load_ink_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("3_v1qvw")
-text = "init"
-metadata/_edit_use_anchors_ = true
-
-[node name="summon_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_v1qvw")
-text = "summon"
-metadata/_edit_use_anchors_ = true
-
-[node name="kill_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_v1qvw")
-theme_override_colors/font_color = Color(0.242129, 0.464629, 1, 1)
-text = "kill"
-metadata/_edit_use_anchors_ = true
-
-[node name="release_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_v1qvw")
-theme_override_colors/font_color = Color(0.122314, 0.358632, 1, 1)
-text = "release"
-metadata/_edit_use_anchors_ = true
-
 [node name="return_b" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_v1qvw")
@@ -151,20 +124,10 @@ theme_override_font_sizes/font_size = 150
 text = "game over!"
 
 [node name="notebook" parent="Control/touch_controls" instance=ExtResource("4_aorri")]
-visible = false
 offset_left = 50.0
 offset_top = 50.0
 offset_right = 550.0
 offset_bottom = 50.0
-
-[node name="notebook_b" type="Button" parent="Control/touch_controls"]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 197.0
-offset_bottom = 100.0
-theme_override_font_sizes/font_size = 30
-toggle_mode = true
-text = "notebook"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
@@ -208,9 +171,4 @@ fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_dxdgq")
 draw_pass_1 = SubResource("QuadMesh_xqkij")
 
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/load_ink_b" to="." method="_on_load_ink_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/summon_b" to="." method="_on_summon_b_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/kill_b" to="." method="_on_kill_b_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/release_b" to="." method="_on_release_b_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/return_b" to="." method="_on_return_b_pressed"]
-[connection signal="toggled" from="Control/touch_controls/notebook_b" to="." method="_on_notebook_b_toggled"]

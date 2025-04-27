@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cflmai4wnxr71"]
+[gd_scene load_steps=8 format=3 uid="uid://cflmai4wnxr71"]
 
 [ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_desk.gd" id="1_37vhg"]
 [ext_resource type="Texture2D" uid="uid://d3ogl5qqw2d5o" path="res://Assets/textures/grunge-style-blackboard-texture.jpg" id="2_37vhg"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_wbusl"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_kgh23"]
+[ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="5_jelkf"]
 [ext_resource type="Script" uid="uid://dur7tpbb13f1f" path="res://Scripts/guides_drawer.gd" id="5_ycwlr"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
@@ -61,6 +62,7 @@ text = "no_tool"
 metadata/_edit_use_anchors_ = true
 
 [node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("4_kgh23")
 text = "reset"
@@ -98,6 +100,13 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 30
 
+[node name="notebook" parent="Control/touch_controls" instance=ExtResource("5_jelkf")]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 550.0
+offset_bottom = 50.0
+page = 3
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1012, 1012)
 limit_left = -1000
@@ -119,7 +128,7 @@ script = ExtResource("5_ycwlr")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="_on_clear_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="reset"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]

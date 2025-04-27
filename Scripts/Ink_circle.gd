@@ -143,14 +143,13 @@ static func fast_ca_genretion(img: Image) -> bool:
 	var width = img.get_width()
 	var height = img.get_height()
 	
-	var center = Vector2(width / 2, height / 2)
+	var center = Vector2(int(width / 2), int(height / 2))
 	var radius = height / 2
+	
 	## check if the image boreders and in side the circle
 	var is_in_border = func borders(v: Vector2) -> bool: 
 		return center.distance_to(v) <= radius - 0.5
-	#var is_in_border = func borders(v: Vector2) -> bool: return v == \
-			#v.clamp(Vector2.ZERO, Vector2(width - 1, height - 1))
-			
+
 	if TextureManager.surface_pos.is_empty():
 		for y in range(height):
 			for x in range(width):
