@@ -5,13 +5,16 @@ class_name Summon
 @export var hp = 100
 @export var mp = 100
 @export var power = 10000
-@export var player: Node3D  # Drag and drop the player in the Inspector
 
-# Called when the node enters the scene tree for the first time.
+enum CATEGORY{ANIMAL, MONSTER, DEMON}
+@export_enum ("animal", "monster", "demon") var category: int
+
+var mage: Node3D
+
 func _ready():
-	pass # Replace with function body.
+	mage = SceneManager.mage
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(_delta):
 	pass
 

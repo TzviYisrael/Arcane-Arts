@@ -33,9 +33,6 @@ var is_finger_held = false
 enum tools{LINE, CIRCLE}
 @export_enum("line", "circle") var tool: int = 0;
 
-
-
-
 func _ready():
 	var rect = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
@@ -85,48 +82,6 @@ func _draw():
 				draw_ring(self, first_point, radius, line_thickness / 2, 16 + radius / 20, 0.0, Color.WHITE_SMOKE)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
-		
-
-#func _unhandled_input(event: InputEvent) -> void:
-	## Track mouse position when it moves
-	#if event is InputEventMouseMotion:
-		#current_point = get_global_mouse_position()
-		#queue_redraw()
-	#
-	#if event is InputEventMouseButton:
-		#
-		#if event.button_index == MOUSE_BUTTON_LEFT:
-			#var mp = get_global_mouse_position()
-			#var closest_point = find_closest_point(mp, points)
-			#if event.pressed:
-				#if closest_point.distance_to(mp) < SNAP_DISTANSE:
-					#first_point = closest_point
-					#is_finger_held = true
-			#else: #release LMB
-				#match tool:
-					#tools.CIRCLE:
-						#if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
-							#var new_guide = Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
-							#if not new_guide in guide_drawer.circle_guides: guide_drawer.circle_guides.append(new_guide)
-					##tools.INF_LINE:
-						##if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
-							##var new_guide = Vector4(first_point.x, first_point.y,(first_point - closest_point).angle(), tools.INF_LINE)
-							##if not new_guide in guide_drawer.guides: guide_drawer.guides.append(new_guide)
-					#tools.LINE:
-						#if closest_point.distance_to(mp) < SNAP_DISTANSE and first_point < Vector2.INF:
-							#var new_guide = Vector4(first_point.x, first_point.y,closest_point.x, closest_point.y)
-							#if not new_guide in guide_drawer.line_guides: guide_drawer.line_guides.append(new_guide)
-				#first_point = Vector2.INF
-				#is_finger_held = false
-		#elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			## Zoom in
-			#camera.zoom = camera.zoom * (1 + zoom_speed)
-			#camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
-		#elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			## Zoom out
-			#camera.zoom = camera.zoom * (1 - zoom_speed)
-			#camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
-	#
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag or event is InputEventScreenTouch:
@@ -170,7 +125,6 @@ func _handle_touch(pos: Vector2, pressed: bool) -> void:
 		current_point = Vector2.INF
 		is_finger_held = false
 
-
 static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float, resolution:int, rotated:float, color:Color)->void:
 	var increments: float = 2*PI / resolution
 	var rad: = rotated
@@ -182,7 +136,7 @@ static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float
 		node.draw_line(offset + from, offset + to, color, width)
 		from = to
 
-# Draw an infinite line from a point with an angle
+## Draw an infinite line from a point with an angle
 func draw_infinite_line(point: Vector2, angle_rad: float, width: float, color: Color = Color.WHITE) -> void:
 	# Get viewport size for calculating line length
 	var viewport_size = get_viewport_rect().size

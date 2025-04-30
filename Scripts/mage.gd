@@ -83,4 +83,4 @@ func camera_state_enter(CAMERA_STATE: int):
 		CAMERA_STATES.SUMMONING: 
 			tween.tween_property(spring_arm, "rotation_degrees:x", -40, 0.5)
 		CAMERA_STATES.OFFSIDE: 
-			tween.tween_property(spring_arm, "position:x", 1, 0.5)
+			tween.tween_property(spring_arm, "position:x", 2, 0.5)

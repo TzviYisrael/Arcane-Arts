@@ -102,17 +102,36 @@ func enter_summon_floor():
 	summoning_table.rotation.y + PI / 2
 	mage.camera_state = mage.CAMERA_STATES.SUMMONING
 
-func init_summon() -> void:
-	if TextureManager.ink_circle and state == states.SUMMONING:
-		Ink_circle.init_ink_colors(TextureManager.ink_circle)
-		TextureManager.surface_pos.clear()
-		update_texture()
-		target_summoned = bull_scene.instantiate()
-		target_power = target_summoned.power
-		run_sim = true
-		
-	else:
-		print("can't init summon")
+func init_summon(category: int, summon_name: String) -> void:
+	var summons_res = {
+		"bull": "res://GameData/resources/bull.tres",
+		"ink_toad": "res://GameData/resources/ink_toad.tres"
+	}
+	if not summon_name in summons_res: print("no such summon"); return
+	if not TextureManager.ink_circle: print("no circle"); return
+	if not state == states.SUMMONING: print("wrong state"); return
+	
+	mage.anim_state.travel("summon")
+	Ink_circle.init_ink_colors(TextureManager.ink_circle)
+	TextureManager.surface_pos.clear()
+	update_texture()
+	
+	#target_summoned = bull_scene.instantiate()
+	#target_power = target_summoned.power
+	var scene
+	match category:
+		SummonData.CATEGORY.ANIMAL:
+			scene = load("res://Scenes/monster.tscn") #TODO
+		SummonData.CATEGORY.MONSTER:
+			scene = load("res://Scenes/monster.tscn")
+		SummonData.CATEGORY.DEMON:
+			scene = load("res://Scenes/monster.tscn") #TODO
+	
+	target_summoned = scene.instantiate()
+	target_summoned.data = load(summons_res[summon_name])
+	target_power = target_summoned.data.power
+	
+	run_sim = true
 
 func add_summon_power(power: int):
 	summon_power += power
@@ -126,6 +145,11 @@ func breach(pos):
 
 func update_texture():
 	ink_circle.texture.update(TextureManager.ink_circle)
+
+func clean_texture():
+	run_sim = false
+	Ink_circle.clean_colors(TextureManager.ink_circle)
+	update_texture()
 
 func release_summon() -> void:
 	if summoned:
@@ -144,9 +168,11 @@ func _on_return_b_pressed() -> void:
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		"zamen shor": init_summon()
-			 #"zamen shunra", "zamen mazzik",
+		"zamen shor": init_summon(SummonData.CATEGORY.ANIMAL, "bull")
+		"zamen tzfardio": init_summon(SummonData.CATEGORY.MONSTER, "ink_toad")
+			 #"zamen mazzik",
 		"kill": kill_summon()
 		"release": release_summon()
+		"clear": clean_texture()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())

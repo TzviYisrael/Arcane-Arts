@@ -131,7 +131,4 @@ scale = Vector2(2, 2)
 toggle_mode = true
 text = "grimoire"
 
-[connection signal="pressed" from="Control/spell_container/spell" to="." method="_on_spell_pressed" binds= ["zamen shor"]]
-[connection signal="pressed" from="Control/spell_container/spell2" to="." method="_on_spell_pressed" binds= ["zamen shunra"]]
-[connection signal="pressed" from="Control/spell_container/spell3" to="." method="_on_spell_pressed" binds= ["zamen mazzik"]]
 [connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

@@ -97,6 +97,16 @@ static func init_ink_colors(img: Image) -> void:
 		if x >= 0 and x < width and y >= 0 and y < height:
 			img.set_pixel(x, y, border_color)
 
+static  func clean_colors(img: Image) -> void:
+	if img.is_empty():
+		return
+
+	var width = img.get_width()
+	var height = img.get_height()
+	for y in range(height):
+			for x in range(width):
+				if not compare_rgb(img.get_pixel(x, y), Color.BLACK):
+					img.set_pixel(x, y, Color(0.0,0.0,0.0,0.0))
 
 static func count_color(circle: Image, ink_color:Color):
 	var ink_counter := 0

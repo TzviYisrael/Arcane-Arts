@@ -9,5 +9,7 @@ var resize_factor: int = 4
 
 var surface_pos: Array[Vector2]
 
+##save the drawing room active tool
 var g_tool: int = 0
+##save the summoning room active tool
 var s_tool: int = 0
