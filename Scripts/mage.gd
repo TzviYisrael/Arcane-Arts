@@ -36,7 +36,7 @@ func _physics_process(delta):
 	get_move_input(delta)
 	move_and_slide()
 
-func get_move_input(delta):
+func get_move_input(delta: float) -> void:
 	if velocity.length() > 1.0:
 		model.rotation.y = lerp_angle(model.rotation.y, spring_arm.rotation.y, rot_speed * delta)
 	
@@ -55,7 +55,7 @@ func _unhandled_input(event):
 		cast()
 	if event.is_action_pressed("summon"):
 		anim_state.travel("summon")
-		Signals.emit_signal("start_summon")
+		#Signals.emit_signal("start_summon")
 		
 func rotate_camera(deg):
 	var angle = deg_to_rad(deg)

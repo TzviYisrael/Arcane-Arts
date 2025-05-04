@@ -6,8 +6,9 @@
 script = ExtResource("1_3t2qm")
 hp = 100
 mp = 0
-power = 10000
-size = 250
+power = 12000
+size = 10000
 model_path = "res://Assets/summons/Bull.gltf"
+model_scale = 0.5
 category = 0
 metadata/_custom_type_script = "uid://drretnng7dj7l"

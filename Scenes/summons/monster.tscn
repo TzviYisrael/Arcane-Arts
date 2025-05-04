@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ip7j1t81r4d1"]
 
-[ext_resource type="Script" uid="uid://cnjo43wwf07di" path="res://Scripts/monster.gd" id="1_xhoai"]
+[ext_resource type="Script" uid="uid://cnjo43wwf07di" path="res://Scripts/summons/monster.gd" id="1_xhoai"]
 
 [node name="monster" type="CharacterBody3D"]
 script = ExtResource("1_xhoai")

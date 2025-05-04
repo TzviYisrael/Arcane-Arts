@@ -22,18 +22,18 @@ var root_of_parent: Node
 func _ready() -> void:
 	set_page(page)
 
-func clear_page():
+func clear_page() -> void:
 	for n in spell_container.get_children():
 		spell_container.remove_child(n)
 		n.queue_free()
 	
-func set_page(p: int):
+func set_page(p: int) -> void:
 	clear_page()
 	title.text = str(MODES.keys()[p]).to_lower()
-	var icon = preload("res://Assets/textures/joystick_center.png")
-	for spl in pages[p]:
+	var icon := preload("res://Assets/textures/joystick_center.png")
+	for spl: String in pages[p]:
 		if spl != "":
-			var button = Button.new()
+			var button: = Button.new()
 			button.name = spl
 			button.text = spl
 			button.icon = icon
@@ -45,7 +45,7 @@ func set_page(p: int):
 				get_tree().get_current_scene()._on_spell_chanted.bind(spl))
 			spell_container.add_child(button)
 		else:
-			var sep = HSeparator.new()
+			var sep := HSeparator.new()
 			sep.add_theme_constant_override("separation", 20)
 			spell_container.add_child(sep)
 

@@ -11,8 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
 [ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
 [ext_resource type="PackedScene" uid="uid://c3877y0a5adm7" path="res://Assets/models/main_room.glb" id="10_oool8"]
-[ext_resource type="PackedScene" uid="uid://ip7j1t81r4d1" path="res://Scenes/monster.tscn" id="12_dxdgq"]
-[ext_resource type="Resource" uid="uid://jr1ee5ipaoxi" path="res://GameData/resources/bull.tres" id="13_dxdgq"]
+[ext_resource type="PackedScene" uid="uid://ip7j1t81r4d1" path="res://Scenes/summons/monster.tscn" id="12_dxdgq"]
+[ext_resource type="Resource" uid="uid://i4wqu1mw2wg0" path="res://GameData/resources/ink_toad.tres" id="13_dxdgq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -173,8 +173,8 @@ fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_dxdgq")
 draw_pass_1 = SubResource("QuadMesh_xqkij")
 
-[node name="monster" parent="." instance=ExtResource("12_dxdgq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.56848, 3.0918, -3.96081)
+[node name="debug_monster" parent="." instance=ExtResource("12_dxdgq")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 3, -2)
 visible = false
 data = ExtResource("13_dxdgq")
 

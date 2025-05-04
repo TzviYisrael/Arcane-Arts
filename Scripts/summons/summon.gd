@@ -15,7 +15,7 @@ func _ready():
 	mage = SceneManager.mage
 
 
-func _process(_delta):
+func _process(_delta: float):
 	pass
 
 func take_damage(amount: int):

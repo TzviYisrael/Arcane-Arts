@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://bpp0c3q5wldrr"]
 
-[ext_resource type="PackedScene" uid="uid://bi1b6r5ingl42" path="res://Assets/summons/Bull.gltf" id="1_whwrm"]
-[ext_resource type="Script" uid="uid://brfukq74nspcp" path="res://Scripts/bull.gd" id="2_e48dr"]
+[ext_resource type="PackedScene" uid="uid://bi1b6r5ingl42" path="res://Assets/summons/Bull.gltf" id="1_jf13v"]
+[ext_resource type="Script" uid="uid://brfukq74nspcp" path="res://Scripts/summons/bull.gd" id="2_832kw"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qwhva"]
 animation = &"Attack_Headbutt"
@@ -61,9 +61,9 @@ graph_offset = Vector2(-273, 3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_f3r0s"]
 size = Vector3(2.5, 4.59564, 8.08911)
 
-[node name="Bull" instance=ExtResource("1_whwrm")]
+[node name="Bull" instance=ExtResource("1_jf13v")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-script = ExtResource("2_e48dr")
+script = ExtResource("2_832kw")
 
 [node name="AnimalArmature" parent="." index="0"]
 transform = Transform3D(-0.7, 0, -6.11959e-08, 0, 0.7, 0, 6.11959e-08, 0, -0.7, 0, 0, 0)

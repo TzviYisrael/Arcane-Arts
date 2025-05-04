@@ -1,12 +1,11 @@
-extends "res://Scripts/summon.gd"
+extends "res://Scripts/summons/summon.gd"
 
-var distance_to_mage = 100
+var distance_to_mage: int = 100
 
-
-func _ready():
+func _ready() -> void:
 	pass # Replace with function body.
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if mage:
 		distance_to_mage = global_position.distance_to(mage.global_position)
 		

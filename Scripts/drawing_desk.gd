@@ -1,13 +1,13 @@
 extends Node2D
 
-@onready var camera = $Camera2D
-@export var cam_speed = 2.0
-@export var min_zoom = 0.5
-@export var max_zoom = 2.0
-@export var zoom_speed = 0.05
+@onready var camera := $Camera2D
+@export var cam_speed: float = 2.0
+@export var min_zoom: float = 0.5
+@export var max_zoom: float = 2.0
+@export var zoom_speed: float = 0.05
 
-@onready var background = $background
-var center = Vector2()
+@onready var background := $background
+var center: Vector2 = Vector2()
 
 @onready var guide_drawer: Node2D = $SubViewport/guide_drawer
 @onready var guide_viewer: Sprite2D = $guide_viewer
@@ -26,15 +26,15 @@ var line_guides : Array[Vector4] = []
 var first_point : Vector2 = Vector2.INF
 var current_point : Vector2 = Vector2.INF
 const SNAP_DISTANSE : float = 70
-var is_finger_held = false
+var is_finger_held: bool = false
 
 @export var line_thickness : float = 9
 
 enum tools{LINE, CIRCLE}
 @export_enum("line", "circle") var tool: int = 0;
 
-func _ready():
-	var rect = background.get_rect()
+func _ready() -> void:
+	var rect: Rect2 = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
 	camera.position = center
@@ -51,22 +51,22 @@ func _ready():
 	
 	queue_redraw()
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	#camera.position += input_dir * cam_speed
 	if not is_finger_held:
 		current_point = Vector2.INF
 	queue_redraw()
 
-func _draw():
+func _draw() -> void:
 	var dots_scale_factor: float = 0.15
 	
 	#center
 	draw_circle(center, 20.0, Color.RED)
 	#dots
-	var offset = texture.get_width() * 0.5 * dots_scale_factor
-	var original_size = Vector2(texture.get_width(), texture.get_height())
-	var scaled_size = original_size * dots_scale_factor
+	var offset: float = texture.get_width() * 0.5 * dots_scale_factor
+	var original_size: Vector2 = Vector2(texture.get_width(), texture.get_height())
+	var scaled_size: Vector2 = original_size * dots_scale_factor
 	for p in points:
 		draw_texture_rect(texture, Rect2(Vector2(p.x - offset, p.y - offset), scaled_size), false, Color.WHITE)
 		
@@ -78,7 +78,7 @@ func _draw():
 	if first_point < Vector2.INF:
 		match tool:
 			tools.CIRCLE:
-				var radius = (first_point-current_point).length()
+				var radius: float = (first_point-current_point).length()
 				draw_ring(self, first_point, radius, line_thickness / 2, 16 + radius / 20, 0.0, Color.WHITE_SMOKE)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
@@ -104,7 +104,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
 func _handle_touch(pos: Vector2, pressed: bool) -> void:
-	var closest_point = find_closest_point(pos, points)
+	var closest_point: Vector2 = find_closest_point(pos, points)
 	if pressed and not is_finger_held:
 		if closest_point.distance_to(pos) < SNAP_DISTANSE:
 			first_point = closest_point
@@ -113,12 +113,12 @@ func _handle_touch(pos: Vector2, pressed: bool) -> void:
 		match tool:
 			tools.CIRCLE:
 				if closest_point.distance_to(pos) < SNAP_DISTANSE and first_point < Vector2.INF:
-					var new_guide = Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
+					var new_guide := Vector4(first_point.x, first_point.y, first_point.distance_to(closest_point), tools.CIRCLE)
 					if not new_guide in guide_drawer.circle_guides:
 						guide_drawer.circle_guides.append(new_guide)
 			tools.LINE:
 				if closest_point.distance_to(pos) < SNAP_DISTANSE and first_point < Vector2.INF:
-					var new_guide = Vector4(first_point.x, first_point.y, closest_point.x, closest_point.y)
+					var new_guide := Vector4(first_point.x, first_point.y, closest_point.x, closest_point.y)
 					if not new_guide in guide_drawer.line_guides:
 						guide_drawer.line_guides.append(new_guide)
 		first_point = Vector2.INF
@@ -139,13 +139,13 @@ static func draw_ring(node:CanvasItem, offset:Vector2, radius:float, width:float
 ## Draw an infinite line from a point with an angle
 func draw_infinite_line(point: Vector2, angle_rad: float, width: float, color: Color = Color.WHITE) -> void:
 	# Get viewport size for calculating line length
-	var viewport_size = get_viewport_rect().size
-	var max_length = viewport_size.length() * 2  # Make it longer than the diagonal
+	var viewport_size: Vector2 = get_viewport_rect().size
+	var max_length := viewport_size.length() * 2 
 	
 	# Calculate end points using cos/sin
-	var direction = Vector2(cos(angle_rad), sin(angle_rad))
-	var start_point = point - direction * max_length
-	var end_point = point + direction * max_length
+	var direction := Vector2(cos(angle_rad), sin(angle_rad))
+	var start_point: Vector2 = point - direction * max_length
+	var end_point: Vector2 = point + direction * max_length
 	
 	# Draw the line
 	draw_line(start_point, end_point, color, width)
@@ -154,26 +154,26 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 	if point_array.size() == 0:
 		return Vector2.INF
 		
-	var closest_point = point_array[0]
-	var min_distance = target_point.distance_to(closest_point)
+	var closest_point: Vector2 = point_array[0]
+	var min_distance: float = target_point.distance_to(closest_point)
 	
 	for point in point_array:
-		var distance = target_point.distance_to(point)
+		var distance: float = target_point.distance_to(point)
 		if distance < min_distance:
 			min_distance = distance
 			closest_point = point
 	
 	return closest_point
 
-func save_to_disk():
-	var save_path = "res://GameData/chalk.png"
+func save_to_disk() -> void:
+	var save_path: String = "res://GameData/chalk.png"
 	var img : Image = guide_viewer.texture.get_image()
 	print("saving... ", img)
 	img.save_png(save_path)
 	
 	guide_drawer.clear()
 
-func save_to_tex_men():
+func save_to_tex_men() -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	TextureManager.chalk_line_org = img
 	TextureManager.chalk_line = Ink_circle.resize_image(img, TextureManager.resize_factor)

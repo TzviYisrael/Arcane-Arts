@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://1063ew1g27dh"]
+
+[ext_resource type="Script" uid="uid://m8eo2hmqqu7s" path="res://Scripts/summons/demon.gd" id="1_k5y5j"]
+
+[node name="demon" type="CharacterBody3D"]
+script = ExtResource("1_k5y5j")
