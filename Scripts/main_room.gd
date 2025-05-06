@@ -4,6 +4,8 @@ var mouse := Vector2()
 const MAX_D = 1000
 @onready var button_con: VBoxContainer = $Control/touch_controls/VBoxContainer
 @onready var massege: Label = $Control/touch_controls/massege
+@onready var book_viewer: TextureRect = $Control/touch_controls/book_viewer
+@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
@@ -13,9 +15,9 @@ var target_power := 0
 var summon_power := 0
 
 @onready var root: Node3D = $"."
-@onready var summoning_table: StaticBody3D = $summoning_table
-@onready var smoke_puff: GPUParticles3D = $summoning_table/smoke_puff
-@onready var ink_circle: Sprite3D = $summoning_table/ink_circle2
+@onready var summoning_table: StaticBody3D = $summoning_floor
+@onready var smoke_puff: GPUParticles3D = $summoning_floor/smoke_puff
+@onready var ink_circle: Sprite3D = $summoning_floor/ink_circle2
 
 @onready var work_desk: StaticBody3D = $work_desk
 
@@ -76,6 +78,8 @@ func _handle_pressed_at(pos: Vector2) -> void:
 		var path: String = coll.get_meta("scene_path")
 		if path == "summon":
 			Signals.emit_signal("start_summon")
+		elif  path == "library":
+			print("library mode")
 		else:
 			get_tree().change_scene_to_file(path)
 
@@ -201,3 +205,6 @@ func _on_spell_chanted(spell: String) -> void:
 		"clear": clean_texture()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
+
+func _on_book_b_toggled(toggled_on: bool) -> void:
+	book_viewport_container.visible = toggled_on

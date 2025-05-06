@@ -1,18 +1,24 @@
-[gd_scene load_steps=22 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=24 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
-[ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/work_desk.tscn" id="6_8147l"]
-[ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_table.tscn" id="7_v1qvw"]
+[ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/drawing_desk_3D.tscn" id="6_8147l"]
+[ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
+[ext_resource type="PackedScene" uid="uid://x2vojf7j8i8f" path="res://Assets/models/cupboard.glb" id="8_xqkij"]
 [ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
 [ext_resource type="PackedScene" uid="uid://c3877y0a5adm7" path="res://Assets/models/main_room.glb" id="10_oool8"]
-[ext_resource type="PackedScene" uid="uid://ip7j1t81r4d1" path="res://Scenes/summons/monster.tscn" id="12_dxdgq"]
-[ext_resource type="Resource" uid="uid://i4wqu1mw2wg0" path="res://GameData/resources/ink_toad.tres" id="13_dxdgq"]
+[ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="13_dxdgq"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dxdgq"]
+viewport_path = NodePath("Control/touch_controls/book_ViewportContainer/book_viewport")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dxdgq"]
+size = Vector2(243, 360)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -131,6 +137,59 @@ offset_top = 50.0
 offset_right = 550.0
 offset_bottom = 50.0
 
+[node name="book_viewer" type="TextureRect" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 546.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_dxdgq")
+
+[node name="book_b" type="Button" parent="Control/touch_controls"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -176.0
+offset_right = 131.0
+offset_bottom = -126.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "book
+"
+
+[node name="book_ViewportContainer" type="SubViewportContainer" parent="Control/touch_controls"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_right = 256.0
+offset_bottom = 512.0
+grow_horizontal = 2
+scale = Vector2(2, 2)
+mouse_filter = 0
+
+[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/book_ViewportContainer"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Book" parent="Control/touch_controls/book_ViewportContainer/book_viewport" instance=ExtResource("13_dxdgq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
+
+[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
+position = Vector2(140, 270)
+shape = SubResource("RectangleShape2D_dxdgq")
+
+[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
+position = Vector2(384, 270)
+shape = SubResource("RectangleShape2D_dxdgq")
+shape_centered = false
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
 
@@ -147,19 +206,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.35673, 0.191746, -1.20246)
 
 [node name="work_desk" parent="." groups=["tap_to_enter"] instance=ExtResource("6_8147l")]
 transform = Transform3D(-0.670141, 0, 0.742233, 0, 1, 0, -0.742233, 0, -0.670141, 3.62834, 0.35306, -9.17767)
-metadata/scene_path = "res://Scenes/drawing_desk.tscn"
+metadata/scene_path = "res://Scenes/drawing_desk_2D.tscn"
 
-[node name="summoning_table" parent="." instance=ExtResource("7_v1qvw")]
+[node name="cupboard" parent="." groups=["tap_to_enter"] instance=ExtResource("8_xqkij")]
+transform = Transform3D(1.76777, 0, 1.76777, 0, 2.5, 0, -1.76777, 0, 1.76777, -10.5, 0, -8.5)
+
+[node name="summoning_floor" parent="." instance=ExtResource("7_v1qvw")]
 transform = Transform3D(1.41421, 0, -1.41421, 0, 2, 0, 1.41421, 0, 1.41421, -3.51861, 0.065846, -3.2676)
 metadata/scene_path = "summon"
 
-[node name="ink_circle2" type="Sprite3D" parent="summoning_table"]
+[node name="ink_circle2" type="Sprite3D" parent="summoning_floor"]
 transform = Transform3D(0, -0.875004, 3.82476e-08, 0, -3.82474e-08, -0.875, 0.875004, 0, 0, 0, 0.85, 0)
 flip_h = true
 texture = ExtResource("8_crhwu")
 script = ExtResource("9_oool8")
 
-[node name="smoke_puff" type="GPUParticles3D" parent="summoning_table"]
+[node name="smoke_puff" type="GPUParticles3D" parent="summoning_floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.929592, 0)
 material_override = SubResource("StandardMaterial3D_oool8")
 emitting = false
@@ -173,9 +235,7 @@ fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_dxdgq")
 draw_pass_1 = SubResource("QuadMesh_xqkij")
 
-[node name="debug_monster" parent="." instance=ExtResource("12_dxdgq")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 3, -2)
-visible = false
-data = ExtResource("13_dxdgq")
-
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/return_b" to="." method="_on_return_b_pressed"]
+[connection signal="toggled" from="Control/touch_controls/book_b" to="." method="_on_book_b_toggled"]
+[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_left_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_left_b_released"]
+[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_right_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_right_b_released"]

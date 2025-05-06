@@ -49,12 +49,6 @@ func set_page(p: int) -> void:
 			sep.add_theme_constant_override("separation", 20)
 			spell_container.add_child(sep)
 
-#func evaluate_spell(spell: String):
-	#print("wow! %s" % spell)
-
-#func _on_spell_pressed(spell: String) -> void:
-	#evaluate_spell(spell)
-
 func _on_button_toggled(toggled_on: bool) -> void:
 	control.visible = toggled_on
 	control.mouse_filter = Control.MOUSE_FILTER_STOP \

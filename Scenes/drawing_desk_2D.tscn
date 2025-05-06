@@ -1,0 +1,134 @@
+[gd_scene load_steps=8 format=3 uid="uid://cflmai4wnxr71"]
+
+[ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_desk_2D.gd" id="1_h044k"]
+[ext_resource type="Texture2D" uid="uid://d3ogl5qqw2d5o" path="res://Assets/textures/grunge-style-blackboard-texture.jpg" id="2_o82lr"]
+[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_cvmnq"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_4bnpw"]
+[ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="5_vmlmr"]
+[ext_resource type="Script" uid="uid://dur7tpbb13f1f" path="res://Scripts/guides_drawer.gd" id="6_fhjnd"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
+viewport_path = NodePath("SubViewport")
+
+[node name="drawing_desk_2D" type="Node2D"]
+script = ExtResource("1_h044k")
+cam_speed = 15.0
+line_thickness = 15.0
+tool = 1
+
+[node name="background" type="Sprite2D" parent="."]
+z_index = -2
+texture_repeat = 2
+texture = ExtResource("2_o82lr")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2024, 2024)
+
+[node name="guide_viewer" type="Sprite2D" parent="."]
+z_index = -1
+texture = SubResource("ViewportTexture_5a8fl")
+centered = false
+
+[node name="Control" type="Control" parent="."]
+top_level = true
+layout_mode = 3
+anchor_right = 0.709
+anchor_bottom = 0.801
+offset_right = 0.231934
+offset_bottom = -0.0480347
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="touch_controls" parent="Control" instance=ExtResource("3_cvmnq")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_top = 20.0
+offset_right = -183.0
+offset_bottom = 222.0
+grow_horizontal = 0
+scale = Vector2(1.5, 1.5)
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="tool" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_4bnpw")
+text = "no_tool"
+metadata/_edit_use_anchors_ = true
+
+[node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_4bnpw")
+text = "reset"
+metadata/_edit_use_anchors_ = true
+
+[node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_4bnpw")
+text = "save"
+metadata/_edit_use_anchors_ = true
+
+[node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_4bnpw")
+text = "return to the room"
+metadata/_edit_use_anchors_ = true
+
+[node name="moveToFloor" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_4bnpw")
+text = "move to the floor"
+metadata/_edit_use_anchors_ = true
+
+[node name="debug_label" type="Label" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+
+[node name="notebook" parent="Control/touch_controls" instance=ExtResource("5_vmlmr")]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 550.0
+offset_bottom = 50.0
+page = 3
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1012, 1012)
+limit_left = -1000
+limit_top = -1000
+limit_right = 2500
+limit_bottom = 2500
+limit_smoothed = true
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 2
+
+[node name="saved_texture" type="Sprite2D" parent="SubViewport"]
+centered = false
+
+[node name="guide_drawer" type="Node2D" parent="SubViewport"]
+script = ExtResource("6_fhjnd")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="reset"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]

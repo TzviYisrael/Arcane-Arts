@@ -74,7 +74,7 @@ static func init_ink_colors(img: Image) -> void:
 	var height: float = img.get_height()
 	var outside_color := Color.GREEN
 	var portal_color := Color.DARK_BLUE
-	var summon_color := Color.RED # remove?
+	var _summon_color := Color.RED # remove?
 
 	var center := Vector2(width / 2.0, height / 2.0)
 	var radius: float = min(width, height) / 2.0 - 1.0
@@ -89,10 +89,10 @@ static func init_ink_colors(img: Image) -> void:
 
 	# Draw circular border in green using polar coordinates
 	var steps := int(2 * PI * radius)  # Approximate number of pixels on the circle
-	for i in range(steps):
-		var angle = i * 2 * PI / steps
-		var x = int(center.x + cos(angle) * radius)
-		var y = int(center.y + sin(angle) * radius)
+	for i: int in range(steps):
+		var angle: float = i * 2 * PI / steps
+		var x := int(center.x + cos(angle) * radius)
+		var y := int(center.y + sin(angle) * radius)
 
 		# Ensure we're in bounds
 		if x >= 0 and x < width and y >= 0 and y < height:
@@ -102,10 +102,10 @@ static  func clean_colors(img: Image) -> void:
 	if img.is_empty():
 		return
 
-	var width = img.get_width()
-	var height = img.get_height()
-	for y in range(height):
-			for x in range(width):
+	var width: float = img.get_width()
+	var height: float = img.get_height()
+	for y: int in range(height):
+			for x: int in range(width):
 				if not compare_rgb(img.get_pixel(x, y), Color.BLACK):
 					img.set_pixel(x, y, Color(0.0,0.0,0.0,0.0))
 
@@ -123,11 +123,11 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 	if img.is_empty():
 		return [false, false]  # No symmetry for empty images
 
-	var width = img.get_width()
-	var height = img.get_height()
+	var width: float = img.get_width()
+	var height: float = img.get_height()
 	
-	var horizontal_matches = 0
-	var vertical_matches = 0
+	var horizontal_matches: int = 0
+	var vertical_matches: int = 0
 
 	for y in range(height):
 		for x in range(width):
@@ -138,8 +138,8 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 				if img.get_pixel(x, y) == img.get_pixel(x, height - 1 - y):
 					vertical_matches += 1
 
-	var horizontal_ratio = float(horizontal_matches) / (int(width / 2.0) * height)
-	var vertical_ratio = float(vertical_matches) / (int(height / 2.0) * width)
+	var horizontal_ratio: float = float(horizontal_matches) / (width / 2.0 * height)
+	var vertical_ratio: float = float(vertical_matches) / (height / 2.0 * width)
 
 	return [horizontal_ratio >= threshold, vertical_ratio >= threshold]
 
@@ -163,7 +163,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 	var radius: float = height / 2
 	
 	## check if the image boreders and in side the circle
-	var is_in_border = func borders(v: Vector2) -> bool: 
+	var is_in_border := func borders(v: Vector2) -> bool: 
 		return center.distance_to(v) <= radius - 0.5
 
 	if TextureManager.surface_pos.is_empty():
@@ -171,21 +171,21 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			for x in range(width):
 				if not compare_rgb(buffer.get_pixel(x, y), Color.BLACK):
 					continue
-				var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
+				var nei: Array = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
 				#prints(x, y, nei, Color.RED in nei, Color.GREEN in nei)
 				if portal_color in nei or outside_color in nei or summon_color in nei:
 						TextureManager.surface_pos.append(Vector2(x, y))
-						
+				
 		return not TextureManager.surface_pos.is_empty()
 	
 	else:
 		for p in TextureManager.surface_pos:
-			var x = p.x
-			var y = p.y
-			var p_color = buffer.get_pixelv(p)
-			var new_color = p_color
-			var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
+			var x: float = p.x
+			var y: float = p.y
+			var p_color: Color = buffer.get_pixelv(p)
+			var new_color := p_color
+			var nei:Array = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
 			if state == 0:
 				if portal_color in nei:
@@ -218,14 +218,14 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 		
 		var new_surface_pos: Array[Vector2] = []
 		for p in TextureManager.surface_pos:
-			var x = p.x
-			var y = p.y
+			var x: float = p.x
+			var y: float = p.y
 			if compare_rgb(img.get_pixelv(p), Color.BLACK):
 				if not p in new_surface_pos: new_surface_pos.append(p)
 				continue
-			var nei = [Vector2(x - 1, y), Vector2(x + 1, y),\
+			var nei: Array = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border)
-			for n in nei:
+			for n: Vector2 in nei:
 				if compare_rgb(img.get_pixelv(n), Color.BLACK):
 					if not n in new_surface_pos: new_surface_pos.append(n)
 

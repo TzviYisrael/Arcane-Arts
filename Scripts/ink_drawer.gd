@@ -6,14 +6,14 @@ var points : Array[Vector4] = []
 func _ready() -> void:
 	position = Vector2.ZERO
 
-func _draw():
+func _draw()  -> void:
 	for p in points:
 		match int(p.w):
 			root.tools.INK:
 				draw_circle(Vector2(p.x, p.y), p.z,Color.BLACK)
 			root.tools.COVER:
 				draw_circle(Vector2(p.x, p.y), p.z,Color.WHITE)
-func _process(_delta):
+func _process(_delta: float) -> void:
 	queue_redraw()
 
 func clear() -> void:
