@@ -2,6 +2,7 @@ extends Node3D
 
 # The current page is the one on the left
 var current_page_number: int = 1
+@export var content: BookContent
 
 # This is displayed when pages are not moving
 @onready var static_page := $Book/Static
@@ -73,16 +74,18 @@ func hide_and_show(page : Node) -> void:
 	await get_tree().create_timer(0.1).timeout  # Wait for 0.1 seconds
 	page.show()  # Show the node again
 
+## Changes current page's number by the offset and updates the viewports.
 func update_page_number(page_offset: int = 0) -> void:
-	"""Changes current page's number by the offset and updates the viewports."""
 	current_page_number += page_offset
 	var number_offset: int = -2
 	for v: Viewport in [v1, v2, v3, v4, v5, v6]:
-		v.get_node("Page").set_number(current_page_number + number_offset)
+		var page_num: int = current_page_number + number_offset
+		v.get_node("Page").set_page_by_number(page_num, content.get_page(page_num))
 		number_offset += 1
 
+## Attaches a viewport texture to a page.
 func set_texture(page: Node, viewport: Viewport) -> void:
-	"""Attaches a viewport texture to a page."""
+	
 	page.material_override = StandardMaterial3D.new()
 	page.material_override.albedo_texture = viewport.get_texture()
 

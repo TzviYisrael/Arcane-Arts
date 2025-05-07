@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BookContent" load_steps=2 format=3 uid="uid://daobfsxp66ljh"]
+
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="1_1508u"]
+
+[resource]
+script = ExtResource("1_1508u")
+pages = Array[String](["cover", "1: hello", "hello my name is inigo montoya", "you killed my father", "prepare to die", "2: hello", "hello my name is inigo montoya", "you killed my father", "prepare to die"])
+metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

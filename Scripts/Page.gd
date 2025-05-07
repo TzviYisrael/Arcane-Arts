@@ -7,9 +7,9 @@ var adjectives: Array[String] = ["brave", "mysterious", "ancient", "glowing", "f
 var adverbs: Array[String] = ["boldly", "mysteriously", "bravely", "fiercely", "quickly", "cautiously", "silently", "relentlessly"]
 
 
-func set_number(value: int) -> void:
+func set_page_by_number(value: int, text: String) -> void:
 	$Background/Number.text =  "- "+str(value) + " -"
-	$Background/Text.text = generate_placeholder_text(value)
+	$Background/Text.text = text #generate_placeholder_text(value)
 
 # Function to generate random placeholder text
 func generate_placeholder_text(page_seed: int) -> String:

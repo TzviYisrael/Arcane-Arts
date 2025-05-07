@@ -4,8 +4,8 @@ var mouse := Vector2()
 const MAX_D = 1000
 @onready var button_con: VBoxContainer = $Control/touch_controls/VBoxContainer
 @onready var massege: Label = $Control/touch_controls/massege
-@onready var book_viewer: TextureRect = $Control/touch_controls/book_viewer
 @onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
+@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D

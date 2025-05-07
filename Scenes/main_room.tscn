@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/drawing_desk_3D.tscn" id="6_8147l"]
+[ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="6_xqkij"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
@@ -13,9 +14,6 @@
 [ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
 [ext_resource type="PackedScene" uid="uid://c3877y0a5adm7" path="res://Assets/models/main_room.glb" id="10_oool8"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="13_dxdgq"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_dxdgq"]
-viewport_path = NodePath("Control/touch_controls/book_ViewportContainer/book_viewport")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dxdgq"]
 size = Vector2(243, 360)
@@ -137,16 +135,6 @@ offset_top = 50.0
 offset_right = 550.0
 offset_bottom = 50.0
 
-[node name="book_viewer" type="TextureRect" parent="Control/touch_controls"]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 546.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("ViewportTexture_dxdgq")
-
 [node name="book_b" type="Button" parent="Control/touch_controls"]
 anchors_preset = 2
 anchor_top = 1.0
@@ -162,6 +150,7 @@ text = "book
 "
 
 [node name="book_ViewportContainer" type="SubViewportContainer" parent="Control/touch_controls"]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -176,10 +165,11 @@ mouse_filter = 0
 own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Book" parent="Control/touch_controls/book_ViewportContainer/book_viewport" instance=ExtResource("13_dxdgq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
+content = ExtResource("6_xqkij")
 
 [node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
 position = Vector2(140, 270)

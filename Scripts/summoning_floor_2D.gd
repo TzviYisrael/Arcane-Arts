@@ -14,6 +14,7 @@ var center := Vector2()
 
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
+@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
 
 #var first_point : Vector2 = Vector2.INF
 var touch_point : Vector2 = Vector2.INF
@@ -156,3 +157,6 @@ func _on_spell_chanted(spell: String) -> void:
 		"save": _on_save_pressed()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
+
+func _on_book_b_toggled(toggled_on: bool) -> void:
+	book_viewport_container.visible = toggled_on

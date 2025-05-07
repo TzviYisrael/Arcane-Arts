@@ -16,6 +16,7 @@ var center: Vector2 = Vector2()
 
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var debug_label: Label = $Control/touch_controls/debug_label
+@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
 
 var points : Array[Vector2] = []
 var texture : Texture2D
@@ -206,3 +207,7 @@ func _on_spell_chanted(spell: String) -> void:
 		"reset": reset()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
+
+
+func _on_book_b_toggled(toggled_on: bool) -> void:
+	book_viewport_container.visible = toggled_on
