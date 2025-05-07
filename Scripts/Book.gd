@@ -34,6 +34,11 @@ var current_page_number: int = 1
 @onready var animationPlayer : AnimationPlayer = $Book/Turning/AnimationPlayer
 
 func _ready()  -> void:
+	if content == null:
+		return
+	setup()
+
+func setup() -> void:
 	update_page_number()
 	turning_page.hide()
 	set_texture(ps1, v3)

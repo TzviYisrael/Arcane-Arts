@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://couxdhiijysg2"
-path="res://.godot/imported/cupboard.glb-82f2ded971793f1d9754cdae7da95be6.scn"
+uid="uid://b0nbq2v6cpdeq"
+path="res://.godot/imported/eye_monster.glb-edb9c32019409ff9c9994ddca270c0e6.scn"
 
 [deps]
 
-source_file="res://Assets/models/cupboard.glb"
-dest_files=["res://.godot/imported/cupboard.glb-82f2ded971793f1d9754cdae7da95be6.scn"]
+source_file="res://Assets/summons/eye_monster.glb"
+dest_files=["res://.godot/imported/eye_monster.glb-edb9c32019409ff9c9994ddca270c0e6.scn"]
 
 [params]
 
@@ -32,6 +32,17 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"materials": {
+"eye white.001": {
+"use_external/enabled": true,
+"use_external/path": "uid://dh58qfoeopqn4"
+},
+"iris": {
+"use_external/enabled": true,
+"use_external/path": "uid://dh58qfoeopqn4"
+}
+}
+}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

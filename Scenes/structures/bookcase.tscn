@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ce5oyn0uvk82o"]
+
+[ext_resource type="PackedScene" uid="uid://couxdhiijysg2" path="res://Assets/models/cupboard.glb" id="1_pqh0n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yln31"]
+size = Vector3(3.66, 6.233, 1.873)
+
+[node name="bookcase" type="StaticBody3D"]
+
+[node name="cupboard" parent="." instance=ExtResource("1_pqh0n")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0143232, 3.04475, 0.00762939)
+shape = SubResource("BoxShape3D_yln31")

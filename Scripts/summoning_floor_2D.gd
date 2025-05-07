@@ -15,6 +15,7 @@ var center := Vector2()
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
 @onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
+@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
 
 #var first_point : Vector2 = Vector2.INF
 var touch_point : Vector2 = Vector2.INF
@@ -47,8 +48,11 @@ func _ready() -> void:
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
 	tool_button.text = str(tools.keys()[tool]).to_lower()
-	
-	
+	if SceneManager.current_book:
+		book.content = SceneManager.current_book
+		book.setup()
+	else:
+		$Control/touch_controls/book_b.hide()
 	queue_redraw()
 
 func _process(_delta: float)  -> void:
@@ -61,16 +65,16 @@ func _draw()  -> void:
 	draw_circle(center, 20.0, Color.RED)
 	
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventScreenDrag or event is InputEventScreenTouch:
-		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
-		queue_redraw()
-		if event.index < 1:
-			_handle_touch(touch_point)
-	elif event is InputEventPanGesture:
+	if event is InputEventPanGesture:
 		camera.position += event.delta
 	elif event is InputEventMagnifyGesture:
 		camera.zoom = camera.zoom * event.factor
 		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+	elif event is InputEventScreenDrag or (event is InputEventScreenTouch and not event.is_pressed()):
+		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		queue_redraw()
+		if event.index < 1:
+			_handle_touch(touch_point)
 		
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
@@ -159,4 +163,5 @@ func _on_spell_chanted(spell: String) -> void:
 		get_tree().get_current_scene())
 
 func _on_book_b_toggled(toggled_on: bool) -> void:
-	book_viewport_container.visible = toggled_on
+	if SceneManager.current_book != null:
+		book_viewport_container.visible = toggled_on

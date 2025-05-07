@@ -79,7 +79,8 @@ func _handle_pressed_at(pos: Vector2) -> void:
 		if path == "summon":
 			Signals.emit_signal("start_summon")
 		elif  path == "library":
-			print("library mode")
+			SceneManager.current_book = load("res://GameData/resources/books/the_qween_bride.tres")
+			$Control/touch_controls/book_b.show()
 		else:
 			get_tree().change_scene_to_file(path)
 
@@ -110,7 +111,8 @@ func enter_summon_floor() -> void:
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/bull.tres",
-		"ink_toad": "res://GameData/resources/ink_toad.tres"
+		"ink_toad": "res://GameData/resources/ink_toad.tres",
+		"eye_demon": "res://GameData/resources/eye_demon.tres"
 	}
 	if not summoned == null: print("existing summon"); return
 	if not summon_name in summons_res: print("no such summon"); return
@@ -199,7 +201,7 @@ func _on_spell_chanted(spell: String) -> void:
 	match spell:
 		"zamen shor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
 		"zamen tzfardio": init_ritual(SummonData.CATEGORY.MONSTER, "ink_toad")
-			 #"zamen mazzik",
+		"zamen mazzik": init_ritual(SummonData.CATEGORY.DEMON, "eye_demon")
 		"kill": kill_summon()
 		"release": release_summon()
 		"clear": clean_texture()
@@ -207,4 +209,5 @@ func _on_spell_chanted(spell: String) -> void:
 		get_tree().get_current_scene())
 
 func _on_book_b_toggled(toggled_on: bool) -> void:
-	book_viewport_container.visible = toggled_on
+	if SceneManager.current_book != null:
+		book_viewport_container.visible = toggled_on

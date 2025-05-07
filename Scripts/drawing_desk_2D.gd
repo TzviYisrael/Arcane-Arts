@@ -17,6 +17,7 @@ var center: Vector2 = Vector2()
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var debug_label: Label = $Control/touch_controls/debug_label
 @onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
+@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
 
 var points : Array[Vector2] = []
 var texture : Texture2D
@@ -49,7 +50,11 @@ func _ready() -> void:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
 	
 	tool_button.text = str(tools.keys()[tool]).to_lower()
-	
+	if SceneManager.current_book:
+		book.content = SceneManager.current_book
+		book.setup()
+	else:
+		$Control/touch_controls/book_b.hide()
 	queue_redraw()
 
 func _process(_delta: float) -> void:
@@ -210,4 +215,5 @@ func _on_spell_chanted(spell: String) -> void:
 
 
 func _on_book_b_toggled(toggled_on: bool) -> void:
-	book_viewport_container.visible = toggled_on
+	if SceneManager.current_book != null:
+		book_viewport_container.visible = toggled_on
