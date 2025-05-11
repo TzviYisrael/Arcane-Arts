@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://4aeulequxcex"]
 
 [ext_resource type="Script" uid="uid://wqewykak48tq" path="res://Scripts/summons/animal.gd" id="1_a2hpi"]
-[ext_resource type="Resource" uid="uid://jr1ee5ipaoxi" path="res://GameData/resources/bull.tres" id="2_gjde1"]
+[ext_resource type="Resource" uid="uid://jr1ee5ipaoxi" path="res://GameData/resources/summons/bull.tres" id="2_gjde1"]
 
 [node name="animal" type="CharacterBody3D"]
 script = ExtResource("1_a2hpi")

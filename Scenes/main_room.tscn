@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="13_dxdgq"]
 [ext_resource type="PackedScene" uid="uid://ce5oyn0uvk82o" path="res://Scenes/structures/bookcase.tscn" id="14_xqkij"]
 [ext_resource type="PackedScene" uid="uid://1063ew1g27dh" path="res://Scenes/summons/demon.tscn" id="15_cw24y"]
-[ext_resource type="Resource" uid="uid://u63crg8rsoaf" path="res://GameData/resources/eye_demon.tres" id="16_84vt4"]
+[ext_resource type="Resource" uid="uid://u63crg8rsoaf" path="res://GameData/resources/summons/eye_demon.tres" id="16_84vt4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dxdgq"]
 size = Vector2(243, 360)
@@ -227,7 +227,6 @@ draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [node name="bookcase" parent="." groups=["tap_to_enter"] instance=ExtResource("14_xqkij")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.7, 0, -9.7)
-metadata/scene_path = "library"
 
 [node name="demon" parent="." instance=ExtResource("15_cw24y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35663, 3.91012, 0.221264)

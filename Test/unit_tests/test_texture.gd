@@ -21,6 +21,17 @@ func test_ca() -> void:
 		Ink_circle.fast_ca_genretion(img, 1)
 		#img.save_png("res://Test/unit_tests/small.png")
 		img.save_png("res://Test/unit_tests/small_after_%d.png" % i)
+	assert_true(true)
+
+func test_flood_fill() -> void:
+	var img := Image.load_from_file("res://Test/unit_tests/flood_img.png")
+	assert_eq(len(Ink_circle.flood_fill(img, Vector2(4, 0))), 9, "the fill is incorrect")
+	assert_eq(Ink_circle.flood_fill(img, Vector2(3, 0)), [Vector2(3,0)], "the fill is incorrect")
+	assert_eq(Ink_circle.flood_fill(img, Vector2(-1, -1)), [], "not empty in OOB position")
+
+func test_island_counter() -> void:
+	var img := Image.load_from_file("res://Test/unit_tests/flood_img.png")
+	assert_eq(Ink_circle.island_counter(img), 6)
 
 func test_rgb_c() -> void:
 	assert_true(Ink_circle.compare_rgb(Color.BLACK, Color(0, 0, 0, 0)))

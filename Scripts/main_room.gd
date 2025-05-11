@@ -21,6 +21,7 @@ var summon_power := 0
 
 @onready var work_desk: StaticBody3D = $work_desk
 
+enum {PORTAL, GRAPPLE}
 enum states{ROOM, RITUAL_READY, RITUAL_START, GRAPPLE, CAPTURED}
 @export_enum("room", "ritual_ready", "ritual_start", "grapple", "captured")
 var state: int = 0
@@ -29,7 +30,7 @@ func _ready() -> void:
 	Signals.connect("init_ritual", init_ritual)
 	Signals.connect("enter_summon_floor", enter_summon_floor)
 	Signals.connect("add_summon_power", add_summon_power)
-	Signals.connect("portal_done", portal_done)
+	Signals.connect("portal_distracted", portal_distracted)
 	Signals.connect("breach", breach)
 	
 	state = states.ROOM
@@ -48,10 +49,10 @@ func _process(_delta: float) -> void:
 			states.ROOM: pass
 			states.RITUAL_READY: pass
 			states.RITUAL_START:
-				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, 0)
+				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, PORTAL)
 				update_texture()
 			states.GRAPPLE:
-				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, 1)
+				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, GRAPPLE)
 				update_texture()
 	
 	#if run_sim and summon_power >= target_power and state == states.RITUAL_START:
@@ -110,9 +111,9 @@ func enter_summon_floor() -> void:
 
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
-		"bull": "res://GameData/resources/bull.tres",
-		"ink_toad": "res://GameData/resources/ink_toad.tres",
-		"eye_demon": "res://GameData/resources/eye_demon.tres"
+		"bull": "res://GameData/resources/summons/bull.tres",
+		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
+		"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
 	}
 	if not summoned == null: print("existing summon"); return
 	if not summon_name in summons_res: print("no such summon"); return
@@ -120,6 +121,8 @@ func init_ritual(category: int, summon_name: String) -> void:
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	
 	mage.anim_state.travel("summon")
+	var param := Ink_circle.island_counter(TextureManager.ink_circle)
+	prints("island_counter:",param)
 	Ink_circle.init_ink_colors(TextureManager.ink_circle)
 	TextureManager.surface_pos.clear()
 	update_texture()
@@ -153,7 +156,10 @@ func summon() -> void:
 
 func add_summon_power(power: int) -> void:
 	summon_power += power
-	prints("summon_power:", summon_power)
+	if state == states.RITUAL_START:
+		prints("potal_size:", summon_power)
+	else:
+		prints("summon power:", summon_power)
 	if run_sim and summon_power >= target_power \
 		and state == states.RITUAL_START:
 		summon()
@@ -165,12 +171,12 @@ func breach(pos: Vector2) -> void:
 	massege.show()
 	root.process_mode = Node.PROCESS_MODE_DISABLED
 
-func portal_done(_pos: Vector2) -> void:
+func portal_distracted(_pos: Vector2) -> void:
 	if summon_power >= target_summoned.data.size:
 		state = states.GRAPPLE
 		print("portal_done")
 	else:
-		print("portal too small")
+		print("portal distracted")
 		clean_texture()
 
 func update_texture() -> void:

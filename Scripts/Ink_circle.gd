@@ -1,8 +1,10 @@
 class_name Ink_circle
 
 extends Object
+enum {PORTAL, GRAPPLE}
 
 @export var something := 5 # only to see it in the editor
+const MIN_ISLAND_SIZE := 100
 
 static func resize_image(image: Image, factor: int) -> Image:
 	var new_image := image.duplicate()
@@ -119,6 +121,65 @@ static func count_color(circle: Image, ink_color:Color) -> int:
 				ink_counter += 1
 	return ink_counter
 
+static func flood_fill(img: Image, pos: Vector2, visited := {}) -> Array:
+	var width: float = img.get_width()
+	var height: float = img.get_height()
+	#var visited := {}
+	
+	var start_color: Color = img.get_pixelv(pos)
+	if start_color.a > 0.7: return []
+	var result := []
+
+	var is_in_bounds := func is_in_bounds(neighbor: Vector2) -> bool:
+		return neighbor.x >= 0 and neighbor.x < width and neighbor.y >= 0 and neighbor.y < height
+	var is_valid_neighbor := func is_valid_neighbor(neighbor: Vector2) -> bool:
+		return (not neighbor in visited) and img.get_pixelv(neighbor) == start_color
+
+	var queue := [pos].filter(is_in_bounds)
+	while queue.size() > 0:
+		var current: Vector2 = queue.pop_front()
+		if current in visited:
+			continue
+
+		visited[current] = true
+		result.append(current)
+
+		var valid_neighbors: Array = \
+		[current + Vector2(0, -1), current + Vector2(0, 1),
+		 current + Vector2(-1, 0), current + Vector2(1, 0)] \
+		.filter(is_in_bounds) \
+		.filter(is_valid_neighbor)
+
+		queue += valid_neighbors
+
+	return result
+
+static func island_counter(img: Image) -> int:
+	var width: float = img.get_width()
+	var height: float = img.get_height()
+	#var dup: Image = img.duplicate()
+	var visited := {}
+	var island_count: int = 0
+
+	for y in range(height):
+		for x in range(width):
+			var pos := Vector2(x, y)
+			if pos in visited:
+				continue
+
+			var island: Array = flood_fill(img, pos, visited)
+			if len(island) > MIN_ISLAND_SIZE:
+				#debug
+				#var rc = Color.from_hsv(randf(),randf_range(0.2, 0.6),randf_range(0.9, 1.0))
+				#for p in island:
+					#dup.set_pixelv(p, rc)
+					
+				for v: Vector2 in island:
+					visited[v] = true
+				island_count += 1
+	#dup.save_png("res://GameData/islands.png") #debug
+	return island_count
+
 static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool]:
 	if img.is_empty():
 		return [false, false]  # No symmetry for empty images
@@ -144,6 +205,7 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 	return [horizontal_ratio >= threshold, vertical_ratio >= threshold]
 
 static func fast_ca_genretion(img: Image, state: int) -> bool:
+	
 	var COLOR_STEP: float = 0.01
 	var power: int = 0
 	var changed: bool = false
@@ -187,13 +249,13 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			var new_color := p_color
 			var nei:Array = [Vector2(x - 1, y), Vector2(x + 1, y),\
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
-			if state == 0:
+			if state == PORTAL:
 				if portal_color in nei:
 					new_color = portal_color
 					power += 1
 					changed = true
 					if Color.BLACK in nei: 
-							Signals.emit_signal("portal_done", p)
+							Signals.emit_signal("portal_distracted", p)
 							return true
 			else:
 				if p_color.a < COLOR_STEP * 2:
