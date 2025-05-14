@@ -227,6 +227,7 @@ draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [node name="bookcase" parent="." groups=["tap_to_enter"] instance=ExtResource("14_xqkij")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.7, 0, -9.7)
+metadata/scene_path = "library"
 
 [node name="demon" parent="." instance=ExtResource("15_cw24y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35663, 3.91012, 0.221264)

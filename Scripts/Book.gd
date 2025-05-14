@@ -47,6 +47,9 @@ func setup() -> void:
 	animationPlayer.animation_finished.connect(_on_animation_finished)
 
 func turn_right() -> void:
+	if current_page_number + 4 > len(content.pages):
+		return
+		
 	set_texture(pf1, v3)
 	set_texture(pf2, v4)
 	set_texture(pf3, v5)
