@@ -6,6 +6,7 @@ const MAX_D = 1000
 @onready var massege: Label = $Control/touch_controls/massege
 @onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
 @onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
+@onready var book_selection_ui: Control = $Control/touch_controls/book_selection_ui
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
@@ -80,8 +81,9 @@ func _handle_pressed_at(pos: Vector2) -> void:
 		if path == "summon":
 			Signals.emit_signal("start_summon")
 		elif  path == "library":
-			SceneManager.current_book = load("res://GameData/resources/books/the_qween_bride.tres")
-			$Control/touch_controls/book_b.show()
+			book_selection_ui.show()
+			#SceneManager.current_book = load("res://GameData/resources/books/the_qween_bride.tres")
+			#$Control/touch_controls/book_b.show()
 		else:
 			get_tree().change_scene_to_file(path)
 

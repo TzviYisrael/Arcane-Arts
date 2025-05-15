@@ -1,24 +1,33 @@
 extends Control
 
-@export var rotation_factor: float
+@export var book_scale: Vector3 = Vector3.ONE
 @export var book_title: String
 
 @onready var book_3d: SubViewportContainer = $"."
 @onready var sub_viewport: SubViewport = $SubViewport
 
-@onready var csg_mesh_3d: CSGMesh3D = $SubViewport/Node3D/CSGMesh3D
-@onready var label_3d: Label3D = $SubViewport/Node3D/CSGMesh3D/Label3D
-@onready var label_3d_2: Label3D = $SubViewport/Node3D/CSGMesh3D/Label3D2
+@onready var book_model: Node3D = $SubViewport/Node3D/book_3D
+@onready var book_name_label: Label3D = $SubViewport/Node3D/book_3D/book_name_label
+@onready var side_name_label: Label3D = $SubViewport/Node3D/book_3D/side_name_label
+@onready var button: TextureButton = $Button
 
+var rotation_factor: float
+var padding: int = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	book_model.scale = book_scale
 	update_rotation(rotation_factor)
-	label_3d.text = book_title
-	label_3d_2.text = book_title
+	book_name_label.text = book_title
+	side_name_label.text = book_title
 	
 func update_rotation(factor: float) -> void:
-	csg_mesh_3d.rotation_degrees.y = lerp(-180, -90, factor)
-	var x_size: int = lerp(512, 128, factor)
+	book_model.rotation_degrees.y = lerp(-90, 0, ease(factor, -3))
+	var x_size: int = lerp(512, 128, factor) + padding * 2
 	book_3d.custom_minimum_size.x = x_size
+	button.custom_minimum_size.x = x_size
 	sub_viewport.size.x = x_size
+
+
+func _on_button_pressed() -> void:
+	print("pressed!")

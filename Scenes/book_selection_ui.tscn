@@ -24,34 +24,34 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
+scroll_deadzone = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 alignment = 1
 
+[node name="VSeparator_start" type="VSeparator" parent="ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1000
+
 [node name="book_3D2" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.0
 book_title = "the apprentice guidebook"
 
 [node name="book_3D5" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.2
 book_title = "summon 101"
 
 [node name="book_3D6" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.4
 book_title = "the princess bride"
 
 [node name="book_3D3" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.6
 book_title = "the fellowship of the ring"
 
 [node name="book_3D4" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.8
 book_title = "the two towers"
 
 [node name="book_3D7" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
@@ -60,27 +60,22 @@ book_title = "the return of the king"
 
 [node name="book_3D8" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.0
 book_title = "the apprentice guidebook"
 
 [node name="book_3D9" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.2
 book_title = "summon 101"
 
 [node name="book_3D10" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.4
 book_title = "the princess bride"
 
 [node name="book_3D11" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.6
 book_title = "the fellowship of the ring"
 
 [node name="book_3D12" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.8
 book_title = "the two towers"
 
 [node name="book_3D13" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
@@ -89,29 +84,39 @@ book_title = "the return of the king"
 
 [node name="book_3D14" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.0
 book_title = "the apprentice guidebook"
 
 [node name="book_3D15" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.2
 book_title = "summon 101"
 
 [node name="book_3D16" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.4
 book_title = "the princess bride"
 
 [node name="book_3D17" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.6
 book_title = "the fellowship of the ring"
 
 [node name="book_3D18" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
-rotation_factor = 0.8
 book_title = "the two towers"
 
 [node name="book_3D19" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
 layout_mode = 2
 book_title = "the return of the king"
+
+[node name="VSeparator_end" type="VSeparator" parent="ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1000
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 160.0
+offset_bottom = 107.0
+theme_override_font_sizes/font_size = 50
+text = "close"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
