@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=26 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/structures/drawing_desk_3D.tscn" id="6_8147l"]
 [ext_resource type="Resource" uid="uid://dubf1f2kdmy6w" path="res://GameData/resources/books/the_qween_bride.tres" id="6_xqkij"]
-[ext_resource type="PackedScene" uid="uid://8ojmfyx0m2hp" path="res://Scenes/book_selection_ui.tscn" id="7_84vt4"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/structures/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
@@ -153,7 +152,7 @@ toggle_mode = true
 text = "book
 "
 
-[node name="book_ViewportContainer" type="SubViewportContainer" parent="Control/touch_controls"]
+[node name="book_2D" type="SubViewportContainer" parent="Control/touch_controls"]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
@@ -165,27 +164,24 @@ grow_horizontal = 2
 scale = Vector2(2, 2)
 mouse_filter = 0
 
-[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/book_ViewportContainer"]
+[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/book_2D"]
 own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 0
 
-[node name="Book" parent="Control/touch_controls/book_ViewportContainer/book_viewport" instance=ExtResource("13_dxdgq")]
+[node name="Book" parent="Control/touch_controls/book_2D/book_viewport" instance=ExtResource("13_dxdgq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
 content = ExtResource("6_xqkij")
 
-[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
+[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_2D"]
 position = Vector2(140, 270)
 shape = SubResource("RectangleShape2D_dxdgq")
 
-[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
+[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/book_2D"]
 position = Vector2(384, 270)
 shape = SubResource("RectangleShape2D_dxdgq")
 shape_centered = false
-
-[node name="book_selection_ui" parent="Control/touch_controls" instance=ExtResource("7_84vt4")]
-visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
@@ -231,7 +227,7 @@ draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [node name="bookcase" parent="." groups=["tap_to_enter"] instance=ExtResource("14_xqkij")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.7, 0, -9.7)
-metadata/scene_path = "library"
+metadata/scene_path = "res://Scenes/study_desk_2D.tscn"
 
 [node name="demon" parent="." instance=ExtResource("15_cw24y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35663, 3.91012, 0.221264)
@@ -240,5 +236,5 @@ data = ExtResource("16_84vt4")
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/return_b" to="." method="_on_return_b_pressed"]
 [connection signal="toggled" from="Control/touch_controls/book_b" to="." method="_on_book_b_toggled"]
-[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_left_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_left_b_released"]
-[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_right_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_right_b_released"]
+[connection signal="released" from="Control/touch_controls/book_2D/book_left_b" to="Control/touch_controls/book_2D/book_viewport/Book" method="_on_book_left_b_released"]
+[connection signal="released" from="Control/touch_controls/book_2D/book_right_b" to="Control/touch_controls/book_2D/book_viewport/Book" method="_on_book_right_b_released"]

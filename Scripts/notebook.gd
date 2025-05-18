@@ -4,7 +4,7 @@ extends Control
 @onready var title: Label = $Control/title
 @onready var control: Control = $Control
 
-enum MODES {SUMMON, SUMMON_SPELLS, ROOM_SPELLS, CHALKBOARD, FLOOR}
+enum MODES {SUMMON, SUMMON_SPELLS, ROOM_SPELLS, CHALKBOARD, FLOOR, STUDY}
 
 var pages: Dictionary = {
 	MODES.SUMMON : ["zamen shor", "zamen tzfardio", "zamen mazzik", "",
@@ -13,6 +13,7 @@ var pages: Dictionary = {
 	MODES.ROOM_SPELLS : [],
 	MODES.CHALKBOARD : ["reset"],
 	MODES.FLOOR: ["reset", "save"],
+	MODES.STUDY: []
 	}
 
 @export_enum("summon", "summon_spells",

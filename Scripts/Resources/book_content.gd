@@ -1,6 +1,8 @@
 extends Resource
 class_name BookContent
 
+@export var title: String
+@export var scale: Vector3 = Vector3.ONE
 @export var pages: Array[String]
 
 

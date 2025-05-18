@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://8ojmfyx0m2hp"]
+[gd_scene load_steps=5 format=3 uid="uid://8ojmfyx0m2hp"]
 
 [ext_resource type="Script" uid="uid://me01p2x3m4df" path="res://Scripts/book_selection_ui.gd" id="1_hngo6"]
-[ext_resource type="PackedScene" uid="uid://6hcfveyrbj6v" path="res://Scenes/book_3d.tscn" id="2_22f8m"]
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="2_yv853"]
+[ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="3_y5qxj"]
+[ext_resource type="Resource" uid="uid://dubf1f2kdmy6w" path="res://GameData/resources/books/the_qween_bride.tres" id="4_68tuy"]
 
 [node name="book_selection_ui" type="Control"]
 layout_mode = 3
@@ -10,7 +12,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_hngo6")
+books = Array[ExtResource("2_yv853")]([ExtResource("3_y5qxj"), ExtResource("4_68tuy")])
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -22,6 +26,7 @@ offset_top = -250.0
 offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 scroll_deadzone = 5
@@ -34,89 +39,23 @@ alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 1000
 
-[node name="book_3D2" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the apprentice guidebook"
-
-[node name="book_3D5" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "summon 101"
-
-[node name="book_3D6" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the princess bride"
-
-[node name="book_3D3" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the fellowship of the ring"
-
-[node name="book_3D4" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the two towers"
-
-[node name="book_3D7" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the return of the king"
-
-[node name="book_3D8" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the apprentice guidebook"
-
-[node name="book_3D9" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "summon 101"
-
-[node name="book_3D10" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the princess bride"
-
-[node name="book_3D11" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the fellowship of the ring"
-
-[node name="book_3D12" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the two towers"
-
-[node name="book_3D13" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the return of the king"
-
-[node name="book_3D14" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the apprentice guidebook"
-
-[node name="book_3D15" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "summon 101"
-
-[node name="book_3D16" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the princess bride"
-
-[node name="book_3D17" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the fellowship of the ring"
-
-[node name="book_3D18" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the two towers"
-
-[node name="book_3D19" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_22f8m")]
-layout_mode = 2
-book_title = "the return of the king"
-
 [node name="VSeparator_end" type="VSeparator" parent="ScrollContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 1000
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(1920, 289)
 layout_mode = 0
-offset_left = 30.0
-offset_top = 30.0
-offset_right = 160.0
-offset_bottom = 107.0
-theme_override_font_sizes/font_size = 50
-text = "close"
+
+[node name="Button2" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(1920, 269)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -269.0
+offset_right = 1920.0
+grow_vertical = 0
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_pressed"]

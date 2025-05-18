@@ -4,9 +4,8 @@ var mouse := Vector2()
 const MAX_D = 1000
 @onready var button_con: VBoxContainer = $Control/touch_controls/VBoxContainer
 @onready var massege: Label = $Control/touch_controls/massege
-@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
-@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
-@onready var book_selection_ui: Control = $Control/touch_controls/book_selection_ui
+@onready var book_container: SubViewportContainer = $Control/touch_controls/book_2D
+@onready var book: Node3D = $Control/touch_controls/book_2D/book_viewport/Book
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
@@ -80,10 +79,6 @@ func _handle_pressed_at(pos: Vector2) -> void:
 		var path: String = coll.get_meta("scene_path")
 		if path == "summon":
 			Signals.emit_signal("start_summon")
-		elif  path == "library":
-			book_selection_ui.show()
-			#SceneManager.current_book = load("res://GameData/resources/books/the_qween_bride.tres")
-			#$Control/touch_controls/book_b.show()
 		else:
 			get_tree().change_scene_to_file(path)
 
@@ -218,4 +213,4 @@ func _on_spell_chanted(spell: String) -> void:
 
 func _on_book_b_toggled(toggled_on: bool) -> void:
 	if SceneManager.current_book != null:
-		book_viewport_container.visible = toggled_on
+		book_container.visible = toggled_on

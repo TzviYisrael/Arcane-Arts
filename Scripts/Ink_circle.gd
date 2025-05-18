@@ -100,7 +100,7 @@ static func init_ink_colors(img: Image) -> void:
 		if x >= 0 and x < width and y >= 0 and y < height:
 			img.set_pixel(x, y, outside_color)
 
-static  func clean_colors(img: Image) -> void:
+static func clean_colors(img: Image) -> void:
 	if img.is_empty():
 		return
 
@@ -121,17 +121,21 @@ static func count_color(circle: Image, ink_color:Color) -> int:
 				ink_counter += 1
 	return ink_counter
 
-static func flood_fill(img: Image, pos: Vector2, visited := {}) -> Array:
+static func flood_fill(img: Image, pos: Vector2, only_transperent: bool = true,
+ 						visited := {}) -> Array:
 	var width: float = img.get_width()
 	var height: float = img.get_height()
 	#var visited := {}
 	
-	var start_color: Color = img.get_pixelv(pos)
-	if start_color.a > 0.7: return []
-	var result := []
-
 	var is_in_bounds := func is_in_bounds(neighbor: Vector2) -> bool:
 		return neighbor.x >= 0 and neighbor.x < width and neighbor.y >= 0 and neighbor.y < height
+	
+	if [pos].filter(is_in_bounds).is_empty():
+		return []
+	var start_color: Color = img.get_pixelv(pos)
+	if  only_transperent and start_color.a > 0.7: return []
+	var result := []
+
 	var is_valid_neighbor := func is_valid_neighbor(neighbor: Vector2) -> bool:
 		return (not neighbor in visited) and img.get_pixelv(neighbor) == start_color
 
@@ -154,7 +158,8 @@ static func flood_fill(img: Image, pos: Vector2, visited := {}) -> Array:
 
 	return result
 
-static func island_counter(img: Image) -> int:
+static func island_counter(img: Image, min_island_size: int = MIN_ISLAND_SIZE,
+							 only_transperent: bool = true) -> int:
 	var width: float = img.get_width()
 	var height: float = img.get_height()
 	#var dup: Image = img.duplicate()
@@ -167,8 +172,8 @@ static func island_counter(img: Image) -> int:
 			if pos in visited:
 				continue
 
-			var island: Array = flood_fill(img, pos, visited)
-			if len(island) > MIN_ISLAND_SIZE:
+			var island: Array = flood_fill(img, pos, only_transperent, visited)
+			if len(island) > min_island_size:
 				#debug
 				#var rc = Color.from_hsv(randf(),randf_range(0.2, 0.6),randf_range(0.9, 1.0))
 				#for p in island:
@@ -179,6 +184,13 @@ static func island_counter(img: Image) -> int:
 				island_count += 1
 	#dup.save_png("res://GameData/islands.png") #debug
 	return island_count
+
+static func find_center(pixels: Array) -> Vector2:
+	var n: int = len(pixels)
+	var sum := Vector2.ZERO
+	for p: Vector2 in pixels:
+		sum += p
+	return (sum / n).floor()
 
 static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool]:
 	if img.is_empty():

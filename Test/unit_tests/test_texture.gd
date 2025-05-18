@@ -25,13 +25,17 @@ func test_ca() -> void:
 
 func test_flood_fill() -> void:
 	var img := Image.load_from_file("res://Test/unit_tests/flood_img.png")
-	assert_eq(len(Ink_circle.flood_fill(img, Vector2(4, 0))), 9, "the fill is incorrect")
-	assert_eq(Ink_circle.flood_fill(img, Vector2(3, 0)), [Vector2(3,0)], "the fill is incorrect")
-	assert_eq(Ink_circle.flood_fill(img, Vector2(-1, -1)), [], "not empty in OOB position")
+	assert_eq(len(Ink_circle.flood_fill(img, Vector2(4, 0), false)), 9, "the fill is incorrect")
+	assert_eq(Ink_circle.flood_fill(img, Vector2(3, 0), false), [Vector2(3,0)], "the fill is incorrect")
+	assert_eq(Ink_circle.flood_fill(img, Vector2(-1, -1), false), [], "not empty in OOB position")
 
 func test_island_counter() -> void:
 	var img := Image.load_from_file("res://Test/unit_tests/flood_img.png")
-	assert_eq(Ink_circle.island_counter(img), 6)
+	assert_eq(Ink_circle.island_counter(img, 0, false), 6)
+
+func test_find_center() -> void:
+	var img := Image.load_from_file("res://Test/unit_tests/flood_img.png")
+	assert_eq(Ink_circle.find_center(Ink_circle.flood_fill(img, Vector2(2, 2), false)), Vector2(2, 2))
 
 func test_rgb_c() -> void:
 	assert_true(Ink_circle.compare_rgb(Color.BLACK, Color(0, 0, 0, 0)))

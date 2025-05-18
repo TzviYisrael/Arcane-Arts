@@ -35,7 +35,12 @@ var current_page_number: int = 1
 
 func _ready()  -> void:
 	if content == null:
+		print("empty book init")
 		return
+	if len(content.pages) % 2 == 1:
+		content.pages.append("")
+		content.pages.append("")
+		content.pages.append("")
 	setup()
 
 func setup() -> void:
@@ -47,6 +52,7 @@ func setup() -> void:
 	animationPlayer.animation_finished.connect(_on_animation_finished)
 
 func turn_right() -> void:
+	#print(len(content.pages))
 	if current_page_number + 4 > len(content.pages):
 		return
 		
