@@ -5,6 +5,7 @@ class_name SummonData
 @export var mp: int
 @export var power: int
 @export var size: int
+@export var loot: Array[String]
 
 @export var model_path: String 
 var model: Node3D

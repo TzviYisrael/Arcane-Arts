@@ -8,6 +8,7 @@ hp = 100
 mp = 0
 power = 12000
 size = 10000
+loot = Array[String](["meat", "blood", "bones"])
 model_path = "res://Assets/summons/Bull.gltf"
 model_scale = 0.5
 category = 0

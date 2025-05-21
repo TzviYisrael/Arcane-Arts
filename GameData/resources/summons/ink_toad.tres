@@ -8,6 +8,7 @@ hp = 100
 mp = 100
 power = 10000
 size = 5000
+loot = Array[String](["mana ink", "toad acid", "ooze"])
 model_path = "res://Assets/summons/ink_toad.glb"
 model_scale = 0.7
 category = 1

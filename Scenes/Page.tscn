@@ -56,7 +56,6 @@ text = "Ava stood at the edge of Hawa Ka Van, the forest of eternal winds."
 fit_content = true
 
 [node name="TextureRect" type="TextureRect" parent="Background/VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("3_7ls5m")

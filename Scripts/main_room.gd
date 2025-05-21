@@ -42,6 +42,11 @@ func _ready() -> void:
 	if TextureManager.chalk_line:
 		var chalk := ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
+	
+	if SceneManager.current_book:
+		book.content = SceneManager.current_book
+		book.setup()
+		$Control/touch_controls/book_b.show()
 
 func _process(_delta: float) -> void:
 	if run_sim and TextureManager.ink_circle:
@@ -177,7 +182,8 @@ func portal_distracted(_pos: Vector2) -> void:
 		clean_texture()
 
 func update_texture() -> void:
-	ink_circle.texture.update(TextureManager.ink_circle)
+	if TextureManager.ink_circle: 
+		ink_circle.texture.update(TextureManager.ink_circle)
 
 func clean_texture() -> void:
 	run_sim = false
@@ -194,6 +200,8 @@ func release_summon() -> void:
 	run_sim = false
 
 func kill_summon() -> void:
+	if summoned:
+		prints("loot: ", summoned.data.loot.pick_random())
 	release_summon()
 
 func _on_return_b_pressed() -> void:
@@ -201,8 +209,9 @@ func _on_return_b_pressed() -> void:
 	get_tree().reload_current_scene()
 
 func _on_spell_chanted(spell: String) -> void:
+	Signals.emit_signal("spell_chanted", spell)
 	match spell:
-		"zamen shor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
+		"zamen verylongshor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
 		"zamen tzfardio": init_ritual(SummonData.CATEGORY.MONSTER, "ink_toad")
 		"zamen mazzik": init_ritual(SummonData.CATEGORY.DEMON, "eye_demon")
 		"kill": kill_summon()

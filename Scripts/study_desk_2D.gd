@@ -17,15 +17,13 @@ func book_changed() -> void:
 	$Control/touch_controls/book_b.show()
 	book.content = SceneManager.current_book
 	book.setup()
-
-
-func _on_book_b_toggled(toggled_on: bool) -> void:
-	book_2d.visible = (toggled_on)
-
+	book_2d.visible = true
 
 func _on_return_to_main_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
 
-
 func _on_books_shelf_pressed() -> void:
 	book_selection_ui.show()
+
+func _on_book_b_pressed() -> void:
+	book_2d.visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=25 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
@@ -6,7 +6,6 @@
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/structures/drawing_desk_3D.tscn" id="6_8147l"]
-[ext_resource type="Resource" uid="uid://dubf1f2kdmy6w" path="res://GameData/resources/books/the_qween_bride.tres" id="6_xqkij"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/structures/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
@@ -172,7 +171,6 @@ render_target_update_mode = 0
 
 [node name="Book" parent="Control/touch_controls/book_2D/book_viewport" instance=ExtResource("13_dxdgq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
-content = ExtResource("6_xqkij")
 
 [node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_2D"]
 position = Vector2(140, 270)

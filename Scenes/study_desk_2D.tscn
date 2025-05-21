@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ch8ll3sslk35x"]
+[gd_scene load_steps=12 format=3 uid="uid://ch8ll3sslk35x"]
 
 [ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="1_gasow"]
 [ext_resource type="Script" uid="uid://dsof7wax16ulh" path="res://Scripts/study_desk_2D.gd" id="1_npo2v"]
@@ -7,16 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_7cyk8"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="5_igg7e"]
 [ext_resource type="PackedScene" uid="uid://8ojmfyx0m2hp" path="res://Scenes/book_selection_ui.tscn" id="7_7nba3"]
+[ext_resource type="Texture2D" uid="uid://dxen7mm4sgxh8" path="res://Assets/textures/bookshelf.png" id="7_wsgvc"]
 [ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="8_wsgvc"]
-[ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="9_yk5o7"]
-[ext_resource type="Resource" uid="uid://dubf1f2kdmy6w" path="res://GameData/resources/books/the_qween_bride.tres" id="10_y58ry"]
 [ext_resource type="Resource" uid="uid://ck21f1053jp2x" path="res://GameData/resources/books/Alice_in_wonderland.tres" id="11_r2ocl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ogdhk"]
 size = Vector2(243, 360)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7nba3"]
-size = Vector2(500, 256)
 
 [node name="study_desk_2D" type="Node2D"]
 script = ExtResource("1_npo2v")
@@ -105,11 +101,11 @@ offset_right = 131.0
 offset_bottom = -126.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 30
-toggle_mode = true
-text = "book
+text = "close book
 "
 
 [node name="books_shelf" type="TextureButton" parent="Control/touch_controls"]
+z_index = -1
 custom_minimum_size = Vector2(500, 256)
 anchors_preset = 1
 anchor_left = 1.0
@@ -118,15 +114,16 @@ offset_left = -500.0
 offset_bottom = 256.0
 grow_horizontal = 0
 mouse_filter = 1
-texture_normal = SubResource("PlaceholderTexture2D_7nba3")
+texture_normal = ExtResource("7_wsgvc")
 
 [node name="book_selection_ui" parent="Control" instance=ExtResource("7_7nba3")]
 visible = false
+z_index = 1
 layout_mode = 1
-books = Array[ExtResource("8_wsgvc")]([ExtResource("9_yk5o7"), ExtResource("10_y58ry"), ExtResource("11_r2ocl")])
+books = Array[ExtResource("8_wsgvc")]([ExtResource("11_r2ocl")])
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_to_main_pressed"]
 [connection signal="released" from="Control/touch_controls/Book_2D/book_left_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_left_b_released"]
 [connection signal="released" from="Control/touch_controls/Book_2D/book_right_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_right_b_released"]
-[connection signal="toggled" from="Control/touch_controls/book_b" to="." method="_on_book_b_toggled"]
+[connection signal="pressed" from="Control/touch_controls/book_b" to="." method="_on_book_b_pressed"]
 [connection signal="pressed" from="Control/touch_controls/books_shelf" to="." method="_on_books_shelf_pressed"]

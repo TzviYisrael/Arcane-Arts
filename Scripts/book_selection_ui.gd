@@ -25,6 +25,5 @@ func update_books_rotation() -> void:
 		var factor: float = clamp(abs(x_position) / half_width, 0.0, 1.0)
 		book.update_rotation(factor)
 
-
 func _on_button_pressed() -> void:
 	hide()

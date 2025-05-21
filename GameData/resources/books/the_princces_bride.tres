@@ -6,5 +6,5 @@
 script = ExtResource("1_1508u")
 title = "the princces bride"
 scale = Vector3(1, 1, 1)
-pages = Array[String](["cover", "1: hello", "my name is inigo montoya", "you killed my father", "prepare to die", "2: hello", "my name is inigo montoya", "you killed my father", "prepare to die"])
+pages = Array[Array]([])
 metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

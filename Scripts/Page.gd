@@ -1,5 +1,9 @@
 extends Control
 
+@onready var text_before: RichTextLabel = $Background/VBoxContainer/Text_before
+@onready var texture_rect: TextureRect = $Background/VBoxContainer/TextureRect
+@onready var text_after: RichTextLabel = $Background/VBoxContainer/Text_after
+
 ## Define the pools of words to generate placeholder text
 var nouns: Array[String] = ["knight", "dragon", "forest", "castle", "moon", "star", "adventure", "treasure", "storm"]
 var verbs: Array[String] = ["seeks", "fights", "journeys", "discovers", "challenges", "protects", "defends", "questions"]
@@ -7,9 +11,23 @@ var adjectives: Array[String] = ["brave", "mysterious", "ancient", "glowing", "f
 var adverbs: Array[String] = ["boldly", "mysteriously", "bravely", "fiercely", "quickly", "cautiously", "silently", "relentlessly"]
 
 
-func set_page_by_number(value: int, text: String) -> void:
-	$Background/VBoxContainer/Text_before.text = text #generate_placeholder_text(value)
+func set_page_by_number(value: int, text: Array) -> void:
+	text_before.text = ""
+	texture_rect.texture = null
+	text_after.text = ""
 	$Background/Number.text =  "- "+str(value) + " -"
+	var before: bool = true
+	for line: String in text:
+		if line.begins_with("res://"):
+			texture_rect.texture = load(line)
+		else:
+			if before:
+				text_before.newline()
+				text_before.append_text(line)
+			else:
+				text_after.newline()
+				text_after.append_text(line)
+	
 
 ## Function to generate random placeholder text
 func generate_placeholder_text(page_seed: int) -> String:

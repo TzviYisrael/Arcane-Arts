@@ -14,6 +14,9 @@ extends CharacterBody3D
 @onready var anim_tree := $AnimationTree
 @onready var anim_state: AnimationNodeStateMachinePlayback = \
 						$AnimationTree.get("parameters/playback")
+@onready var gpu_particles_3d: GPUParticles3D = $Rig/GPUParticles3D
+
+
 
 enum CAMERA_STATES{ROOM, SUMMONING, OFFSIDE}
 var camera_state: int = CAMERA_STATES.ROOM:
@@ -26,6 +29,7 @@ var camera_state: int = CAMERA_STATES.ROOM:
 var fire_ball_scene: Resource
 
 func  _ready() -> void:
+	Signals.connect("spell_chanted", emit_spell)
 	SceneManager.set_mage(self)
 	fire_ball_scene = load("res://Scenes/fireball.tscn")
 
@@ -68,6 +72,15 @@ func cast() -> void:
 	fireball.dir = -model.global_transform.basis.z
 	fireball.speed = 0.5
 	add_child(fireball)
+
+func emit_spell(spell: String) -> void:
+	for word: String in spell.split(" "):
+		var time: float = len(word) * 0.2
+		gpu_particles_3d.lifetime = time
+		gpu_particles_3d.draw_pass_1.text = word
+		gpu_particles_3d.emitting = true
+		await get_tree().create_timer(time).timeout
+		gpu_particles_3d.emitting = false
 
 func camera_state_exit(CAMERA_STATE: int) -> void:
 	var tween := create_tween()

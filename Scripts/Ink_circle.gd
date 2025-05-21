@@ -6,6 +6,7 @@ enum {PORTAL, GRAPPLE}
 @export var something := 5 # only to see it in the editor
 const MIN_ISLAND_SIZE := 100
 
+## Resizes an image by the given factor using Lanczos interpolation.
 static func resize_image(image: Image, factor: int) -> Image:
 	var new_image := image.duplicate()
 	var new_width := image.get_width() / float(factor)
@@ -13,6 +14,7 @@ static func resize_image(image: Image, factor: int) -> Image:
 	new_image.resize(new_width, new_height, Image.INTERPOLATE_LANCZOS)
 	return new_image
 
+## Crops an image to a circular area based on a given radius percentage.
 static func crop_image_to_circle(image: Image, radius_percentage: float) -> Image:
 	var size: float = image.get_width()
 	var image_center := Vector2(size / 2.0, size / 2.0)
@@ -29,6 +31,7 @@ static func crop_image_to_circle(image: Image, radius_percentage: float) -> Imag
 
 	return image
 
+## Applies a mask to an image, making masked or white areas transparent.
 static func mask_image(img: Image, mask: Image) -> Image:
 	if mask == null:
 		mask = img.duplicate()
@@ -47,6 +50,7 @@ static func mask_image(img: Image, mask: Image) -> Image:
 	
 	return result_image
 
+## Applies a circular mask to an image at a given position and radius.
 static func mask_circle(image1: Image, mask: Image, pos: Vector2, radius: float) -> Image:
 	if mask == null:
 		mask = image1.duplicate() 
@@ -68,6 +72,7 @@ static func mask_circle(image1: Image, mask: Image, pos: Vector2, radius: float)
 				result_image.set_pixel(x, y, Color(0, 0, 0, 0))
 	return result_image
 
+## Draws a red portal center and green circular border on the image.
 static func init_ink_colors(img: Image) -> void:
 	if img.is_empty():
 		return
@@ -100,8 +105,9 @@ static func init_ink_colors(img: Image) -> void:
 		if x >= 0 and x < width and y >= 0 and y < height:
 			img.set_pixel(x, y, outside_color)
 
+## Makes all non-black pixels in the image fully transparent.
 static func clean_colors(img: Image) -> void:
-	if img.is_empty():
+	if img == null or img.is_empty():
 		return
 
 	var width: float = img.get_width()
@@ -111,6 +117,7 @@ static func clean_colors(img: Image) -> void:
 				if not compare_rgb(img.get_pixel(x, y), Color.BLACK):
 					img.set_pixel(x, y, Color(0.0,0.0,0.0,0.0))
 
+## Counts how many pixels in the image match the given color.
 static func count_color(circle: Image, ink_color:Color) -> int:
 	var ink_counter := 0
 	if circle == null:
@@ -121,6 +128,7 @@ static func count_color(circle: Image, ink_color:Color) -> int:
 				ink_counter += 1
 	return ink_counter
 
+## Performs a flood fill from a starting position, collecting similar pixels.
 static func flood_fill(img: Image, pos: Vector2, only_transperent: bool = true,
  						visited := {}) -> Array:
 	var width: float = img.get_width()
@@ -158,6 +166,7 @@ static func flood_fill(img: Image, pos: Vector2, only_transperent: bool = true,
 
 	return result
 
+## Counts the number of disconnected transparent regions (islands) above a minimum size.
 static func island_counter(img: Image, min_island_size: int = MIN_ISLAND_SIZE,
 							 only_transperent: bool = true) -> int:
 	var width: float = img.get_width()
@@ -185,6 +194,7 @@ static func island_counter(img: Image, min_island_size: int = MIN_ISLAND_SIZE,
 	#dup.save_png("res://GameData/islands.png") #debug
 	return island_count
 
+## Returns the center point of a group of pixel positions.
 static func find_center(pixels: Array) -> Vector2:
 	var n: int = len(pixels)
 	var sum := Vector2.ZERO
@@ -192,6 +202,7 @@ static func find_center(pixels: Array) -> Vector2:
 		sum += p
 	return (sum / n).floor()
 
+## Checks for horizontal and vertical mirror symmetry in the image based on a match threshold.
 static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool]:
 	if img.is_empty():
 		return [false, false]  # No symmetry for empty images
@@ -216,6 +227,7 @@ static func is_mirror_symmetry(img: Image, threshold: float = 1.0) -> Array[bool
 
 	return [horizontal_ratio >= threshold, vertical_ratio >= threshold]
 
+## Simulates ink spreading using a cellular automaton-like method and emits signals on interaction.
 static func fast_ca_genretion(img: Image, state: int) -> bool:
 	
 	var COLOR_STEP: float = 0.01
@@ -315,6 +327,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			#power = 0
 			return changed
 
+## Compares two colors by RGB values, ignoring alpha.
 static func compare_rgb(color1: Color, color2: Color = Color.BLACK) -> bool:
 	return color1.clamp(Color(0.0, 0.0, 0.0, 1.0),Color(1.0, 1.0, 1.0, 1.0)) == \
 	color2.clamp(Color(0.0, 0.0, 0.0, 1.0),Color(1.0, 1.0, 1.0, 1.0))

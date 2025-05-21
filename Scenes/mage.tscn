@@ -1,7 +1,38 @@
-[gd_scene load_steps=105 format=3 uid="uid://l512ut4v74wv"]
+[gd_scene load_steps=111 format=3 uid="uid://l512ut4v74wv"]
 
 [ext_resource type="PackedScene" uid="uid://bvrk8xij8oh0r" path="res://Assets/characters/gltf-c/Mage.glb" id="1_nta1c"]
 [ext_resource type="Script" uid="uid://druay1qqyhqaw" path="res://Scripts/mage.gd" id="2_y08kr"]
+
+[sub_resource type="Gradient" id="Gradient_0xdm5"]
+offsets = PackedFloat32Array(0, 0.64)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bbshb"]
+gradient = SubResource("Gradient_0xdm5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h01ui"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, -1, 0)
+color = Color(0.532618, 0.283966, 0.241746, 1)
+color_ramp = SubResource("GradientTexture1D_bbshb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_254od"]
+transparency = 1
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(0.867713, 0.17282, 0.202735, 1)
+emission_energy_multiplier = 2.0
+rim_enabled = true
+billboard_mode = 2
+
+[sub_resource type="TextMesh" id="TextMesh_qippj"]
+material = SubResource("StandardMaterial3D_254od")
+text = "blabla"
+font_size = 50
+depth = 0.01
 
 [sub_resource type="Animation" id="Animation_auov0"]
 resource_name = "1H_Melee_Attack_Chop"
@@ -30645,6 +30676,9 @@ tracks/56/interp = 1
 tracks/56/loop_wrap = true
 tracks/56/keys = PackedFloat32Array(0, 1, 0.674362, -0.0851905, -0.727687, 0.0919271, 0.0333333, 1, 0.674686, -0.0848674, -0.72747, 0.0915623, 0.0666667, 1, 0.675619, -0.0839343, -0.726844, 0.0905093, 0.1, 1, 0.677101, -0.0824459, -0.725841, 0.0888297, 0.133333, 1, 0.679074, -0.0804565, -0.724492, 0.0865849, 0.166667, 1, 0.681474, -0.0780204, -0.722826, 0.0838357, 0.2, 1, 0.684239, -0.0751915, -0.720874, 0.080644, 0.233333, 1, 0.687309, -0.0720248, -0.718664, 0.0770706, 0.266667, 1, 0.690621, -0.0685747, -0.716229, 0.0731779, 0.3, 1, 0.694116, -0.0648967, -0.713601, 0.0690282, 0.333333, 1, 0.697734, -0.0610463, -0.710814, 0.0646843, 0.366667, 1, 0.701419, -0.0570797, -0.707905, 0.0602096, 0.433333, 1, 0.708767, -0.0490235, -0.701878, 0.0511223, 0.466667, 1, 0.712328, -0.0450478, -0.698845, 0.0466375, 0.5, 1, 0.715748, -0.0411824, -0.69586, 0.0422782, 0.533333, 1, 0.718982, -0.0374847, -0.69297, 0.0381078, 0.566667, 1, 0.721985, -0.0340113, -0.690226, 0.0341909, 0.6, 1, 0.724716, -0.030819, -0.687678, 0.0305908, 0.633333, 1, 0.727135, -0.0279641, -0.685379, 0.0273715, 0.666667, 1, 0.729202, -0.025503, -0.683381, 0.0245961, 0.7, 1, 0.73088, -0.0234915, -0.681737, 0.0223279, 0.733333, 1, 0.732128, -0.0219855, -0.680499, 0.0206298, 0.766667, 1, 0.732908, -0.0210409, -0.679721, 0.0195647, 0.833333, 1, 0.732908, -0.0210409, -0.679721, 0.0195648, 0.866667, 1, 0.732128, -0.0219855, -0.680499, 0.0206298, 0.9, 1, 0.73088, -0.0234915, -0.681737, 0.0223279, 0.933333, 1, 0.729202, -0.025503, -0.683381, 0.0245961, 0.966667, 1, 0.727135, -0.0279641, -0.685379, 0.0273715, 1, 1, 0.724716, -0.030819, -0.687678, 0.0305908, 1.03333, 1, 0.721985, -0.0340113, -0.690226, 0.0341908, 1.06667, 1, 0.718982, -0.0374847, -0.69297, 0.0381078, 1.1, 1, 0.715748, -0.0411824, -0.69586, 0.0422782, 1.13333, 1, 0.712328, -0.0450477, -0.698845, 0.0466375, 1.16667, 1, 0.708767, -0.0490235, -0.701878, 0.0511223, 1.23333, 1, 0.701419, -0.0570797, -0.707905, 0.0602096, 1.26667, 1, 0.697734, -0.0610462, -0.710814, 0.0646845, 1.3, 1, 0.694116, -0.0648967, -0.713601, 0.0690282, 1.33333, 1, 0.690621, -0.0685747, -0.716229, 0.0731779, 1.36667, 1, 0.687309, -0.0720247, -0.718664, 0.0770706, 1.4, 1, 0.684239, -0.0751915, -0.720874, 0.080644, 1.43333, 1, 0.681474, -0.0780204, -0.722826, 0.0838357, 1.46667, 1, 0.679074, -0.0804565, -0.724492, 0.0865849, 1.5, 1, 0.677101, -0.0824459, -0.725841, 0.0888297, 1.53333, 1, 0.675619, -0.0839343, -0.726844, 0.0905093, 1.56667, 1, 0.674686, -0.0848674, -0.72747, 0.0915623, 1.6, 1, 0.674362, -0.0851905, -0.727687, 0.0919271)
 
+[sub_resource type="Animation" id="Animation_tf4tv"]
+resource_name = "spell_label_anim"
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7cmxw"]
 _data = {
 &"1H_Melee_Attack_Chop": SubResource("Animation_auov0"),
@@ -30723,7 +30757,8 @@ _data = {
 &"Walking_A": SubResource("Animation_s0cl3"),
 &"Walking_B": SubResource("Animation_prqv4"),
 &"Walking_Backwards": SubResource("Animation_rxa5b"),
-&"Walking_C": SubResource("Animation_nn5c4")
+&"Walking_C": SubResource("Animation_nn5c4"),
+&"spell_label_anim": SubResource("Animation_tf4tv")
 }
 
 [sub_resource type="Animation" id="Animation_bbshb"]
@@ -30830,46 +30865,46 @@ script = ExtResource("2_y08kr")
 [node name="Skeleton3D" parent="Rig" index="0"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 bones/0/rotation = Quaternion(0, 1.19209e-07, 0, 1)
-bones/1/position = Vector3(0, 0.392062, 0)
+bones/1/position = Vector3(0, 0.382344, 0)
 bones/1/rotation = Quaternion(-1.11123e-10, 0.0431578, 2.57241e-09, 0.999068)
 bones/2/rotation = Quaternion(-6.93889e-18, 7.10543e-15, 4.93038e-32, 1)
 bones/3/rotation = Quaternion(8.27181e-25, 3.72529e-09, -2.75506e-40, 1)
 bones/4/position = Vector3(0.212007, 0.134132, 7.92996e-08)
-bones/4/rotation = Quaternion(-0.559906, -0.0608809, -0.643977, 0.517777)
+bones/4/rotation = Quaternion(-0.553355, -0.0635498, -0.657661, 0.507191)
 bones/4/scale = Vector3(0.999999, 0.999999, 1)
-bones/5/rotation = Quaternion(3.65217e-08, -4.88216e-08, -0.494715, 0.869055)
+bones/5/rotation = Quaternion(3.37207e-08, -6.68099e-08, -0.472938, 0.881096)
 bones/6/rotation = Quaternion(-9.73784e-11, -2.98437e-10, 0.0266581, 0.999645)
 bones/6/scale = Vector3(1, 1, 1)
-bones/7/rotation = Quaternion(-0.321064, -0.325319, 0.145724, 0.877411)
+bones/7/rotation = Quaternion(-0.316723, -0.327482, 0.133418, 0.880138)
 bones/8/position = Vector3(8.34843e-10, 0.0961252, -0.0575)
-bones/8/rotation = Quaternion(3.16701e-07, 3.2713e-07, -0.707106, 0.707108)
+bones/8/rotation = Quaternion(0.00162497, 0.00162497, -0.701115, 0.713044)
 bones/8/scale = Vector3(1, 1, 1)
 bones/9/rotation = Quaternion(-8.95373e-08, 0.707107, 0.707107, -9.81383e-08)
 bones/10/rotation = Quaternion(-8.95373e-08, 0.707107, 0.707107, -9.81383e-08)
 bones/11/position = Vector3(-0.212007, 0.134132, 8.6814e-08)
-bones/11/rotation = Quaternion(-0.618243, 0.0807291, 0.618014, 0.478871)
+bones/11/rotation = Quaternion(-0.612792, 0.0835553, 0.630285, 0.469304)
 bones/11/scale = Vector3(0.999999, 0.999999, 1)
-bones/12/rotation = Quaternion(2.10456e-08, 5.12315e-08, 0.517936, 0.85542)
+bones/12/rotation = Quaternion(2.04879e-09, 6.32921e-08, 0.49717, 0.867653)
 bones/13/rotation = Quaternion(-9.73784e-11, 2.98437e-10, -0.0266581, 0.999645)
 bones/13/scale = Vector3(1, 1, 1)
-bones/14/rotation = Quaternion(-0.31929, 0.300524, -0.227348, 0.869513)
+bones/14/rotation = Quaternion(-0.315195, 0.301469, -0.215061, 0.873795)
 bones/15/position = Vector3(-1.5736e-08, 0.0961251, -0.0575)
-bones/15/rotation = Quaternion(1.02159e-06, 1.20025e-06, 0.707106, 0.707108)
+bones/15/rotation = Quaternion(0.00414186, 0.0048785, 0.702786, 0.711372)
 bones/15/scale = Vector3(1, 1, 1)
 bones/18/rotation = Quaternion(-5.80608e-11, -0.0313417, -1.88012e-09, 0.999509)
 bones/19/rotation = Quaternion(-0.130526, -7.04464e-15, -9.27445e-16, 0.991445)
 bones/21/position = Vector3(0.170945, 0.113587, 1.59941e-08)
-bones/21/rotation = Quaternion(0.993715, 0.0837145, 0.0735042, 0.0109233)
+bones/21/rotation = Quaternion(0.992333, 0.0831207, 0.0763017, 0.050448)
 bones/21/scale = Vector3(1, 1, 1)
-bones/22/rotation = Quaternion(0.195614, 6.2625e-08, -1.3224e-07, 0.980681)
-bones/23/rotation = Quaternion(-0.51757, -0.209497, 0.0436568, 0.828448)
+bones/22/rotation = Quaternion(0.298613, 6.52224e-08, -2.1016e-07, 0.954374)
+bones/23/rotation = Quaternion(-0.571107, -0.205856, 0.059885, 0.792385)
 bones/24/rotation = Quaternion(-9.74065e-09, 0.920355, -0.391084, 7.8309e-08)
 bones/24/scale = Vector3(1, 1, 1)
 bones/25/position = Vector3(-0.170945, 0.113587, 1.55755e-08)
-bones/25/rotation = Quaternion(0.997322, -0.0294576, 0.0315292, 0.0590518)
+bones/25/rotation = Quaternion(0.994935, -0.031233, 0.0307032, 0.0904803)
 bones/25/scale = Vector3(1, 1, 1)
-bones/26/rotation = Quaternion(0.274017, -6.38135e-08, 1.92765e-07, 0.961725)
-bones/27/rotation = Quaternion(-0.559044, 0.114513, -0.00862837, 0.821147)
+bones/26/rotation = Quaternion(0.354954, -6.23469e-08, 2.46682e-07, 0.934884)
+bones/27/rotation = Quaternion(-0.602124, 0.113789, -0.0155499, 0.790099)
 bones/28/rotation = Quaternion(3.03591e-08, 0.920355, -0.391084, -6.95338e-08)
 bones/28/scale = Vector3(1, 1, 1)
 bones/29/position = Vector3(0.170945, 0.29231, 0.575812)
@@ -30895,37 +30930,44 @@ bones/40/rotation = Quaternion(-0.391084, -6.885e-08, -6.56287e-08, 0.920355)
 bones/41/rotation = Quaternion(1, 3.76526e-09, 1.94879e-07, 7.45058e-09)
 bones/43/position = Vector3(0.453507, 1.10676, -0.588859)
 bones/43/rotation = Quaternion(-0.707107, -7.27951e-08, -7.27951e-08, 0.707107)
-bones/44/position = Vector3(0.520841, 0.78831, -0.0576373)
+bones/44/position = Vector3(0.520841, 0.770006, -0.0576374)
 bones/44/rotation = Quaternion(0.794627, -1.2666e-07, 0.607098, -5.96046e-08)
 bones/45/position = Vector3(-0.453507, 1.10676, -0.58886)
 bones/45/rotation = Quaternion(-0.707107, -7.27951e-08, -7.27951e-08, 0.707107)
-bones/46/position = Vector3(-0.510844, 0.78831, 0.0597369)
+bones/46/position = Vector3(-0.510844, 0.770006, 0.0597369)
 bones/46/rotation = Quaternion(-0.758253, -1.82539e-07, 0.651961, -1.11759e-08)
 
 [node name="Spellbook" parent="Rig/Skeleton3D" index="0"]
-transform = Transform3D(7.63999e-08, 0.964832, 0.262865, -0.999999, 1.99556e-06, -3.63307e-06, -4.50676e-06, -0.262864, 0.964832, 0.577621, 0.636701, 0.237872)
+transform = Transform3D(-2.37609e-06, 0.964832, 0.262864, -0.999846, 0.00459455, -0.0168699, -0.0174848, -0.262823, 0.964685, 0.577292, 0.613004, 0.236213)
 visible = false
 
 [node name="Spellbook_open" parent="Rig/Skeleton3D" index="1"]
-transform = Transform3D(7.63999e-08, 0.964832, 0.262865, -0.999999, 1.99556e-06, -3.63307e-06, -4.50676e-06, -0.262864, 0.964832, 0.545985, 0.636701, 0.121753)
+transform = Transform3D(-2.37609e-06, 0.964832, 0.262864, -0.999846, 0.00459455, -0.0168699, -0.0174848, -0.262823, 0.964685, 0.545656, 0.615035, 0.120112)
 visible = false
 
 [node name="1H_Wand" parent="Rig/Skeleton3D" index="2"]
-transform = Transform3D(-6.3054e-07, -0.149897, 0.988701, 0.999999, -3.78208e-06, -7.85875e-07, 4.39164e-06, 0.988701, 0.149897, -0.49106, 0.641026, 0.106595)
+transform = Transform3D(-0.00292792, -0.162477, 0.986707, 0.999925, -0.0121486, 0.000965708, 0.0118307, 0.986637, 0.1625, -0.491006, 0.62154, 0.105004)
 visible = false
 
 [node name="2H_Staff" parent="Rig/Skeleton3D" index="3"]
-transform = Transform3D(-6.3054e-07, -0.149897, 0.988701, 0.999999, -3.78208e-06, -7.85875e-07, 4.39164e-06, 0.988701, 0.149897, -0.49106, 0.641026, 0.106595)
+transform = Transform3D(-0.00292792, -0.162477, 0.986707, 0.999925, -0.0121486, 0.000965708, 0.0118307, 0.986637, 0.1625, -0.491006, 0.62154, 0.105004)
 
 [node name="Mage_Hat" parent="Rig/Skeleton3D" index="4"]
-transform = Transform3D(0.99972, -0.00612024, 0.0228411, 1.39343e-09, 0.965926, 0.258819, -0.0236468, -0.258746, 0.965656, -7.48423e-09, 1.7705, -1.02479e-07)
+transform = Transform3D(0.99972, -0.00612024, 0.0228411, 1.39343e-09, 0.965926, 0.258819, -0.0236468, -0.258746, 0.965656, -7.48423e-09, 1.76078, -1.02479e-07)
 
 [node name="Mage_Hat" parent="Rig/Skeleton3D/Mage_Hat" index="0"]
 visible = false
 
 [node name="Mage_Cape" parent="Rig/Skeleton3D" index="5"]
-transform = Transform3D(0.996275, -5.14962e-09, 0.0862354, 5.13044e-09, 1, 4.44078e-10, -0.0862354, 1.46374e-15, 0.996275, -1.2997e-08, 1.20227, -1.01951e-07)
+transform = Transform3D(0.996275, -5.14962e-09, 0.0862354, 5.13044e-09, 1, 4.44078e-10, -0.0862354, 1.46374e-15, 0.996275, -1.2997e-08, 1.19255, -1.01951e-07)
 visible = false
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Rig" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+emitting = false
+amount = 1
+process_material = SubResource("ParticleProcessMaterial_h01ui")
+draw_pass_1 = SubResource("TextMesh_qippj")
 
 [node name="AnimationPlayer" parent="." index="1"]
 libraries = {
