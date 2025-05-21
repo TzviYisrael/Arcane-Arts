@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://cqvbrk3axdfi8"]
+
+[ext_resource type="Script" uid="uid://buraawm75gpa1" path="res://Scripts/main_roon_structure.gd" id="1_81txx"]
+[ext_resource type="PackedScene" uid="uid://b43ea1qbu75vk" path="res://Assets/models/main_room_floor_n_coll.glb" id="1_jajb3"]
+[ext_resource type="PackedScene" uid="uid://ccfqbdqkyidwv" path="res://Assets/models/main_room_walls.glb" id="2_52mc0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_81txx"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_g8gpf"]
+sky_material = SubResource("ProceduralSkyMaterial_81txx")
+
+[sub_resource type="Environment" id="Environment_metm6"]
+background_mode = 2
+sky = SubResource("Sky_g8gpf")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="main_roon_structure" type="Node3D"]
+script = ExtResource("1_81txx")
+amount = 2
+
+[node name="main_room_floor_n_coll" parent="." instance=ExtResource("1_jajb3")]
+
+[node name="main_room_walls" parent="." instance=ExtResource("2_52mc0")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_metm6")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.996194, -0.0843796, 0.021822, 0, 0.25038, 0.968147, -0.0871557, -0.964464, 0.249427, 0, 8.73972, 0)
+layers = 3
+shadow_enabled = true

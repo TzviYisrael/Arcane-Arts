@@ -63,8 +63,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		#Signals.emit_signal("start_summon")
 		
 func rotate_camera(deg: float) -> void:
-	var angle: float = deg_to_rad(deg)
-	spring_arm.rotate_y(angle)
+	spring_arm.rotate_y(deg_to_rad(deg))
+	Signals.emit_signal("view_angle_changed",-spring_arm.rotation.y + PI)
 
 func cast() -> void:
 	var fireball: Node = fire_ball_scene.instantiate()

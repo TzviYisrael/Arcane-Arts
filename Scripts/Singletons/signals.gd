@@ -9,3 +9,4 @@ signal breach(position: Vector2)
 signal portal_distracted(position: Vector2)
 
 signal book_changed
+signal view_angle_changed(angle: float)

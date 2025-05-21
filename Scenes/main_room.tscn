@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=26 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/structures/drawing_desk_3D.tscn" id="6_8147l"]
+[ext_resource type="PackedScene" uid="uid://cqvbrk3axdfi8" path="res://Scenes/structures/main_roon_structure.tscn" id="7_cw24y"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/structures/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
@@ -23,12 +24,12 @@ size = Vector2(243, 360)
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_g8gpf"]
+[sub_resource type="Sky" id="Sky_guc7c"]
 sky_material = SubResource("ProceduralSkyMaterial_teq5p")
 
 [sub_resource type="Environment" id="Environment_lkk8e"]
 background_mode = 2
-sky = SubResource("Sky_g8gpf")
+sky = SubResource("Sky_guc7c")
 tonemap_mode = 2
 glow_enabled = true
 
@@ -186,11 +187,17 @@ environment = SubResource("Environment_lkk8e")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.996194, -0.0843796, 0.021822, 0, 0.25038, 0.968147, -0.0871557, -0.964464, 0.249427, 0, 8.73972, 0)
+visible = false
 layers = 3
 shadow_enabled = true
 
 [node name="room_structure" parent="." instance=ExtResource("10_oool8")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, -3, 0, -3)
+visible = false
+
+[node name="main_roon_structure" parent="." instance=ExtResource("7_cw24y")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, -3, 0, -3)
+amount = 4
 
 [node name="Mage" parent="." instance=ExtResource("3_6mt2a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.35673, 0.191746, -1.20246)
