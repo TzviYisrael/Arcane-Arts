@@ -19,7 +19,6 @@ glow_enabled = true
 
 [node name="main_roon_structure" type="Node3D"]
 script = ExtResource("1_81txx")
-amount = 2
 
 [node name="main_room_floor_n_coll" parent="." instance=ExtResource("1_jajb3")]
 

@@ -14,10 +14,15 @@ var run_sim: bool
 var target_power := 0
 var summon_power := 0
 
+var input_coll_saver: Node3D = null
+var drag: bool = false
+
 @onready var root: Node3D = $"."
 @onready var summoning_table: StaticBody3D = $summoning_floor
 @onready var smoke_puff: GPUParticles3D = $summoning_floor/smoke_puff
 @onready var ink_circle: Sprite3D = $summoning_floor/ink_circle2
+@onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
+
 
 @onready var work_desk: StaticBody3D = $work_desk
 
@@ -34,7 +39,6 @@ func _ready() -> void:
 	Signals.connect("breach", breach)
 	
 	state = states.ROOM
-	#ink_circle.position = summoning_table.find_child("ink_circle").global_position
 	if TextureManager.ink_circle:
 		var ink := ImageTexture.create_from_image(TextureManager.ink_circle)
 		ink_circle.texture = ink
@@ -59,38 +63,35 @@ func _process(_delta: float) -> void:
 			states.GRAPPLE:
 				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, GRAPPLE)
 				update_texture()
-	
-	#if run_sim and summon_power >= target_power and state == states.RITUAL_START:
-		#summon()
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Track pointer position (mouse or touch)
-	if event is InputEventMouseMotion:
-		mouse = event.position
-	elif event is InputEventScreenDrag:
-		SceneManager.mage.rotate_camera(-event.screen_relative.x / 10)
+	if event is InputEventScreenDrag:
+		#set input_coll_saver to random node so it will not register as press
+		input_coll_saver = camera_spring_arm 
+		rotate_camera(-event.screen_relative.x / 10)
 
-	# Handle tap or mouse click
-	if event is InputEventMouseButton:
-		if not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			_handle_pressed_at(event.position)
-	elif event is InputEventScreenTouch:
-		if not event.pressed:
-			_handle_pressed_at(event.position)
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if not input_coll_saver:
+				input_coll_saver = get_camera_ray_collider(event.position)
+		else:
+			_handle_release_at(event.position)
+			input_coll_saver = null
 
-func _handle_pressed_at(pos: Vector2) -> void:
-	var coll: Node = get_mouse_collider(pos)
-	if coll and coll.is_in_group("tap_to_enter"):
+func _handle_release_at(pos: Vector2) -> void:
+	var coll: Node = get_camera_ray_collider(pos)
+	if coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
+		print("entering: ", coll.name)
 		var path: String = coll.get_meta("scene_path")
 		if path == "summon":
 			Signals.emit_signal("start_summon")
 		else:
 			get_tree().change_scene_to_file(path)
 
-func get_mouse_collider(_mouse: Vector2) -> Node:
+func get_camera_ray_collider(pos: Vector2) -> Node:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var start: Vector3 = get_viewport().get_camera_3d().project_ray_origin(_mouse)
-	var end: Vector3 = get_viewport().get_camera_3d().project_position(_mouse, MAX_D)
+	var start: Vector3 = get_viewport().get_camera_3d().project_ray_origin(pos)
+	var end: Vector3 = get_viewport().get_camera_3d().project_position(pos, MAX_D)
 	var params := PhysicsRayQueryParameters3D.new()
 	params.from = start
 	params.to = end
@@ -98,18 +99,20 @@ func get_mouse_collider(_mouse: Vector2) -> Node:
 	var coll_dict: Dictionary = space.intersect_ray(params)
 	if (coll_dict != null) and (coll_dict.size() != 0):
 		var coll: Node3D = coll_dict["collider"]
-		print("ray coll: ", coll.name)
+		#print("ray coll: ", coll.name)
 		return coll
 	else:
 		return null
+
+func rotate_camera(deg: float) -> void:
+	camera_spring_arm.rotate_y(deg_to_rad(deg))
+	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
 
 func enter_summon_floor() -> void:
 	state = states.RITUAL_READY
 	mage.position = summoning_table.find_child("mage_circle").global_position
 	mage.find_child("Rig").rotation.y = summoning_table.rotation.y + PI / 2
-	mage.find_child("SpringArm3D").rotation.y = \
-	summoning_table.rotation.y + PI / 2
-	mage.camera_state = mage.CAMERA_STATES.SUMMONING
+
 
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
