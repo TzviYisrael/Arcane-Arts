@@ -16,15 +16,16 @@ var summon_power := 0
 
 var input_coll_saver: Node3D = null
 var drag: bool = false
+var scene_path_to_enter: String = ""
 
 @onready var root: Node3D = $"."
-@onready var summoning_table: StaticBody3D = $summoning_floor
-@onready var smoke_puff: GPUParticles3D = $summoning_floor/smoke_puff
-@onready var ink_circle: Sprite3D = $summoning_floor/ink_circle2
+@onready var summoning_floor: StaticBody3D = $NavigationRegion3D/summoning_floor
+@onready var smoke_puff: GPUParticles3D = $NavigationRegion3D/summoning_floor/smoke_puff
+@onready var ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/ink_circle
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 
 
-@onready var work_desk: StaticBody3D = $work_desk
+@onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
 enum {PORTAL, GRAPPLE}
 enum states{ROOM, RITUAL_READY, RITUAL_START, GRAPPLE, CAPTURED}
@@ -33,10 +34,13 @@ var state: int = 0
 
 func _ready() -> void:
 	Signals.connect("init_ritual", init_ritual)
-	Signals.connect("enter_summon_floor", enter_summon_floor)
 	Signals.connect("add_summon_power", add_summon_power)
 	Signals.connect("portal_distracted", portal_distracted)
 	Signals.connect("breach", breach)
+	
+	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
+	
+	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
 	
 	state = states.ROOM
 	if TextureManager.ink_circle:
@@ -73,22 +77,30 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			if not input_coll_saver:
-				input_coll_saver = get_camera_ray_collider(event.position)
+				input_coll_saver = get_camera_ray_collider(event.position)[1]
 		else:
 			_handle_release_at(event.position)
 			input_coll_saver = null
 
 func _handle_release_at(pos: Vector2) -> void:
-	var coll: Node = get_camera_ray_collider(pos)
+	var ret_arr: Array = get_camera_ray_collider(pos)
+	var coll_pos: Vector3 = ret_arr[0]
+	var coll: Node = ret_arr[1]
+	#print("coll:",coll.name)
 	if coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
-		print("entering: ", coll.name)
 		var path: String = coll.get_meta("scene_path")
+		scene_path_to_enter = path
 		if path == "summon":
-			Signals.emit_signal("start_summon")
+			Signals.emit_signal("walk_destination", 
+				summoning_floor.mage_circle.global_position)
 		else:
-			get_tree().change_scene_to_file(path)
+			Signals.emit_signal("walk_destination", coll_pos)
+	else:
+		scene_path_to_enter = ""
+		if input_coll_saver != camera_spring_arm:
+			Signals.emit_signal("walk_destination", coll_pos)
 
-func get_camera_ray_collider(pos: Vector2) -> Node:
+func get_camera_ray_collider(pos: Vector2) -> Array:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var start: Vector3 = get_viewport().get_camera_3d().project_ray_origin(pos)
 	var end: Vector3 = get_viewport().get_camera_3d().project_position(pos, MAX_D)
@@ -99,20 +111,21 @@ func get_camera_ray_collider(pos: Vector2) -> Node:
 	var coll_dict: Dictionary = space.intersect_ray(params)
 	if (coll_dict != null) and (coll_dict.size() != 0):
 		var coll: Node3D = coll_dict["collider"]
-		#print("ray coll: ", coll.name)
-		return coll
+		return [coll_dict["position"], coll]
 	else:
-		return null
+		return [coll_dict["position"], null]
 
 func rotate_camera(deg: float) -> void:
 	camera_spring_arm.rotate_y(deg_to_rad(deg))
 	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
 
-func enter_summon_floor() -> void:
-	state = states.RITUAL_READY
-	mage.position = summoning_table.find_child("mage_circle").global_position
-	mage.find_child("Rig").rotation.y = summoning_table.rotation.y + PI / 2
-
+func destination_reached() -> void:
+	#print("destination reached: ", scene_path_to_enter)
+	if scene_path_to_enter == "summon":
+		state = states.RITUAL_READY
+	elif scene_path_to_enter != "":
+		print("entering: ", scene_path_to_enter)
+		get_tree().change_scene_to_file(scene_path_to_enter)
 
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
@@ -168,7 +181,6 @@ func add_summon_power(power: int) -> void:
 	if run_sim and summon_power >= target_power \
 		and state == states.RITUAL_START:
 		summon()
-	
 
 func breach(pos: Vector2) -> void:
 	run_sim = false

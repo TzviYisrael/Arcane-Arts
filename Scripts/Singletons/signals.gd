@@ -1,7 +1,7 @@
 extends Node
 
-signal enter_summon_floor
 signal init_ritual
+signal walk_destination(target_position: Vector3)
 
 signal spell_chanted(spell: String)
 signal add_summon_power(power: int)
