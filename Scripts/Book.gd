@@ -35,12 +35,12 @@ var current_page_number: int = 1
 
 func _ready()  -> void:
 	if content == null:
-		print("empty book init")
+		#print("empty book init")
 		return
-	if len(content.pages) % 2 == 1:
-		content.pages.append("")
-		content.pages.append("")
-		content.pages.append("")
+	#if len(content.pages) % 2 == 1:
+		#content.pages.append("")
+		#content.pages.append("")
+		#content.pages.append("")
 	setup()
 
 func setup() -> void:

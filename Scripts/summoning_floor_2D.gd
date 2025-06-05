@@ -14,13 +14,9 @@ var center := Vector2()
 
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
-@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
-@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
 
-#var first_point : Vector2 = Vector2.INF
 var touch_point : Vector2 = Vector2.INF
 #const SNAP_DISTANSE : float = 50
-#var is_finger_held = false
 
 @export var brush_size : int = 10
 @export var max_clear: float = 100
@@ -34,6 +30,8 @@ enum tools{INK, COVER}
 
 
 func _ready() -> void:
+	Signals.connect("spell_chanted", _on_spell_chanted)
+	
 	var rect:Rect2 = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
@@ -48,11 +46,7 @@ func _ready() -> void:
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
 	tool_button.text = str(tools.keys()[tool]).to_lower()
-	if SceneManager.current_book:
-		book.content = SceneManager.current_book
-		book.setup()
-	else:
-		$Control/touch_controls/book_b.hide()
+	
 	queue_redraw()
 
 func _process(_delta: float)  -> void:
@@ -161,7 +155,3 @@ func _on_spell_chanted(spell: String) -> void:
 		"save": _on_save_pressed()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
-
-func _on_book_b_toggled(toggled_on: bool) -> void:
-	if SceneManager.current_book != null:
-		book_viewport_container.visible = toggled_on

@@ -1,15 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://ch8ll3sslk35x"]
+[gd_scene load_steps=14 format=3 uid="uid://ch8ll3sslk35x"]
 
 [ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="1_gasow"]
 [ext_resource type="Script" uid="uid://dsof7wax16ulh" path="res://Scripts/study_desk_2D.gd" id="1_npo2v"]
-[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_npo2v"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_ut0vv"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_7cyk8"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="5_igg7e"]
 [ext_resource type="PackedScene" uid="uid://8ojmfyx0m2hp" path="res://Scenes/book_selection_ui.tscn" id="7_7nba3"]
 [ext_resource type="Texture2D" uid="uid://dxen7mm4sgxh8" path="res://Assets/textures/bookshelf.png" id="7_wsgvc"]
 [ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="8_wsgvc"]
+[ext_resource type="Resource" uid="uid://bqys4y1bi16p7" path="res://GameData/resources/books/tower maintenance.tres" id="10_yk5o7"]
 [ext_resource type="Resource" uid="uid://ck21f1053jp2x" path="res://GameData/resources/books/Alice_in_wonderland.tres" id="11_r2ocl"]
+[ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="11_wsgvc"]
+[ext_resource type="Resource" uid="uid://gf3kbr2hakl3" path="res://GameData/resources/books/the_greencces_bride.tres" id="12_yk5o7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ogdhk"]
 size = Vector2(243, 360)
@@ -34,7 +36,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="touch_controls" parent="Control" instance=ExtResource("2_npo2v")]
+[node name="touch_controls" type="CanvasLayer" parent="Control"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
 anchors_preset = 5
@@ -54,21 +56,21 @@ text = "return to the room"
 metadata/_edit_use_anchors_ = true
 
 [node name="notebook" parent="Control/touch_controls" instance=ExtResource("4_7cyk8")]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 550.0
-offset_bottom = 50.0
-page = 4
+page = 1
 
 [node name="Book_2D" type="SubViewportContainer" parent="Control/touch_controls"]
 visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -256.0
-offset_right = 256.0
-offset_bottom = 512.0
-grow_horizontal = 2
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1220.0
+offset_top = -980.0
+offset_right = -708.0
+offset_bottom = -468.0
+grow_horizontal = 0
+grow_vertical = 0
 scale = Vector2(2, 2)
 mouse_filter = 0
 
@@ -97,7 +99,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 50.0
 offset_top = -176.0
-offset_right = 131.0
+offset_right = 211.0
 offset_bottom = -126.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 30
@@ -120,7 +122,7 @@ texture_normal = ExtResource("7_wsgvc")
 visible = false
 z_index = 1
 layout_mode = 1
-books = Array[ExtResource("8_wsgvc")]([ExtResource("11_r2ocl")])
+books = Array[ExtResource("8_wsgvc")]([ExtResource("10_yk5o7"), ExtResource("11_r2ocl"), ExtResource("11_wsgvc"), ExtResource("12_yk5o7")])
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_to_main_pressed"]
 [connection signal="released" from="Control/touch_controls/Book_2D/book_left_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_left_b_released"]

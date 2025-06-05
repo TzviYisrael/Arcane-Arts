@@ -16,8 +16,6 @@ var center: Vector2 = Vector2()
 
 @onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
 @onready var debug_label: Label = $Control/touch_controls/debug_label
-@onready var book_viewport_container: SubViewportContainer = $Control/touch_controls/book_ViewportContainer
-@onready var book: Node3D = $Control/touch_controls/book_ViewportContainer/book_viewport/Book
 
 var points : Array[Vector2] = []
 var texture : Texture2D
@@ -36,6 +34,9 @@ enum tools{LINE, CIRCLE}
 @export_enum("line", "circle") var tool: int = 0;
 
 func _ready() -> void:
+	Signals.connect("spell_chanted", _on_spell_chanted)
+
+	
 	var rect: Rect2 = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
 					background.position.y + (rect.size.y) * 0.5)
@@ -50,16 +51,10 @@ func _ready() -> void:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
 	
 	tool_button.text = str(tools.keys()[tool]).to_lower()
-	if SceneManager.current_book:
-		book.content = SceneManager.current_book
-		book.setup()
-	else:
-		$Control/touch_controls/book_b.hide()
+	
 	queue_redraw()
 
 func _process(_delta: float) -> void:
-	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	#camera.position += input_dir * cam_speed
 	if not is_finger_held:
 		current_point = Vector2.INF
 	queue_redraw()
@@ -212,8 +207,3 @@ func _on_spell_chanted(spell: String) -> void:
 		"reset": reset()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
-
-
-func _on_book_b_toggled(toggled_on: bool) -> void:
-	if SceneManager.current_book != null:
-		book_viewport_container.visible = toggled_on

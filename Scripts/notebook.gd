@@ -7,10 +7,10 @@ extends Control
 enum MODES {SUMMON, SUMMON_SPELLS, ROOM_SPELLS, CHALKBOARD, FLOOR, STUDY}
 
 var pages: Dictionary = {
-	MODES.SUMMON : ["zamen verylongshor", "zamen tzfardio", "zamen mazzik", "",
-					 "kill", "release", "clear"],
+	MODES.SUMMON : ["zamen shor", "zamen tzfardio", "zamen mazzik", "",
+					 "kill", "release"],
 	MODES.SUMMON_SPELLS : [],
-	MODES.ROOM_SPELLS : [],
+	MODES.ROOM_SPELLS : ["clear"],
 	MODES.CHALKBOARD : ["reset"],
 	MODES.FLOOR: ["reset", "save"],
 	MODES.STUDY: []
@@ -21,14 +21,21 @@ var pages: Dictionary = {
 var root_of_parent: Node
 
 func _ready() -> void:
+	Signals.connect("change_notebook_page", set_mode)
 	set_page(page)
 
 func clear_page() -> void:
 	for n in spell_container.get_children():
 		spell_container.remove_child(n)
 		n.queue_free()
-	
-func set_page(p: int) -> void:
+
+func set_mode(mode: String) -> void:
+	var m = mode.to_upper()
+	#print("mode - ",MODES[m])
+	set_page(MODES[m])
+		
+
+func set_page(p: int = page) -> void:
 	clear_page()
 	title.text = str(MODES.keys()[p]).to_lower()
 	var icon := preload("res://Assets/textures/joystick_center.png")
@@ -42,15 +49,20 @@ func set_page(p: int) -> void:
 			button.flat = true
 			button.add_theme_font_size_override("font_size", 30)
 			button.add_theme_color_override("font_color", Color.BLACK)
-			button.connect("pressed", 
-				get_tree().get_current_scene()._on_spell_chanted.bind(spl))
+			#button.connect("pressed", 
+				#get_tree().get_current_scene()._on_spell_chanted.bind(spl))
+			button.connect("pressed", spell_botton_pressed.bind(spl))
 			spell_container.add_child(button)
 		else:
 			var sep := HSeparator.new()
 			sep.add_theme_constant_override("separation", 20)
 			spell_container.add_child(sep)
 
+
 func _on_button_toggled(toggled_on: bool) -> void:
 	control.visible = toggled_on
 	control.mouse_filter = Control.MOUSE_FILTER_STOP \
 	 if toggled_on else Control.MOUSE_FILTER_PASS
+	
+func spell_botton_pressed(spl: String) -> void:
+	Signals.emit_signal("spell_chanted", spl)

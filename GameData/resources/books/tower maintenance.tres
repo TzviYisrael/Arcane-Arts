@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BookContent" load_steps=2 format=3 uid="uid://bqys4y1bi16p7"]
+
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="1_d1ih4"]
+
+[resource]
+script = ExtResource("1_d1ih4")
+title = "tower maintenance"
+scale = Vector3(1, 1, 1)
+pages = Array[String](["case", "tower maintenance procedures\\n\\nthe best way to keep your master happy", "the basic layout:\\n\\n in the main room of the tower, you will find a lot of things and work stations. for your own safety, ", "you must know what they are, what to do with then, and more importantly, what not to do with them", "the basic workstaions are:\\nthe summoning floor,\\nthe drawing desk,\\nthe study desk", "the most importent spell is\\n$remove junk\\n it will clean most of the basic stuff, but maybe not something with significant magic resistent", "the end"])
+metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

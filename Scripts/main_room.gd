@@ -1,11 +1,8 @@
 extends Node3D
 
-var mouse := Vector2()
-const MAX_D = 1000
+const RAYCAST_MAX_D = 1000
 @onready var button_con: VBoxContainer = $Control/touch_controls/VBoxContainer
 @onready var massege: Label = $Control/touch_controls/massege
-@onready var book_container: SubViewportContainer = $Control/touch_controls/book_2D
-@onready var book: Node3D = $Control/touch_controls/book_2D/book_viewport/Book
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
@@ -37,6 +34,7 @@ func _ready() -> void:
 	Signals.connect("add_summon_power", add_summon_power)
 	Signals.connect("portal_distracted", portal_distracted)
 	Signals.connect("breach", breach)
+	Signals.connect("spell_chanted", _on_spell_chanted)
 	
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	
@@ -51,10 +49,10 @@ func _ready() -> void:
 		var chalk := ImageTexture.create_from_image(TextureManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
 	
-	if SceneManager.current_book:
-		book.content = SceneManager.current_book
-		book.setup()
-		$Control/touch_controls/book_b.show()
+	#if SceneManager.current_book:
+		#book.content = SceneManager.current_book
+		#book.setup()
+		#$Control/touch_controls/book_b.show()
 
 func _process(_delta: float) -> void:
 	if run_sim and TextureManager.ink_circle:
@@ -103,7 +101,7 @@ func _handle_release_at(pos: Vector2) -> void:
 func get_camera_ray_collider(pos: Vector2) -> Array:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var start: Vector3 = get_viewport().get_camera_3d().project_ray_origin(pos)
-	var end: Vector3 = get_viewport().get_camera_3d().project_position(pos, MAX_D)
+	var end: Vector3 = get_viewport().get_camera_3d().project_position(pos, RAYCAST_MAX_D)
 	var params := PhysicsRayQueryParameters3D.new()
 	params.from = start
 	params.to = end
@@ -123,9 +121,14 @@ func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)
 	if scene_path_to_enter == "summon":
 		state = states.RITUAL_READY
+		Signals.emit_signal("change_notebook_page", "summon")
 	elif scene_path_to_enter != "":
 		print("entering: ", scene_path_to_enter)
 		get_tree().change_scene_to_file(scene_path_to_enter)
+	elif state == states.RITUAL_READY:
+		state = states.ROOM
+		Signals.emit_signal("change_notebook_page", "room_spells")
+
 
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
@@ -224,7 +227,6 @@ func _on_return_b_pressed() -> void:
 	get_tree().reload_current_scene()
 
 func _on_spell_chanted(spell: String) -> void:
-	Signals.emit_signal("spell_chanted", spell)
 	match spell:
 		"zamen verylongshor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
 		"zamen tzfardio": init_ritual(SummonData.CATEGORY.MONSTER, "ink_toad")
@@ -234,7 +236,3 @@ func _on_spell_chanted(spell: String) -> void:
 		"clear": clean_texture()
 		_: prints("error, unknown spell in", 
 		get_tree().get_current_scene())
-
-func _on_book_b_toggled(toggled_on: bool) -> void:
-	if SceneManager.current_book != null:
-		book_container.visible = toggled_on

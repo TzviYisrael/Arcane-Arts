@@ -1,18 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbw7pmrwoar5r"]
+[gd_scene load_steps=8 format=3 uid="uid://cbw7pmrwoar5r"]
 
 [ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summoning_floor_2D.gd" id="1_jc3jh"]
 [ext_resource type="Texture2D" uid="uid://b32f2mmc3jsk4" path="res://Assets/textures/clay_floor_001_rough_2k.jpg" id="2_oyhf0"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_nkr0i"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_7mdlq"]
-[ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="5_4246d"]
+[ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/book_and_notebook_ui.tscn" id="5_jc3jh"]
 [ext_resource type="Script" uid="uid://cgnacxk5m2e56" path="res://Scripts/ink_drawer.gd" id="6_633pv"]
-[ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="6_oyhf0"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nkr0i"]
-size = Vector2(243, 360)
 
 [node name="summon_floor_2D" type="Node2D"]
 script = ExtResource("1_jc3jh")
@@ -115,56 +111,8 @@ step = 3.0
 value = 99.0
 tick_count = 20
 
-[node name="notebook" parent="Control/touch_controls" instance=ExtResource("5_4246d")]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 550.0
-offset_bottom = 50.0
-page = 4
-
-[node name="book_ViewportContainer" type="SubViewportContainer" parent="Control/touch_controls"]
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -256.0
-offset_right = 256.0
-offset_bottom = 512.0
-grow_horizontal = 2
-scale = Vector2(2, 2)
-mouse_filter = 0
-
-[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/book_ViewportContainer"]
-own_world_3d = true
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 0
-
-[node name="Book" parent="Control/touch_controls/book_ViewportContainer/book_viewport" instance=ExtResource("6_oyhf0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
-
-[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
-position = Vector2(140, 270)
-shape = SubResource("RectangleShape2D_nkr0i")
-
-[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/book_ViewportContainer"]
-position = Vector2(384, 270)
-shape = SubResource("RectangleShape2D_nkr0i")
-shape_centered = false
-
-[node name="book_b" type="Button" parent="Control/touch_controls"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -176.0
-offset_right = 131.0
-offset_bottom = -126.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 30
-toggle_mode = true
-text = "book
-"
+[node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("5_jc3jh")]
+notebook_page = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1012, 1012)
@@ -194,6 +142,3 @@ metadata/_edit_use_anchors_ = true
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToDesk" to="." method="_on_move_to_desk_pressed"]
 [connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_h_slider_value_changed"]
-[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_left_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_left_b_released"]
-[connection signal="released" from="Control/touch_controls/book_ViewportContainer/book_right_b" to="Control/touch_controls/book_ViewportContainer/book_viewport/Book" method="_on_book_right_b_released"]
-[connection signal="toggled" from="Control/touch_controls/book_b" to="." method="_on_book_b_toggled"]

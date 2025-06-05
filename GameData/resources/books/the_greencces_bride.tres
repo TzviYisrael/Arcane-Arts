@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BookContent" load_steps=2 format=3 uid="uid://gf3kbr2hakl3"]
+
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="1_3b6gi"]
+
+[resource]
+script = ExtResource("1_3b6gi")
+title = "the greencces bride"
+scale = Vector3(1, 1, 1)
+pages = Array[String](["case", "the princces bride\\n\\nthe best movie ever", "yellow", "My name is Inidgo Montoya. ", "You healed my father. ", "Prepare to dye.", "the end"])
+metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

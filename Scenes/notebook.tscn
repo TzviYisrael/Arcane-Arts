@@ -6,16 +6,19 @@
 
 [node name="notebook" type="Control"]
 clip_contents = true
+custom_minimum_size = Vector2(500, 1080)
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 500.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 550.0
+offset_bottom = 50.0
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_apojy")
 
 [node name="Control" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,18 +120,3 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "          summon a bull"
 horizontal_alignment = 1
-
-[node name="Button" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -130.0
-offset_right = 74.0
-offset_bottom = -99.0
-grow_vertical = 0
-scale = Vector2(2, 2)
-toggle_mode = true
-text = "grimoire"
-
-[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

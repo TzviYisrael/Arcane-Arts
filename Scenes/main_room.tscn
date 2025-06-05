@@ -1,23 +1,18 @@
-[gd_scene load_steps=26 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=23 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
-[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="2_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
+[ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/book_and_notebook_ui.tscn" id="3_dxdgq"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="3_v1qvw"]
-[ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="4_aorri"]
 [ext_resource type="PackedScene" uid="uid://eyxu78xewiuj" path="res://Scenes/structures/drawing_desk_3D.tscn" id="6_8147l"]
 [ext_resource type="PackedScene" uid="uid://cqvbrk3axdfi8" path="res://Scenes/structures/main_roon_structure.tscn" id="7_cw24y"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/structures/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
 [ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
-[ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="13_dxdgq"]
 [ext_resource type="PackedScene" uid="uid://ce5oyn0uvk82o" path="res://Scenes/structures/bookcase.tscn" id="14_xqkij"]
 [ext_resource type="PackedScene" uid="uid://1063ew1g27dh" path="res://Scenes/summons/demon.tscn" id="15_cw24y"]
 [ext_resource type="Resource" uid="uid://u63crg8rsoaf" path="res://GameData/resources/summons/eye_demon.tres" id="16_84vt4"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dxdgq"]
-size = Vector2(243, 360)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_teq5p"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -97,7 +92,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="touch_controls" parent="Control" instance=ExtResource("2_v1qvw")]
+[node name="touch_controls" type="CanvasLayer" parent="Control"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
 anchors_preset = 1
@@ -134,56 +129,8 @@ theme_override_colors/font_shadow_color = Color(0.70271, 0.12445, 0.193261, 1)
 theme_override_font_sizes/font_size = 150
 text = "game over!"
 
-[node name="notebook" parent="Control/touch_controls" instance=ExtResource("4_aorri")]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 550.0
-offset_bottom = 50.0
-
-[node name="book_b" type="Button" parent="Control/touch_controls"]
-visible = false
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -176.0
-offset_right = 131.0
-offset_bottom = -126.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 30
-toggle_mode = true
-text = "book
-"
-
-[node name="book_2D" type="SubViewportContainer" parent="Control/touch_controls"]
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -256.0
-offset_right = 256.0
-offset_bottom = 512.0
-grow_horizontal = 2
-scale = Vector2(2, 2)
-mouse_filter = 0
-
-[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/book_2D"]
-own_world_3d = true
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 0
-
-[node name="Book" parent="Control/touch_controls/book_2D/book_viewport" instance=ExtResource("13_dxdgq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
-
-[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/book_2D"]
-position = Vector2(140, 270)
-shape = SubResource("RectangleShape2D_dxdgq")
-
-[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/book_2D"]
-position = Vector2(384, 270)
-shape = SubResource("RectangleShape2D_dxdgq")
-shape_centered = false
+[node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("3_dxdgq")]
+notebook_page = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lkk8e")
@@ -252,6 +199,3 @@ current = true
 [node name="CSGSphere3D" type="CSGSphere3D" parent="camera_spring_arm"]
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/return_b" to="." method="_on_return_b_pressed"]
-[connection signal="toggled" from="Control/touch_controls/book_b" to="." method="_on_book_b_toggled"]
-[connection signal="released" from="Control/touch_controls/book_2D/book_left_b" to="Control/touch_controls/book_2D/book_viewport/Book" method="_on_book_left_b_released"]
-[connection signal="released" from="Control/touch_controls/book_2D/book_right_b" to="Control/touch_controls/book_2D/book_viewport/Book" method="_on_book_right_b_released"]
