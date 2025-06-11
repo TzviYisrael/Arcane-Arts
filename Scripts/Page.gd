@@ -19,7 +19,9 @@ func set_page_by_number(value: int, text: String) -> void:
 			before = false
 		elif line.begins_with("$"):
 			for word in line.split(" "):
-				spell_container.add_child(add_magic_word(word))
+				var b := add_magic_word(word)
+				b.connect("pressed", magic_word_botton_pressed.bind(word.trim_prefix("$")))
+				spell_container.add_child(b)
 			before = false
 		else:
 			if before:
@@ -32,9 +34,13 @@ func set_page_by_number(value: int, text: String) -> void:
 
 func add_magic_word(word: String) -> Button:
 	var button := Button.new()
-	button.text = word
+	button.text = word.trim_prefix("$")
 	button.add_theme_font_size_override("font_size", 50)
 	return button
+
+func magic_word_botton_pressed(word: String) -> void:
+	print(word, "button pressed")
+	Signals.emit_signal("magic_word_pressed", word)
 
 func empty_spell_container() -> void:
 	for ch in spell_container.get_children():

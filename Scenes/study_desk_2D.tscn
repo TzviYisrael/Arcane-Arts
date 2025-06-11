@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ch8ll3sslk35x"]
+[gd_scene load_steps=15 format=3 uid="uid://ch8ll3sslk35x"]
 
 [ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="1_gasow"]
 [ext_resource type="Script" uid="uid://dsof7wax16ulh" path="res://Scripts/study_desk_2D.gd" id="1_npo2v"]
@@ -13,8 +13,11 @@
 [ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="11_wsgvc"]
 [ext_resource type="Resource" uid="uid://gf3kbr2hakl3" path="res://GameData/resources/books/the_greencces_bride.tres" id="12_yk5o7"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ogdhk"]
-size = Vector2(243, 360)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wsgvc"]
+size = Vector2(75, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yk5o7"]
+size = Vector2(75, 360)
 
 [node name="study_desk_2D" type="Node2D"]
 script = ExtResource("1_npo2v")
@@ -56,7 +59,7 @@ text = "return to the room"
 metadata/_edit_use_anchors_ = true
 
 [node name="notebook" parent="Control/touch_controls" instance=ExtResource("4_7cyk8")]
-page = 1
+page = 5
 
 [node name="Book_2D" type="SubViewportContainer" parent="Control/touch_controls"]
 visible = false
@@ -84,12 +87,12 @@ render_target_update_mode = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
 
 [node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/Book_2D"]
-position = Vector2(140, 270)
-shape = SubResource("RectangleShape2D_ogdhk")
+position = Vector2(0, 270)
+shape = SubResource("RectangleShape2D_wsgvc")
 
 [node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/Book_2D"]
-position = Vector2(384, 270)
-shape = SubResource("RectangleShape2D_ogdhk")
+position = Vector2(520, 270)
+shape = SubResource("RectangleShape2D_yk5o7")
 shape_centered = false
 
 [node name="book_b" type="Button" parent="Control/touch_controls"]

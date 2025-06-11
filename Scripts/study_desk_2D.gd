@@ -4,14 +4,21 @@ extends Node2D
 @onready var book: Node3D = $Control/touch_controls/Book_2D/book_viewport/Book
 @onready var book_2d: SubViewportContainer = $Control/touch_controls/Book_2D
 
+var active_spell := ""
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Signals.connect("book_changed", book_changed)
+	Signals.connect("spell_chanted", _on_spell_chanted)
+	Signals.connect("magic_word_pressed", _on_magic_word_pressed)
 
 func _on_spell_chanted(spell: String) -> void:
-	match spell:
-		_: prints("error, unknown spell in", 
-		get_tree().get_current_scene())
+	active_spell = spell
+	print("active_spell: ", spell)
+	
+func _on_magic_word_pressed(word: String) -> void:
+	if active_spell != "":
+		print(word)
 
 func book_changed() -> void:
 	$Control/touch_controls/book_b.show()
