@@ -21,6 +21,7 @@ var scene_path_to_enter: String = ""
 @onready var ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/ink_circle
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 
+@onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
 
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
@@ -44,6 +45,7 @@ func _ready() -> void:
 	if TextureManager.ink_circle:
 		var ink := ImageTexture.create_from_image(TextureManager.ink_circle)
 		ink_circle.texture = ink
+		gpu_ink_circle.set_ca_texture(ink)
 	
 	if TextureManager.chalk_line:
 		var chalk := ImageTexture.create_from_image(TextureManager.chalk_line)
@@ -129,7 +131,6 @@ func destination_reached() -> void:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
 
-
 func init_ritual(category: int, summon_name: String) -> void:
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/summons/bull.tres",
@@ -142,8 +143,8 @@ func init_ritual(category: int, summon_name: String) -> void:
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	
 	mage.anim_state.travel("summon")
-	var param := Ink_circle.island_counter(TextureManager.ink_circle)
-	prints("island_counter:",param)
+	#var param := Ink_circle.island_counter(TextureManager.ink_circle)
+	#prints("island_counter:",param)
 	Ink_circle.init_ink_colors(TextureManager.ink_circle)
 	TextureManager.surface_pos.clear()
 	update_texture()
@@ -165,6 +166,7 @@ func init_ritual(category: int, summon_name: String) -> void:
 	
 	run_sim = true
 	state = states.RITUAL_START
+	Signals.emit_signal("change_ca_state", true)
 
 func summon() -> void:
 	print("fight!")
@@ -216,6 +218,7 @@ func release_summon() -> void:
 	state = states.RITUAL_READY
 	summon_power = 0
 	run_sim = false
+	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
 	if summoned:
@@ -228,11 +231,11 @@ func _on_return_b_pressed() -> void:
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		"zamen verylongshor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
+		"zamen shor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
 		"zamen tzfardio": init_ritual(SummonData.CATEGORY.MONSTER, "ink_toad")
 		"zamen mazzik": init_ritual(SummonData.CATEGORY.DEMON, "eye_demon")
 		"kill": kill_summon()
 		"release": release_summon()
 		"clear": clean_texture()
-		_: prints("error, unknown spell in", 
+		_: prints("the spell", spell.to_upper(), "is unknown in", 
 		get_tree().get_current_scene())

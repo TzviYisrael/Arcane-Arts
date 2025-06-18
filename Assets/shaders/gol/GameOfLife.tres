@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bjjdvaeegkek0"]
+
+[ext_resource type="Shader" uid="uid://dbe45x4xb6jyb" path="res://Assets/shaders/gol/GameOfLife.gdshader" id="1_xvsp3"]
+
+[resource]
+shader = ExtResource("1_xvsp3")
+shader_parameter/mouse_pressed = false
+shader_parameter/mouse_position = Vector2(0, 0)

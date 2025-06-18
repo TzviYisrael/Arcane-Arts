@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dj5l2qhcjxrw3"]
+
+[ext_resource type="Shader" uid="uid://hh1b1hjw3r3" path="res://Assets/shaders/gol/gpu_ca.gdshader" id="1_jq80i"]
+
+[resource]
+shader = ExtResource("1_jq80i")
+shader_parameter/run = false
+shader_parameter/mouse_pressed = false
+shader_parameter/mouse_position = Vector2(0, 0)

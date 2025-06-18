@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://ojtlnin1bjr7"]
+
+[ext_resource type="Script" uid="uid://b8xn47hjcduhl" path="res://Scripts/gol/gpu_ink_circle.gd" id="2"]
+[ext_resource type="Material" uid="uid://dj5l2qhcjxrw3" path="res://Assets/shaders/gpu_ca_material.tres" id="2_pqhco"]
+[ext_resource type="Script" uid="uid://c00pubvwks5hc" path="res://Scripts/gol/Renderer.gd" id="5"]
+[ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/gol/Renderer2.gd" id="6"]
+
+[sub_resource type="ViewportTexture" id="1"]
+viewport_path = NodePath("Viewport2")
+
+[node name="CA_Display" type="Sprite3D"]
+texture = SubResource("1")
+script = ExtResource("2")
+
+[node name="Viewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(506, 506)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer" type="Sprite2D" parent="Viewport"]
+material = ExtResource("2_pqhco")
+scale = Vector2(2, 2)
+script = ExtResource("5")
+
+[node name="Viewport2" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(506, 506)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer" type="Sprite2D" parent="Viewport2"]
+material = ExtResource("2_pqhco")
+scale = Vector2(2, 2)
+script = ExtResource("6")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.05604)

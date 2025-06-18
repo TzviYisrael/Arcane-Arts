@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://be44p41edn7eg"]
+
+[ext_resource type="Shader" uid="uid://cjmarbmsg7noc" path="res://Assets/shaders/gol/jazzy.gdshader" id="1_xoqjy"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xoqjy")

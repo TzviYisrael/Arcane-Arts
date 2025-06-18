@@ -116,6 +116,7 @@ notebook_page = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1012, 1012)
+zoom = Vector2(0.8, 0.8)
 limit_left = -1000
 limit_top = -1000
 limit_right = 2500
