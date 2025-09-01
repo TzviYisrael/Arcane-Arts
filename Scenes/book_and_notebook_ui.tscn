@@ -1,13 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1pcsiccnkvw7"]
+[gd_scene load_steps=5 format=3 uid="uid://d1pcsiccnkvw7"]
 
 [ext_resource type="Script" uid="uid://ckmj2c0falhe1" path="res://Scripts/book_and__notebook_ui.gd" id="1_k4ecw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="1_ryrls"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="2_k4ecw"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqotr"]
-size = Vector2(243, 360)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i1vmg"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_af8pp"]
 size = Vector2(243, 360)
 
 [node name="book_and _notebook_ui" type="Control"]
@@ -25,6 +22,7 @@ visible = false
 layout_mode = 1
 
 [node name="book_2D" type="SubViewportContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -40,18 +38,18 @@ mouse_filter = 0
 own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Book" parent="book_2D/book_viewport" instance=ExtResource("2_k4ecw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
 
 [node name="book_left_b" type="TouchScreenButton" parent="book_2D"]
 position = Vector2(140, 270)
-shape = SubResource("RectangleShape2D_dqotr")
+shape = SubResource("RectangleShape2D_af8pp")
 
 [node name="book_right_b" type="TouchScreenButton" parent="book_2D"]
-position = Vector2(372, 270)
-shape = SubResource("RectangleShape2D_i1vmg")
+position = Vector2(384, 270)
+shape = SubResource("RectangleShape2D_af8pp")
 shape_centered = false
 
 [node name="book_button" type="Button" parent="."]

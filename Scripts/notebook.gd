@@ -13,11 +13,11 @@ var pages: Dictionary = {
 	MODES.ROOM_SPELLS : ["clear"],
 	MODES.CHALKBOARD : ["reset"],
 	MODES.FLOOR: ["reset", "save"],
-	MODES.STUDY: ["one", "two", "three", "four"]
+	MODES.STUDY: []
 	}
 
 @export_enum("summon", "summon_spells",
- "room_spells", "chalkboard", "floor", "study") var page: int
+ "room_spells", "chalkboard", "floor") var page: int
 var root_of_parent: Node
 
 func _ready() -> void:
@@ -30,7 +30,7 @@ func clear_page() -> void:
 		n.queue_free()
 
 func set_mode(mode: String) -> void:
-	var m: String = mode.to_upper()
+	var m = mode.to_upper()
 	#print("mode - ",MODES[m])
 	set_page(MODES[m])
 		

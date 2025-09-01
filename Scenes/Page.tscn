@@ -58,7 +58,6 @@ horizontal_alignment = 1
 
 [node name="spell_container" type="HBoxContainer" parent="Background/VBoxContainer"]
 layout_mode = 2
-alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="Background/VBoxContainer"]
 layout_mode = 2

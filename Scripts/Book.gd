@@ -37,10 +37,14 @@ func _ready()  -> void:
 	if content == null:
 		#print("empty book init")
 		return
+	#if len(content.pages) % 2 == 1:
+		#content.pages.append("")
+		#content.pages.append("")
+		#content.pages.append("")
 	setup()
 
 func setup() -> void:
-	update_page_number(-current_page_number)
+	update_page_number()
 	turning_page.hide()
 	set_texture(ps1, v3)
 	set_texture(ps2, v4)
