@@ -5,5 +5,10 @@ extends Sprite2D
 func _ready() -> void:
 	self.texture = viewport_2.get_texture()
 	
-func update(tex: Texture2D):
+func setup(tex: Texture2D) -> void:
 	self.texture = tex
+
+func setup_loop() -> void:
+	await get_tree().process_frame
+	self.texture = viewport_2.get_texture()
+	

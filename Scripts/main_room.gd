@@ -164,7 +164,7 @@ func init_ritual(category: int, summon_name: String) -> void:
 	target_summoned.data = load(summons_res[summon_name])
 	target_power = target_summoned.data.power
 	
-	run_sim = true
+	#run_sim = true
 	state = states.RITUAL_START
 	Signals.emit_signal("change_ca_state", true)
 

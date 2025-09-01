@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ojtlnin1bjr7"]
+[gd_scene load_steps=7 format=3 uid="uid://ojtlnin1bjr7"]
 
 [ext_resource type="Script" uid="uid://b8xn47hjcduhl" path="res://Scripts/gol/gpu_ink_circle.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://crqfag7gyvoxh" path="res://GameData/gpu_ink.png" id="2_j2kxs"]
 [ext_resource type="Material" uid="uid://dj5l2qhcjxrw3" path="res://Assets/shaders/gpu_ca_material.tres" id="2_pqhco"]
 [ext_resource type="Script" uid="uid://c00pubvwks5hc" path="res://Scripts/gol/Renderer.gd" id="5"]
 [ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/gol/Renderer2.gd" id="6"]
@@ -11,6 +12,7 @@ viewport_path = NodePath("Viewport2")
 [node name="CA_Display" type="Sprite3D"]
 texture = SubResource("1")
 script = ExtResource("2")
+start_texture = ExtResource("2_j2kxs")
 
 [node name="Viewport" type="SubViewport" parent="."]
 transparent_bg = true

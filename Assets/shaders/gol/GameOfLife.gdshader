@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 // Controlled from GDscript
-uniform bool run = false;
+uniform bool run = true;
 uniform bool mouse_pressed = false;
 uniform vec2 mouse_position = vec2(0., 0.);
 

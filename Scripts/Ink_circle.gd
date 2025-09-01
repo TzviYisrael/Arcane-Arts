@@ -92,7 +92,7 @@ static func init_ink_colors(img: Image) -> void:
 		for x in range(int(center.x - inner_radius), int(center.x + inner_radius) + 1):
 			var pos := Vector2(x, y)
 			if center.distance_to(pos) <= inner_radius:
-					img.set_pixel(x, y, portal_color)
+					img.set_pixel(x, y, _summon_color)
 
 	# Draw circular border in green using polar coordinates
 	var steps := int(2 * PI * radius)  # Approximate number of pixels on the circle
