@@ -80,7 +80,7 @@ static func init_ink_colors(img: Image) -> void:
 	var width: float = img.get_width()
 	var height: float = img.get_height()
 	var outside_color := Color.GREEN
-	var portal_color := Color.DARK_BLUE
+	var _portal_color := Color.DARK_BLUE
 	var _summon_color := Color.RED # remove?
 
 	var center := Vector2(width / 2.0, height / 2.0)

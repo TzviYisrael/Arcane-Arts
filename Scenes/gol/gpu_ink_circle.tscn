@@ -1,13 +1,41 @@
-[gd_scene load_steps=7 format=3 uid="uid://ojtlnin1bjr7"]
+[gd_scene load_steps=17 format=3 uid="uid://ojtlnin1bjr7"]
 
 [ext_resource type="Script" uid="uid://b8xn47hjcduhl" path="res://Scripts/gol/gpu_ink_circle.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://crqfag7gyvoxh" path="res://GameData/gpu_ink.png" id="2_j2kxs"]
-[ext_resource type="Material" uid="uid://dj5l2qhcjxrw3" path="res://Assets/shaders/gpu_ca_material.tres" id="2_pqhco"]
+[ext_resource type="Material" uid="uid://dj5l2qhcjxrw3" path="res://Assets/shaders/gpu_ca.tres" id="2_pqhco"]
 [ext_resource type="Script" uid="uid://c00pubvwks5hc" path="res://Scripts/gol/Renderer.gd" id="5"]
 [ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/gol/Renderer2.gd" id="6"]
+[ext_resource type="Material" uid="uid://ogqveovydvqn" path="res://Assets/shaders/average_reducer.tres" id="6_c24rx"]
+[ext_resource type="Shader" uid="uid://vjveqyuihmna" path="res://Assets/shaders/color_fillter.gdshader" id="6_jb18e"]
 
 [sub_resource type="ViewportTexture" id="1"]
 viewport_path = NodePath("Viewport2")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_j2kxs"]
+viewport_path = NodePath("pixel_reducer/level_5_vp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pnqp1"]
+shader = ExtResource("6_jb18e")
+shader_parameter/target_color = Vector4(1, 0, 0, 1)
+shader_parameter/range = 0.01
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_htlb1"]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ry1d3"]
+viewport_path = NodePath("pixel_reducer/level_0_vp")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_jb18e"]
+viewport_path = NodePath("pixel_reducer/level_1_vp")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_pnqp1"]
+viewport_path = NodePath("pixel_reducer/level_2_vp")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6j4kl"]
+viewport_path = NodePath("pixel_reducer/level_3_vp")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5m6bw"]
+viewport_path = NodePath("pixel_reducer/level_4_vp")
 
 [node name="CA_Display" type="Sprite3D"]
 texture = SubResource("1")
@@ -38,3 +66,66 @@ script = ExtResource("6")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.05604)
+
+[node name="pixel_reducer" type="Sprite2D" parent="."]
+position = Vector2(618, 465)
+texture = SubResource("ViewportTexture_j2kxs")
+
+[node name="level_0_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(506, 506)
+
+[node name="level0_sp" type="Sprite2D" parent="pixel_reducer/level_0_vp"]
+material = SubResource("ShaderMaterial_pnqp1")
+texture = SubResource("ViewportTexture_htlb1")
+centered = false
+
+[node name="level_1_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(253, 253)
+
+[node name="level1_sp" type="Sprite2D" parent="pixel_reducer/level_1_vp"]
+material = ExtResource("6_c24rx")
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_ry1d3")
+centered = false
+
+[node name="level_2_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(126, 126)
+
+[node name="level2_sp" type="Sprite2D" parent="pixel_reducer/level_2_vp"]
+material = ExtResource("6_c24rx")
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_jb18e")
+centered = false
+
+[node name="level_3_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(63, 63)
+
+[node name="level3_sp" type="Sprite2D" parent="pixel_reducer/level_3_vp"]
+material = ExtResource("6_c24rx")
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_pnqp1")
+centered = false
+
+[node name="level_4_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(31, 31)
+
+[node name="level1_sp" type="Sprite2D" parent="pixel_reducer/level_4_vp"]
+material = ExtResource("6_c24rx")
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_6j4kl")
+centered = false
+
+[node name="level_5_vp" type="SubViewport" parent="pixel_reducer"]
+canvas_item_default_texture_filter = 0
+size = Vector2i(15, 15)
+
+[node name="level5_sp" type="Sprite2D" parent="pixel_reducer/level_5_vp"]
+material = ExtResource("6_c24rx")
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_5m6bw")
+centered = false

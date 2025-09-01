@@ -30,7 +30,7 @@ func clear_page() -> void:
 		n.queue_free()
 
 func set_mode(mode: String) -> void:
-	var m = mode.to_upper()
+	var m := mode.to_upper()
 	#print("mode - ",MODES[m])
 	set_page(MODES[m])
 		

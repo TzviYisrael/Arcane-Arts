@@ -18,12 +18,15 @@ var scene_path_to_enter: String = ""
 @onready var root: Node3D = $"."
 @onready var summoning_floor: StaticBody3D = $NavigationRegion3D/summoning_floor
 @onready var smoke_puff: GPUParticles3D = $NavigationRegion3D/summoning_floor/smoke_puff
-@onready var ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/ink_circle
+#@onready var ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/ink_circle
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 
 @onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
 
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
+
+@onready var init_material : ShaderMaterial = load("res://Assets/shaders/init.tres")
+@onready var clear_material : ShaderMaterial = load("res://Assets/shaders/clear.tres")
 
 enum {PORTAL, GRAPPLE}
 enum states{ROOM, RITUAL_READY, RITUAL_START, GRAPPLE, CAPTURED}
@@ -44,7 +47,7 @@ func _ready() -> void:
 	state = states.ROOM
 	if TextureManager.ink_circle:
 		var ink := ImageTexture.create_from_image(TextureManager.ink_circle)
-		ink_circle.texture = ink
+		#ink_circle.texture = ink
 		gpu_ink_circle.set_ca_texture(ink)
 	
 	if TextureManager.chalk_line:
@@ -61,12 +64,12 @@ func _process(_delta: float) -> void:
 		match state:
 			states.ROOM: pass
 			states.RITUAL_READY: pass
-			states.RITUAL_START:
-				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, PORTAL)
-				update_texture()
-			states.GRAPPLE:
-				run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, GRAPPLE)
-				update_texture()
+			states.RITUAL_START: pass
+				#run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, PORTAL)
+				#update_texture()
+			states.GRAPPLE: pass
+				#run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, GRAPPLE)
+				#update_texture()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
@@ -146,8 +149,13 @@ func init_ritual(category: int, summon_name: String) -> void:
 	#var param := Ink_circle.island_counter(TextureManager.ink_circle)
 	#prints("island_counter:",param)
 	Ink_circle.init_ink_colors(TextureManager.ink_circle)
-	TextureManager.surface_pos.clear()
-	update_texture()
+	
+	
+	gpu_ink_circle.one_shot_shader(init_material, 1)
+	await get_tree().process_frame
+	print("init")
+	#TextureManager.surface_pos.clear()
+	#update_texture()
 	
 	#target_summoned = bull_scene.instantiate()
 	#target_power = target_summoned.power
@@ -167,13 +175,14 @@ func init_ritual(category: int, summon_name: String) -> void:
 	#run_sim = true
 	state = states.RITUAL_START
 	Signals.emit_signal("change_ca_state", true)
+	
 
 func summon() -> void:
 	print("fight!")
 	smoke_puff.emitting = true
 	summoned = target_summoned
-	summoned.position = ink_circle.global_position
-	summoned.look_at_from_position(ink_circle.global_position, mage.global_position) 
+	summoned.position = gpu_ink_circle.global_position
+	summoned.look_at_from_position(gpu_ink_circle.global_position, mage.global_position) 
 	root.add_child(summoned)
 	state = states.GRAPPLE
 
@@ -201,15 +210,18 @@ func portal_distracted(_pos: Vector2) -> void:
 		print("portal distracted")
 		clean_texture()
 
-func update_texture() -> void:
-	if TextureManager.ink_circle: 
-		ink_circle.texture.update(TextureManager.ink_circle)
+#func update_texture() -> void:
+	#if TextureManager.ink_circle: 
+		#ink_circle.texture.update(TextureManager.ink_circle)
 
 func clean_texture() -> void:
 	run_sim = false
 	state = states.RITUAL_READY
-	Ink_circle.clean_colors(TextureManager.ink_circle)
-	update_texture()
+	gpu_ink_circle.one_shot_shader(clear_material, 5)
+	await get_tree().process_frame
+	print("clear")
+	#Ink_circle.clean_colors(TextureManager.ink_circle)
+	#update_texture()
 
 func release_summon() -> void:
 	if summoned:
@@ -221,6 +233,8 @@ func release_summon() -> void:
 	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
+	gpu_ink_circle.count_color(Color.GREEN)
+	#gpu_ink_circle.save_small_image()
 	if summoned:
 		prints("loot: ", summoned.data.loot.pick_random())
 	release_summon()

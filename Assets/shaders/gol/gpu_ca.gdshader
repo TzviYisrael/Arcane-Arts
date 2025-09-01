@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform bool run = true;
+uniform bool run = false;
 uniform float power = 0.1;
 
 //debug
@@ -42,14 +42,14 @@ void fragment() {
 	vec4 result_color = vec4(0.0, 0.0, 0.0, 0.0); // default: transparent
 
 	vec2 center = vec2(0.5, 0.5);
-	float radius = 0.5;
-	
+	float radius = 0.501;
+
 	if(distance(uv, center) > radius){
 		result_color = vec4(1.0, 1.0, 1.0, 0.0);// transparent outside circle
 	}
 	else if (!run) {
 		//result_color = vec4(1.0, 1.0, 1.0, 0.0);// transparent outside circle
-		result_color = vec4(1.0, 1.0, 0.0, 1.0); 
+		result_color = texture(TEXTURE, uv);
 	} else {
 		vec4 current = texture(TEXTURE, uv);
 		vec2 dist_to_mouse = (uv / sz) - mouse_position;
@@ -65,7 +65,7 @@ void fragment() {
 		}
 		// Keep flood color if already filled
 		else if (is_flooding_color(current)) {
-			result_color = current; 
+			result_color = current;
 		}
 		else {
 			if (is_black(current)) {
