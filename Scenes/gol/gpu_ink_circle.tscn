@@ -49,6 +49,7 @@ render_target_clear_mode = 2
 render_target_update_mode = 0
 
 [node name="Renderer" type="Sprite2D" parent="Viewport"]
+texture_filter = 1
 material = ExtResource("2_pqhco")
 scale = Vector2(2, 2)
 script = ExtResource("5")
@@ -60,6 +61,7 @@ render_target_clear_mode = 2
 render_target_update_mode = 0
 
 [node name="Renderer" type="Sprite2D" parent="Viewport2"]
+texture_filter = 1
 material = ExtResource("2_pqhco")
 scale = Vector2(2, 2)
 script = ExtResource("6")
@@ -68,8 +70,8 @@ script = ExtResource("6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.05604)
 
 [node name="pixel_reducer" type="Sprite2D" parent="."]
-position = Vector2(618, 465)
 texture = SubResource("ViewportTexture_j2kxs")
+centered = false
 
 [node name="level_0_vp" type="SubViewport" parent="pixel_reducer"]
 canvas_item_default_texture_filter = 0

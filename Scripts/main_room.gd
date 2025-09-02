@@ -6,7 +6,7 @@ const RAYCAST_MAX_D = 1000
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
-var target_summoned: Node3D
+#var target_summoned: Node3D
 var run_sim: bool
 #var target_power := 0
 #var summon_power := 0
@@ -177,6 +177,9 @@ func init_ritual(_category: int) -> void:
 	
 
 func summon() -> void:
+	if not summoned == null: print("existing summon"); return
+	if not state == states.RITUAL_START: print("wrong state"); return
+	
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/summons/bull.tres",
 		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
@@ -184,9 +187,9 @@ func summon() -> void:
 	}
 	
 	var power : float = await gpu_ink_circle.count_color(Color.RED)
-	prints("power: ", power)
+	prints("power:", power)
 	var answering_summon : Node3D = null
-	var answer : int = 0
+	var answer : int = -1
 	if power < 20: prints("too low power", power)
 	elif 20 <= power && power < 50: answer = SummonData.CATEGORY.ANIMAL
 	elif 50 <= power && power < 100: answer = SummonData.CATEGORY.MONSTER
@@ -206,7 +209,7 @@ func summon() -> void:
 			scene = load("res://Scenes/summons/demon.tscn")
 			summon_name = "eye_demon"
 	
-	if answering_summon:
+	if not answer == -1:
 		answering_summon = scene.instantiate()
 		answering_summon.data = load(summons_res[summon_name])
 		print("fight!")
@@ -218,8 +221,8 @@ func summon() -> void:
 		state = states.GRAPPLE
 	else:
 		print("no fight")
-		smoke_puff.emitting = false
-		
+		smoke_puff.emitting = true
+
 
 #func add_summon_power(power: int) -> void:
 	#summon_power += power
