@@ -92,7 +92,7 @@ centered = false
 
 [node name="level_2_vp" type="SubViewport" parent="pixel_reducer"]
 canvas_item_default_texture_filter = 0
-size = Vector2i(126, 126)
+size = Vector2i(127, 127)
 
 [node name="level2_sp" type="Sprite2D" parent="pixel_reducer/level_2_vp"]
 material = ExtResource("6_c24rx")
@@ -102,7 +102,7 @@ centered = false
 
 [node name="level_3_vp" type="SubViewport" parent="pixel_reducer"]
 canvas_item_default_texture_filter = 0
-size = Vector2i(63, 63)
+size = Vector2i(64, 64)
 
 [node name="level3_sp" type="Sprite2D" parent="pixel_reducer/level_3_vp"]
 material = ExtResource("6_c24rx")
@@ -112,7 +112,7 @@ centered = false
 
 [node name="level_4_vp" type="SubViewport" parent="pixel_reducer"]
 canvas_item_default_texture_filter = 0
-size = Vector2i(31, 31)
+size = Vector2i(32, 32)
 
 [node name="level1_sp" type="Sprite2D" parent="pixel_reducer/level_4_vp"]
 material = ExtResource("6_c24rx")
@@ -122,7 +122,7 @@ centered = false
 
 [node name="level_5_vp" type="SubViewport" parent="pixel_reducer"]
 canvas_item_default_texture_filter = 0
-size = Vector2i(15, 15)
+size = Vector2i(16, 16)
 
 [node name="level5_sp" type="Sprite2D" parent="pixel_reducer/level_5_vp"]
 material = ExtResource("6_c24rx")

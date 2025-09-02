@@ -8,8 +8,8 @@ const RAYCAST_MAX_D = 1000
 var summoned: Node3D
 var target_summoned: Node3D
 var run_sim: bool
-var target_power := 0
-var summon_power := 0
+#var target_power := 0
+#var summon_power := 0
 
 var input_coll_saver: Node3D = null
 var drag: bool = false
@@ -35,8 +35,8 @@ var state: int = 0
 
 func _ready() -> void:
 	Signals.connect("init_ritual", init_ritual)
-	Signals.connect("add_summon_power", add_summon_power)
-	Signals.connect("portal_distracted", portal_distracted)
+	#Signals.connect("add_summon_power", add_summon_power)
+	#Signals.connect("portal_distracted", portal_distracted)
 	Signals.connect("breach", breach)
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	
@@ -134,22 +134,21 @@ func destination_reached() -> void:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
 
-func init_ritual(category: int, summon_name: String) -> void:
-	var summons_res: Dictionary = {
-		"bull": "res://GameData/resources/summons/bull.tres",
-		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
-		"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
-	}
+func init_ritual(_category: int) -> void:
+	#var summons_res: Dictionary = {
+		#"bull": "res://GameData/resources/summons/bull.tres",
+		#"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
+		#"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
+	#}
 	if not summoned == null: print("existing summon"); return
-	if not summon_name in summons_res: print("no such summon"); return
+	#if not summon_name in summons_res: print("no such summon"); return
 	if not TextureManager.ink_circle: print("no circle"); return
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	
 	mage.anim_state.travel("summon")
 	#var param := Ink_circle.island_counter(TextureManager.ink_circle)
 	#prints("island_counter:",param)
-	Ink_circle.init_ink_colors(TextureManager.ink_circle)
-	
+	#Ink_circle.init_ink_colors(TextureManager.ink_circle)
 	
 	gpu_ink_circle.one_shot_shader(init_material, 1)
 	await get_tree().process_frame
@@ -159,18 +158,18 @@ func init_ritual(category: int, summon_name: String) -> void:
 	
 	#target_summoned = bull_scene.instantiate()
 	#target_power = target_summoned.power
-	var scene: Resource
-	match category:
-		SummonData.CATEGORY.ANIMAL:
-			scene = load("res://Scenes/summons/animal.tscn")
-		SummonData.CATEGORY.MONSTER:
-			scene = load("res://Scenes/summons/monster.tscn")
-		SummonData.CATEGORY.DEMON:
-			scene = load("res://Scenes/summons/demon.tscn")
-	
-	target_summoned = scene.instantiate()
-	target_summoned.data = load(summons_res[summon_name])
-	target_power = target_summoned.data.power
+	#var scene: Resource
+	#match category:
+		#SummonData.CATEGORY.ANIMAL:
+			#scene = load("res://Scenes/summons/animal.tscn")
+		#SummonData.CATEGORY.MONSTER:
+			#scene = load("res://Scenes/summons/monster.tscn")
+		#SummonData.CATEGORY.DEMON:
+			#scene = load("res://Scenes/summons/demon.tscn")
+	#
+	#target_summoned = scene.instantiate()
+	#target_summoned.data = load(summons_res[summon_name])
+	#target_power = target_summoned.data.power
 	
 	#run_sim = true
 	state = states.RITUAL_START
@@ -178,23 +177,59 @@ func init_ritual(category: int, summon_name: String) -> void:
 	
 
 func summon() -> void:
-	print("fight!")
-	smoke_puff.emitting = true
-	summoned = target_summoned
-	summoned.position = gpu_ink_circle.global_position
-	summoned.look_at_from_position(gpu_ink_circle.global_position, mage.global_position) 
-	root.add_child(summoned)
-	state = states.GRAPPLE
-
-func add_summon_power(power: int) -> void:
-	summon_power += power
-	if state == states.RITUAL_START:
-		prints("potal_size:", summon_power)
+	var summons_res: Dictionary = {
+		"bull": "res://GameData/resources/summons/bull.tres",
+		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
+		"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
+	}
+	
+	var power : float = await gpu_ink_circle.count_color(Color.RED)
+	prints("power: ", power)
+	var answering_summon : Node3D = null
+	var answer : int = 0
+	if power < 20: prints("too low power", power)
+	elif 20 <= power && power < 50: answer = SummonData.CATEGORY.ANIMAL
+	elif 50 <= power && power < 100: answer = SummonData.CATEGORY.MONSTER
+	elif 100 <= power && power < 150: answer = SummonData.CATEGORY.DEMON
+	else: prints("too high power", power)
+	
+	var scene: Resource
+	var summon_name: String
+	match answer:
+		SummonData.CATEGORY.ANIMAL:
+			scene = load("res://Scenes/summons/animal.tscn")
+			summon_name = "bull"
+		SummonData.CATEGORY.MONSTER:
+			scene = load("res://Scenes/summons/monster.tscn")
+			summon_name = "ink_toad"
+		SummonData.CATEGORY.DEMON:
+			scene = load("res://Scenes/summons/demon.tscn")
+			summon_name = "eye_demon"
+	
+	if answering_summon:
+		answering_summon = scene.instantiate()
+		answering_summon.data = load(summons_res[summon_name])
+		print("fight!")
+		smoke_puff.emitting = true
+		summoned = answering_summon
+		summoned.position = gpu_ink_circle.global_position
+		summoned.look_at_from_position(gpu_ink_circle.global_position, mage.global_position) 
+		root.add_child(summoned)
+		state = states.GRAPPLE
 	else:
-		prints("summon power:", summon_power)
-	if run_sim and summon_power >= target_power \
-		and state == states.RITUAL_START:
-		summon()
+		print("no fight")
+		smoke_puff.emitting = false
+		
+
+#func add_summon_power(power: int) -> void:
+	#summon_power += power
+	#if state == states.RITUAL_START:
+		#prints("potal_size:", summon_power)
+	#else:
+		#prints("summon power:", summon_power)
+	#if run_sim and summon_power >= target_power \
+		#and state == states.RITUAL_START:
+		#summon()
 
 func breach(pos: Vector2) -> void:
 	run_sim = false
@@ -202,13 +237,13 @@ func breach(pos: Vector2) -> void:
 	massege.show()
 	root.process_mode = Node.PROCESS_MODE_DISABLED
 
-func portal_distracted(_pos: Vector2) -> void:
-	if summon_power >= target_summoned.data.size:
-		state = states.GRAPPLE
-		print("portal_done")
-	else:
-		print("portal distracted")
-		clean_texture()
+#func portal_distracted(_pos: Vector2) -> void:
+	#if summon_power >= target_summoned.data.size:
+		#state = states.GRAPPLE
+		#print("portal_done")
+	#else:
+		#print("portal distracted")
+		#clean_texture()
 
 #func update_texture() -> void:
 	#if TextureManager.ink_circle: 
@@ -228,12 +263,12 @@ func release_summon() -> void:
 		summoned.queue_free()
 		summoned = null
 	state = states.RITUAL_READY
-	summon_power = 0
+	#summon_power = 0
 	run_sim = false
 	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
-	gpu_ink_circle.count_color(Color.GREEN)
+	#gpu_ink_circle.count_color(Color.RED)
 	#gpu_ink_circle.save_small_image()
 	if summoned:
 		prints("loot: ", summoned.data.loot.pick_random())
@@ -245,9 +280,10 @@ func _on_return_b_pressed() -> void:
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		"zamen shor": init_ritual(SummonData.CATEGORY.ANIMAL, "bull")
-		"zamen tzfardio": init_ritual(SummonData.CATEGORY.MONSTER, "ink_toad")
-		"zamen mazzik": init_ritual(SummonData.CATEGORY.DEMON, "eye_demon")
+		"Terra Vinculum": init_ritual(SummonData.CATEGORY.ANIMAL)
+		"Astralis Vinculum": init_ritual(SummonData.CATEGORY.MONSTER)
+		"Infernum Vinculum": init_ritual(SummonData.CATEGORY.DEMON)
+		"Evoco Vos": summon()
 		"kill": kill_summon()
 		"release": release_summon()
 		"clear": clean_texture()

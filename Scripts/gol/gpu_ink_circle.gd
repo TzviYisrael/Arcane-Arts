@@ -40,7 +40,7 @@ func _ready() -> void:
 	#if pos_offset > Vector2(253, 253):
 		#pos_offset = Vector2(-253, -253)
 
-func count_color(color: Color) -> void:
+func count_color(color: Color) -> int:
 	filter_sprite.material.set_shader_parameter("target_color", color)
 	await RenderingServer.frame_post_draw
 	
@@ -53,7 +53,7 @@ func count_color(color: Color) -> void:
 	for y in range(height):
 		for x in range(width):
 			sum += small_img.get_pixel(x, y).r
-	print((sum / n) * 255)
+	return ((sum / n) * 255)
 	
 func save_small_image() -> void:
 	var save_path: String = "res://GameData/small_img.png"

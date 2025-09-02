@@ -7,8 +7,8 @@ extends Control
 enum MODES {SUMMON, SUMMON_SPELLS, ROOM_SPELLS, CHALKBOARD, FLOOR, STUDY}
 
 var pages: Dictionary = {
-	MODES.SUMMON : ["zamen shor", "zamen tzfardio", "zamen mazzik", "",
-					 "kill", "release"],
+	MODES.SUMMON : ["Terra Vinculum", "Astralis Vinculum", "Infernum Vinculum", "",
+					 "Evoco Vos", "", "kill", "release"],
 	MODES.SUMMON_SPELLS : [],
 	MODES.ROOM_SPELLS : ["clear"],
 	MODES.CHALKBOARD : ["reset"],
