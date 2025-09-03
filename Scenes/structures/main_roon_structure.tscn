@@ -1,33 +1,40 @@
-[gd_scene load_steps=7 format=3 uid="uid://cqvbrk3axdfi8"]
+[gd_scene load_steps=4 format=3 uid="uid://cqvbrk3axdfi8"]
 
 [ext_resource type="Script" uid="uid://buraawm75gpa1" path="res://Scripts/main_roon_structure.gd" id="1_81txx"]
 [ext_resource type="PackedScene" uid="uid://b43ea1qbu75vk" path="res://Assets/models/main_room_floor_n_coll.glb" id="1_jajb3"]
 [ext_resource type="PackedScene" uid="uid://ccfqbdqkyidwv" path="res://Assets/models/main_room_walls.glb" id="2_52mc0"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_81txx"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_g8gpf"]
-sky_material = SubResource("ProceduralSkyMaterial_81txx")
-
-[sub_resource type="Environment" id="Environment_metm6"]
-background_mode = 2
-sky = SubResource("Sky_g8gpf")
-tonemap_mode = 2
-glow_enabled = true
-
 [node name="main_roon_structure" type="Node3D"]
 script = ExtResource("1_81txx")
 
 [node name="main_room_floor_n_coll" parent="." instance=ExtResource("1_jajb3")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 
 [node name="main_room_walls" parent="." instance=ExtResource("2_52mc0")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_metm6")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.996194, -0.0843796, 0.021822, 0, 0.25038, 0.968147, -0.0871557, -0.964464, 0.249427, 0, 8.73972, 0)
-layers = 3
+[node name="SpotLight3D5" type="SpotLight3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, -1.74846e-08, 0.4, 0, -0.4, -1.74846e-08, 0, 20, 0)
+light_energy = 30.0
 shadow_enabled = true
+spot_range = 30.0
+
+[node name="SpotLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.72906, 5, -6.5907)
+light_color = Color(0.968627, 0.8, 0.396078, 1)
+light_energy = 5.0
+
+[node name="SpotLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 5, -6.5)
+light_color = Color(0.968627, 0.8, 0.396078, 1)
+light_energy = 5.0
+
+[node name="SpotLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 5, 6.5)
+light_color = Color(0.968627, 0.8, 0.396078, 1)
+light_energy = 5.0
+
+[node name="SpotLight3D4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 5, 6.5)
+light_color = Color(0.97, 0.79831, 0.3977, 1)
+light_energy = 5.0

@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1pcsiccnkvw7"]
+[gd_scene load_steps=7 format=3 uid="uid://d1pcsiccnkvw7"]
 
 [ext_resource type="Script" uid="uid://ckmj2c0falhe1" path="res://Scripts/book_and__notebook_ui.gd" id="1_k4ecw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="1_ryrls"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="2_k4ecw"]
+[ext_resource type="Texture2D" uid="uid://fj4xp1cjlwe2" path="res://Assets/ui/button_icons/book2.png" id="4_qpobx"]
+[ext_resource type="Texture2D" uid="uid://dhy80swtuuni4" path="res://Assets/ui/button_icons/scroll.png" id="5_lir8m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_af8pp"]
 size = Vector2(243, 360)
@@ -59,15 +61,16 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -176.0
-offset_right = 131.0
-offset_bottom = -126.0
+offset_left = 30.0
+offset_top = -292.0
+offset_right = 466.0
+offset_bottom = 142.0
 grow_vertical = 0
+scale = Vector2(0.3, 0.3)
 theme_override_font_sizes/font_size = 40
 toggle_mode = true
-text = "book
-"
+icon = ExtResource("4_qpobx")
+flat = true
 
 [node name="notebook_button" type="Button" parent="."]
 custom_minimum_size = Vector2(150, 0)
@@ -75,14 +78,16 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -100.0
-offset_right = 223.0
-offset_bottom = -37.0
+offset_left = 30.0
+offset_top = -153.0
+offset_right = 498.0
+offset_bottom = 319.0
 grow_vertical = 0
+scale = Vector2(0.3, 0.3)
 theme_override_font_sizes/font_size = 40
 toggle_mode = true
-text = "grimoire"
+icon = ExtResource("5_lir8m")
+flat = true
 
 [connection signal="released" from="book_2D/book_left_b" to="book_2D/book_viewport/Book" method="_on_book_left_b_released"]
 [connection signal="released" from="book_2D/book_right_b" to="book_2D/book_viewport/Book" method="_on_book_right_b_released"]

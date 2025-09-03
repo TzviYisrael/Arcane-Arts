@@ -1,14 +1,21 @@
-[gd_scene load_steps=8 format=3 uid="uid://cbw7pmrwoar5r"]
+[gd_scene load_steps=12 format=3 uid="uid://cbw7pmrwoar5r"]
 
 [ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summoning_floor_2D.gd" id="1_jc3jh"]
 [ext_resource type="Texture2D" uid="uid://b32f2mmc3jsk4" path="res://Assets/textures/clay_floor_001_rough_2k.jpg" id="2_oyhf0"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_nkr0i"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_7mdlq"]
+[ext_resource type="Texture2D" uid="uid://d13jskad8hsam" path="res://Assets/ui/button_icons/coloring_tools.png" id="5_7mdlq"]
 [ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/book_and_notebook_ui.tscn" id="5_jc3jh"]
 [ext_resource type="Script" uid="uid://cgnacxk5m2e56" path="res://Scripts/ink_drawer.gd" id="6_633pv"]
+[ext_resource type="Texture2D" uid="uid://cqekf328f7243" path="res://Assets/ui/button_icons/room.png" id="6_4246d"]
+[ext_resource type="Texture2D" uid="uid://deniiifo46gmb" path="res://Assets/ui/button_icons/drawing1.png" id="7_633pv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
 viewport_path = NodePath("SubViewport")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4246d"]
+atlas = ExtResource("5_7mdlq")
+region = Rect2(450, 0, 450, 450)
 
 [node name="summon_floor_2D" type="Node2D"]
 script = ExtResource("1_jc3jh")
@@ -46,20 +53,24 @@ metadata/_edit_use_anchors_ = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -237.0
-offset_top = 20.0
-offset_bottom = 222.0
+offset_left = -170.0
+offset_right = 280.0
+offset_bottom = 1349.0
 grow_horizontal = 0
+scale = Vector2(0.3, 0.3)
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="tool" type="Button" parent="Control/touch_controls/VBoxContainer"]
+[node name="tools" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_7mdlq")
-text = "no_tool"
+icon = SubResource("AtlasTexture_4246d")
+flat = true
+icon_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="showGuides" type="Button" parent="Control/touch_controls/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("4_7mdlq")
 text = "show guides"
@@ -82,14 +93,15 @@ metadata/_edit_use_anchors_ = true
 [node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_7mdlq")
-text = "return to the room"
+icon = ExtResource("6_4246d")
+flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="moveToDesk" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_7mdlq")
-text = "move to the table
-"
+icon = ExtResource("7_633pv")
+flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="brushSlider" type="HSlider" parent="Control/touch_controls"]
@@ -108,7 +120,7 @@ scale = Vector2(1.5, 1.5)
 min_value = 15.0
 max_value = 300.0
 step = 3.0
-value = 99.0
+value = 150.0
 tick_count = 20
 
 [node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("5_jc3jh")]
@@ -136,7 +148,7 @@ centered = false
 script = ExtResource("6_633pv")
 metadata/_edit_use_anchors_ = true
 
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/showGuides" to="." method="_on_show_guides_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="_on_clear_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]

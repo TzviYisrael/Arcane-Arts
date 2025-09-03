@@ -12,11 +12,10 @@ var center := Vector2()
 @onready var saved_texture: Sprite2D = $SubViewport/saved_texture
 @onready var sub_viewport: SubViewport = $SubViewport
 
-@onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
+@onready var tools_button: Button = $Control/touch_controls/VBoxContainer/tools
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
 
 var touch_point : Vector2 = Vector2.INF
-#const SNAP_DISTANSE : float = 50
 
 @export var brush_size : int = 10
 @export var max_clear: float = 100
@@ -25,8 +24,8 @@ var touch_point : Vector2 = Vector2.INF
 @export var max_zoom: float = 2.0
 @export var zoom_speed: float = 0.05
 
-enum tools{INK, COVER}
-@export_enum("ink", "cover", "clear") var tool: int = 0;
+enum tools{HAND, INK, COVER}
+@export_enum("hand", "ink", "cover") var tool: int = 1
 
 
 func _ready() -> void:
@@ -45,7 +44,6 @@ func _ready() -> void:
 	
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
-	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
 	queue_redraw()
 
@@ -115,7 +113,10 @@ func save_to_tex_men()  -> void:
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
 	TextureManager.s_tool = tool
-	tool_button.text = str(tools.keys()[tool]).to_lower()
+	
+	var tool_offset : Array = [0, 450, 905]
+	var atlas_icon := tools_button.icon as AtlasTexture
+	atlas_icon.region.position.x = tool_offset[tool]
 
 func _on_save_pressed() -> void:
 	#save_to_disk()

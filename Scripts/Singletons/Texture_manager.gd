@@ -10,6 +10,6 @@ var resize_factor: int = 4
 var surface_pos: Array[Vector2]
 
 ##save the drawing room active tool
-var g_tool: int = 0
+var g_tool: int = 1
 ##save the summoning room active tool
-var s_tool: int = 0
+var s_tool: int = 1

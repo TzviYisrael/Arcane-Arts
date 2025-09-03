@@ -14,11 +14,11 @@ var center: Vector2 = Vector2()
 @onready var saved_texture: Sprite2D = $SubViewport/saved_texture
 @onready var sub_viewport: SubViewport = $SubViewport
 
-@onready var tool_button: Button = $Control/touch_controls/VBoxContainer/tool
+@onready var tools_button: Button = $Control/touch_controls/VBoxContainer/tools
 @onready var debug_label: Label = $Control/touch_controls/debug_label
 
 var points : Array[Vector2] = []
-var texture : Texture2D
+var points_texture : Texture2D
 
 var circle_guides : Array[Vector4] = []
 var line_guides : Array[Vector4] = []
@@ -30,8 +30,8 @@ var is_finger_held: bool = false
 
 @export var line_thickness : float = 9
 
-enum tools{LINE, CIRCLE}
-@export_enum("line", "circle") var tool: int = 0;
+enum tools{HAND, CIRCLE, LINE}
+@export_enum("hand", "circle", "line") var tool: int = 1
 
 func _ready() -> void:
 	Signals.connect("spell_chanted", _on_spell_chanted)
@@ -45,12 +45,11 @@ func _ready() -> void:
 		for j in range(11):
 			points.append(Vector2(center.x + (i-5) * 200, center.y + (j-5) * 200))
 	
-	texture = load("res://Assets/textures/point.png")
+	points_texture = load("res://Assets/textures/point.png")
 	
 	if TextureManager.chalk_line_org:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
 	
-	tool_button.text = str(tools.keys()[tool]).to_lower()
 	
 	queue_redraw()
 
@@ -65,11 +64,11 @@ func _draw() -> void:
 	#center
 	draw_circle(center, 20.0, Color.RED)
 	#dots
-	var offset: float = texture.get_width() * 0.5 * dots_scale_factor
-	var original_size: Vector2 = Vector2(texture.get_width(), texture.get_height())
+	var offset: float = points_texture.get_width() * 0.5 * dots_scale_factor
+	var original_size: Vector2 = Vector2(points_texture.get_width(), points_texture.get_height())
 	var scaled_size: Vector2 = original_size * dots_scale_factor
 	for p in points:
-		draw_texture_rect(texture, Rect2(Vector2(p.x - offset, p.y - offset), scaled_size), false, Color.WHITE)
+		draw_texture_rect(points_texture, Rect2(Vector2(p.x - offset, p.y - offset), scaled_size), false, Color.WHITE)
 		
 	#drawing position
 	draw_circle(first_point, 10.0, Color.GREEN_YELLOW)
@@ -83,6 +82,8 @@ func _draw() -> void:
 				draw_ring(self, first_point, radius, line_thickness / 2, 16 + radius / 20, 0.0, Color.WHITE_SMOKE)
 			tools.LINE:
 				draw_line(first_point, current_point, Color.WHITE_SMOKE,  line_thickness / 2)
+			tools.HAND:
+				pass
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag or event is InputEventScreenTouch:
@@ -182,7 +183,10 @@ func save_to_tex_men() -> void:
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
-	tool_button.text = str(tools.keys()[tool]).to_lower()
+	
+	var tool_offset : Array = [0, 450, 905]
+	var atlas_icon := tools_button.icon as AtlasTexture
+	atlas_icon.region.position.x = tool_offset[tool]
 
 func _on_save_pressed() -> void:
 	save_to_tex_men()

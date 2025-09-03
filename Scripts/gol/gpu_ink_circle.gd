@@ -12,12 +12,12 @@ extends Sprite3D
 @export var start_texture: Texture2D
 
 @export var items_points: Dictionary = {
-	Vector2(0, 0) : Color.BLUE, 
-	Vector2(50, 50) : Color.BLUE,
-	Vector2(100, 100) : Color.BLUE, 
-	Vector2(200, 200) : Color.BLUE,
-	Vector2(300, 300) : Color.BLUE, 
-	Vector2(400, 400) : Color.BLUE,
+	#Vector2(0, 0) : Color.BLUE, 
+	#Vector2(50, 50) : Color.BLUE,
+	#Vector2(100, 100) : Color.BLUE, 
+	#Vector2(200, 200) : Color.BLUE,
+	#Vector2(300, 300) : Color.BLUE, 
+	#Vector2(400, 400) : Color.BLUE,
 	}
 
 

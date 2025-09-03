@@ -1,20 +1,26 @@
-[gd_scene load_steps=8 format=3 uid="uid://cflmai4wnxr71"]
+[gd_scene load_steps=12 format=3 uid="uid://cflmai4wnxr71"]
 
 [ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_desk_2D.gd" id="1_h044k"]
 [ext_resource type="Texture2D" uid="uid://d3ogl5qqw2d5o" path="res://Assets/textures/grunge-style-blackboard-texture.jpg" id="2_o82lr"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/touch_controls.tscn" id="3_cvmnq"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_4bnpw"]
+[ext_resource type="Texture2D" uid="uid://cpmf3fw8q2nn3" path="res://Assets/ui/button_icons/drawing_tools.png" id="5_4bnpw"]
+[ext_resource type="Texture2D" uid="uid://cqekf328f7243" path="res://Assets/ui/button_icons/room.png" id="5_cvmnq"]
 [ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/book_and_notebook_ui.tscn" id="5_h044k"]
+[ext_resource type="Texture2D" uid="uid://c21e3vncwstu3" path="res://Assets/ui/button_icons/summon1.png" id="6_4bnpw"]
 [ext_resource type="Script" uid="uid://dur7tpbb13f1f" path="res://Scripts/guides_drawer.gd" id="6_fhjnd"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
 viewport_path = NodePath("SubViewport")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmlmr"]
+atlas = ExtResource("5_4bnpw")
+region = Rect2(450, 0, 450, 450)
+
 [node name="drawing_desk_2D" type="Node2D"]
 script = ExtResource("1_h044k")
 cam_speed = 15.0
 line_thickness = 15.0
-tool = 1
 
 [node name="background" type="Sprite2D" parent="."]
 z_index = -2
@@ -46,59 +52,34 @@ metadata/_edit_use_anchors_ = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -420.0
-offset_top = 20.0
-offset_right = -183.0
-offset_bottom = 222.0
+offset_left = -170.0
+offset_right = 280.0
+offset_bottom = 1351.0
 grow_horizontal = 0
-scale = Vector2(1.5, 1.5)
+scale = Vector2(0.3, 0.3)
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="tool" type="Button" parent="Control/touch_controls/VBoxContainer"]
+[node name="tools" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_4bnpw")
-text = "no_tool"
-metadata/_edit_use_anchors_ = true
-
-[node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_4bnpw")
-text = "reset"
-metadata/_edit_use_anchors_ = true
-
-[node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_4bnpw")
-text = "save"
+icon = SubResource("AtlasTexture_vmlmr")
+flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_4bnpw")
-text = "return to the room"
+icon = ExtResource("5_cvmnq")
+flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="moveToFloor" type="Button" parent="Control/touch_controls/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_4bnpw")
-text = "move to the floor"
+icon = ExtResource("6_4bnpw")
+flat = true
 metadata/_edit_use_anchors_ = true
-
-[node name="debug_label" type="Label" parent="Control/touch_controls"]
-visible = false
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 30
 
 [node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("5_h044k")]
 notebook_page = 3
@@ -124,8 +105,6 @@ centered = false
 script = ExtResource("6_fhjnd")
 metadata/_edit_use_anchors_ = true
 
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tool" to="." method="_on_tool_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="reset"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToFloor" to="." method="_on_move_to_floor_pressed"]
