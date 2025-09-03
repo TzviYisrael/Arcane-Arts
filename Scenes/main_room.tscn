@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c7jlh34oe660m"]
+[gd_scene load_steps=23 format=3 uid="uid://c7jlh34oe660m"]
 
 [ext_resource type="Script" uid="uid://cwjqqd76chd8o" path="res://Scripts/main_room.gd" id="1_r033x"]
 [ext_resource type="PackedScene" uid="uid://l512ut4v74wv" path="res://Scenes/mage.tscn" id="3_6mt2a"]
@@ -8,9 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cqvbrk3axdfi8" path="res://Scenes/structures/main_roon_structure.tscn" id="7_cw24y"]
 [ext_resource type="PackedScene" uid="uid://bvupg85kqgibk" path="res://Scenes/structures/summoning_floor_3D.tscn" id="7_v1qvw"]
 [ext_resource type="PackedScene" uid="uid://ojtlnin1bjr7" path="res://Scenes/gol/gpu_ink_circle.tscn" id="7_xqkij"]
-[ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="8_crhwu"]
 [ext_resource type="Texture2D" uid="uid://dghw251vmms3t" path="res://Assets/textures/T_smoke_flipbook.png" id="8_w1vw5"]
-[ext_resource type="Script" uid="uid://dhr51onbrdpe3" path="res://Scripts/Ink_circle.gd" id="9_oool8"]
 [ext_resource type="PackedScene" uid="uid://ce5oyn0uvk82o" path="res://Scenes/structures/bookcase.tscn" id="14_xqkij"]
 [ext_resource type="PackedScene" uid="uid://1063ew1g27dh" path="res://Scenes/summons/demon.tscn" id="15_cw24y"]
 [ext_resource type="Resource" uid="uid://u63crg8rsoaf" path="res://GameData/resources/summons/eye_demon.tres" id="16_84vt4"]
@@ -162,13 +160,6 @@ metadata/scene_path = "summon"
 [node name="gpu_ink_circle" parent="NavigationRegion3D/summoning_floor" instance=ExtResource("7_xqkij")]
 transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, 0, 0.85, 0)
 texture = SubResource("ViewportTexture_guc7c")
-
-[node name="ink_circle" type="Sprite3D" parent="NavigationRegion3D/summoning_floor"]
-transform = Transform3D(0, -0.875004, 3.82476e-08, 0, -3.82474e-08, -0.875, 0.875004, 0, 0, 0, 0.85, 0)
-visible = false
-flip_h = true
-texture = ExtResource("8_crhwu")
-script = ExtResource("9_oool8")
 
 [node name="smoke_puff" type="GPUParticles3D" parent="NavigationRegion3D/summoning_floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.929592, 0)

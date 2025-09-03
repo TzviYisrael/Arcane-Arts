@@ -28,6 +28,8 @@ var scene_path_to_enter: String = ""
 @onready var init_material : ShaderMaterial = load("res://Assets/shaders/init.tres")
 @onready var clear_material : ShaderMaterial = load("res://Assets/shaders/clear.tres")
 
+var i := 0
+
 enum {PORTAL, GRAPPLE}
 enum states{ROOM, RITUAL_READY, RITUAL_START, GRAPPLE, CAPTURED}
 @export_enum("room", "ritual_ready", "ritual_start", "grapple", "captured")
@@ -60,16 +62,14 @@ func _ready() -> void:
 		#$Control/touch_controls/book_b.show()
 
 func _process(_delta: float) -> void:
-	if run_sim and TextureManager.ink_circle:
-		match state:
-			states.ROOM: pass
-			states.RITUAL_READY: pass
-			states.RITUAL_START: pass
-				#run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, PORTAL)
-				#update_texture()
-			states.GRAPPLE: pass
-				#run_sim = Ink_circle.fast_ca_genretion(TextureManager.ink_circle, GRAPPLE)
-				#update_texture()
+	if i == 10:
+		prints("red:", await gpu_ink_circle.count_color(Color.RED))
+	elif i == 20:
+		prints("green:", await gpu_ink_circle.count_color(Color.GREEN))
+
+	#print(i)
+	i += 1
+	if i >= 30: i = 0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
@@ -146,32 +146,10 @@ func init_ritual(_category: int) -> void:
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	
 	mage.anim_state.travel("summon")
-	#var param := Ink_circle.island_counter(TextureManager.ink_circle)
-	#prints("island_counter:",param)
-	#Ink_circle.init_ink_colors(TextureManager.ink_circle)
-	
+
 	gpu_ink_circle.one_shot_shader(init_material, 1)
 	await get_tree().process_frame
-	print("init")
-	#TextureManager.surface_pos.clear()
-	#update_texture()
-	
-	#target_summoned = bull_scene.instantiate()
-	#target_power = target_summoned.power
-	#var scene: Resource
-	#match category:
-		#SummonData.CATEGORY.ANIMAL:
-			#scene = load("res://Scenes/summons/animal.tscn")
-		#SummonData.CATEGORY.MONSTER:
-			#scene = load("res://Scenes/summons/monster.tscn")
-		#SummonData.CATEGORY.DEMON:
-			#scene = load("res://Scenes/summons/demon.tscn")
-	#
-	#target_summoned = scene.instantiate()
-	#target_summoned.data = load(summons_res[summon_name])
-	#target_power = target_summoned.data.power
-	
-	#run_sim = true
+	print("init ritual")
 	state = states.RITUAL_START
 	Signals.emit_signal("change_ca_state", true)
 	
@@ -224,15 +202,6 @@ func summon() -> void:
 		smoke_puff.emitting = true
 
 
-#func add_summon_power(power: int) -> void:
-	#summon_power += power
-	#if state == states.RITUAL_START:
-		#prints("potal_size:", summon_power)
-	#else:
-		#prints("summon power:", summon_power)
-	#if run_sim and summon_power >= target_power \
-		#and state == states.RITUAL_START:
-		#summon()
 
 func breach(pos: Vector2) -> void:
 	run_sim = false
@@ -240,26 +209,13 @@ func breach(pos: Vector2) -> void:
 	massege.show()
 	root.process_mode = Node.PROCESS_MODE_DISABLED
 
-#func portal_distracted(_pos: Vector2) -> void:
-	#if summon_power >= target_summoned.data.size:
-		#state = states.GRAPPLE
-		#print("portal_done")
-	#else:
-		#print("portal distracted")
-		#clean_texture()
-
-#func update_texture() -> void:
-	#if TextureManager.ink_circle: 
-		#ink_circle.texture.update(TextureManager.ink_circle)
-
 func clean_texture() -> void:
 	run_sim = false
 	state = states.RITUAL_READY
 	gpu_ink_circle.one_shot_shader(clear_material, 5)
 	await get_tree().process_frame
 	print("clear")
-	#Ink_circle.clean_colors(TextureManager.ink_circle)
-	#update_texture()
+
 
 func release_summon() -> void:
 	if summoned:

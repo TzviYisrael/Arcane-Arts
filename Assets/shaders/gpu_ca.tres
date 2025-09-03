@@ -5,6 +5,4 @@
 [resource]
 shader = ExtResource("1_oon50")
 shader_parameter/run = false
-shader_parameter/power = 0.01
-shader_parameter/mouse_pressed = false
-shader_parameter/mouse_position = Vector2(0, 0)
+shader_parameter/power = 0.007

@@ -15,7 +15,7 @@ void fragment() {
 	if(distance(uv, center) > radius){
 		result_color = vec4(0.0, 0.0, 0.0, 0.0);
 	}
-	else if(distance(uv, center) > radius - 0.01){
+	else if(distance(uv, center) > radius - 0.005){
 		result_color = vec4(0.0, 1.0, 0.0, 1.0);
 	}
 	
