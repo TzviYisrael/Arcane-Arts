@@ -11,9 +11,15 @@ extends Sprite3D
 
 @export var start_texture: Texture2D
 
+@export var items_points: Dictionary = {
+	Vector2(0, 0) : Color.BLUE, 
+	Vector2(50, 50) : Color.BLUE,
+	Vector2(100, 100) : Color.BLUE, 
+	Vector2(200, 200) : Color.BLUE,
+	Vector2(300, 300) : Color.BLUE, 
+	Vector2(400, 400) : Color.BLUE,
+	}
 
-var pos := Vector2(253, 253)
-var pos_offset := Vector2.ZERO
 
 func _ready() -> void:
 	Signals.connect("change_ca_state", _on_change_ca_state)
@@ -26,19 +32,8 @@ func _ready() -> void:
 
 	if not Renderer:
 		print("Could not mount renderer")
-		return
-	Renderer.material.set_shader_parameter("mouse_position", pos)
-	
+		return	
 	set_ca_texture(start_texture)
-
-#
-#func _process(_delta: float) -> void:
-	#Renderer.material.set_shader_parameter("mouse_position", pos + pos_offset)
-	#Renderer.material.set_shader_parameter("mouse_pressed", true)
-	#
-	#pos_offset += Vector2.ONE
-	#if pos_offset > Vector2(253, 253):
-		#pos_offset = Vector2(-253, -253)
 
 func count_color(color: Color) -> int:
 	filter_sprite.material.set_shader_parameter("target_color", color)

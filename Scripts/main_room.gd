@@ -6,10 +6,6 @@ const RAYCAST_MAX_D = 1000
 
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
-#var target_summoned: Node3D
-var run_sim: bool
-#var target_power := 0
-#var summon_power := 0
 
 var input_coll_saver: Node3D = null
 var drag: bool = false
@@ -18,27 +14,22 @@ var scene_path_to_enter: String = ""
 @onready var root: Node3D = $"."
 @onready var summoning_floor: StaticBody3D = $NavigationRegion3D/summoning_floor
 @onready var smoke_puff: GPUParticles3D = $NavigationRegion3D/summoning_floor/smoke_puff
-#@onready var ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/ink_circle
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
-
 @onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
-
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
-@onready var init_material : ShaderMaterial = load("res://Assets/shaders/init.tres")
-@onready var clear_material : ShaderMaterial = load("res://Assets/shaders/clear.tres")
+@onready var init_material: ShaderMaterial = load("res://Assets/shaders/init.tres")
+@onready var clear_material: ShaderMaterial = load("res://Assets/shaders/clear.tres")
 
-var i := 0
-
-enum {PORTAL, GRAPPLE}
-enum states{ROOM, RITUAL_READY, RITUAL_START, GRAPPLE, CAPTURED}
-@export_enum("room", "ritual_ready", "ritual_start", "grapple", "captured")
+enum states{ROOM, RITUAL_READY, RITUAL_STARTED, GRAPPLE, CAPTURED}
+@export_enum("room", "ritual_ready", "ritual_started", "grapple", "captured")
 var state: int = 0
+
+var frame_counter: int = 0
+var max_green: int = 0
 
 func _ready() -> void:
 	Signals.connect("init_ritual", init_ritual)
-	#Signals.connect("add_summon_power", add_summon_power)
-	#Signals.connect("portal_distracted", portal_distracted)
 	Signals.connect("breach", breach)
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	
@@ -62,14 +53,16 @@ func _ready() -> void:
 		#$Control/touch_controls/book_b.show()
 
 func _process(_delta: float) -> void:
-	if i == 10:
-		prints("red:", await gpu_ink_circle.count_color(Color.RED))
-	elif i == 20:
-		prints("green:", await gpu_ink_circle.count_color(Color.GREEN))
-
-	#print(i)
-	i += 1
-	if i >= 30: i = 0
+	if state == states.RITUAL_STARTED || state == states.GRAPPLE:
+		frame_counter += 1
+		if frame_counter >= 12:
+			frame_counter = 0
+			var current_green : int = await gpu_ink_circle.count_color(Color.GREEN)
+			if current_green >= max_green: 
+				max_green = current_green
+			else: 
+				Signals.emit_signal("breach")
+	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
@@ -141,22 +134,29 @@ func init_ritual(_category: int) -> void:
 		#"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
 	#}
 	if not summoned == null: print("existing summon"); return
-	#if not summon_name in summons_res: print("no such summon"); return
 	if not TextureManager.ink_circle: print("no circle"); return
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	
 	mage.anim_state.travel("summon")
-
+	
+	var positions_array := []
+	var colors_array := []
+	for pos: Vector2 in gpu_ink_circle.items_points:
+		positions_array.append(pos)
+		colors_array.append(gpu_ink_circle.items_points[pos])
+	init_material.set_shader_parameter("circle_count", positions_array.size())
+	init_material.set_shader_parameter("circle_positions", positions_array)
+	init_material.set_shader_parameter("circle_colors", colors_array)
+	
 	gpu_ink_circle.one_shot_shader(init_material, 1)
 	await get_tree().process_frame
 	print("init ritual")
-	state = states.RITUAL_START
+	state = states.RITUAL_STARTED
 	Signals.emit_signal("change_ca_state", true)
 	
-
 func summon() -> void:
 	if not summoned == null: print("existing summon"); return
-	if not state == states.RITUAL_START: print("wrong state"); return
+	if not state == states.RITUAL_STARTED: print("wrong state"); return
 	
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/summons/bull.tres",
@@ -201,21 +201,16 @@ func summon() -> void:
 		print("no fight")
 		smoke_puff.emitting = true
 
-
-
-func breach(pos: Vector2) -> void:
-	run_sim = false
-	print("game over", pos)
+func breach() -> void:
+	print("game over")
 	massege.show()
 	root.process_mode = Node.PROCESS_MODE_DISABLED
 
 func clean_texture() -> void:
-	run_sim = false
 	state = states.RITUAL_READY
 	gpu_ink_circle.one_shot_shader(clear_material, 5)
 	await get_tree().process_frame
 	print("clear")
-
 
 func release_summon() -> void:
 	if summoned:
@@ -223,7 +218,6 @@ func release_summon() -> void:
 		summoned = null
 	state = states.RITUAL_READY
 	#summon_power = 0
-	run_sim = false
 	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
