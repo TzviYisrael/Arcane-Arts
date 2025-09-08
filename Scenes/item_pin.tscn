@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://3tkmsmvy5kqa"]
+
+[ext_resource type="Texture2D" uid="uid://dwtlrxnppvq1q" path="res://Assets/ui/button_icons/ring.png" id="1_kbldc"]
+[ext_resource type="Script" uid="uid://w83yj3k7i434" path="res://Scripts/item_pin.gd" id="1_ljbdq"]
+
+[node name="item_pin" type="Node2D"]
+script = ExtResource("1_ljbdq")
+
+[node name="ring" type="Sprite2D" parent="."]
+position = Vector2(0, -150)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_kbldc")
+
+[node name="Button" type="Button" parent="ring"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -367.5
+offset_top = -366.0
+offset_right = -67.5
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="icon" type="Sprite2D" parent="."]
+position = Vector2(0, -150)
+scale = Vector2(0.15, 0.15)
+
+[connection signal="button_down" from="ring/Button" to="." method="_on_button_button_down"]

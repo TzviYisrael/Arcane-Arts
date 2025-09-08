@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 void fragment() {
 	vec2 texture_size = 1.0 / TEXTURE_PIXEL_SIZE;
-	
+
     // Convert UV to pixel coordinates
     vec2 pixel_pos = UV * texture_size;
 

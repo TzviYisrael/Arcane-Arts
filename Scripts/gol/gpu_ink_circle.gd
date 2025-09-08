@@ -1,4 +1,5 @@
 extends Sprite3D
+class_name GPU_Ink_Circle
 
 # We'll give input to the first renderer
 # Then the CA (Cellular Automata) will ping-pong
@@ -11,15 +12,9 @@ extends Sprite3D
 
 @export var start_texture: Texture2D
 
-@export var items_points: Dictionary = {
-	#Vector2(0, 0) : Color.BLUE, 
-	#Vector2(50, 50) : Color.BLUE,
-	#Vector2(100, 100) : Color.BLUE, 
-	#Vector2(200, 200) : Color.BLUE,
-	#Vector2(300, 300) : Color.BLUE, 
-	#Vector2(400, 400) : Color.BLUE,
-	}
 
+@onready var init_material: ShaderMaterial = load("res://Assets/shaders/init.tres")
+@onready var clear_material: ShaderMaterial = load("res://Assets/shaders/clear.tres")
 
 func _ready() -> void:
 	Signals.connect("change_ca_state", _on_change_ca_state)
@@ -34,6 +29,20 @@ func _ready() -> void:
 		print("Could not mount renderer")
 		return	
 	set_ca_texture(start_texture)
+
+func init() -> void:
+	var positions_array: Array[Vector2]
+	var colors_array: Array[Color]
+	for pos: Vector2 in SceneManager.placed_item:
+		var item: Item = SceneManager.placed_item[pos]
+		positions_array.append(pos)
+		colors_array.append(item.color)
+	init_material.set_shader_parameter("circle_count", positions_array.size())
+	init_material.set_shader_parameter("circle_positions", positions_array)
+	init_material.set_shader_parameter("circle_colors", colors_array)
+	
+	one_shot_shader(init_material, 1)
+	#await get_tree().process_frame
 
 func count_color(color: Color) -> int:
 	filter_sprite.material.set_shader_parameter("target_color", color)
@@ -67,7 +76,6 @@ func one_shot_shader(shader_material: ShaderMaterial, delay: int) -> void:
 	await get_tree().process_frame
 	Renderer2.material = original_material
 
-
 func set_ca_texture(tex: Texture2D) -> void:
 	#print("set_gpu_ink_circle ", tex)
 	Renderer.setup(tex)
@@ -81,3 +89,7 @@ func set_ca_texture(tex: Texture2D) -> void:
 func _on_change_ca_state(run: bool) -> void:
 	#print("change ca state: ", run)
 	Renderer.material.set_shader_parameter("run", run)
+
+func clear_colors() -> void:
+	one_shot_shader(clear_material, 5)
+	await get_tree().process_frame

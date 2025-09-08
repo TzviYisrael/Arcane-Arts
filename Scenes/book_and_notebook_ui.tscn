@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1pcsiccnkvw7"]
+[gd_scene load_steps=10 format=3 uid="uid://d1pcsiccnkvw7"]
 
 [ext_resource type="Script" uid="uid://ckmj2c0falhe1" path="res://Scripts/book_and__notebook_ui.gd" id="1_k4ecw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/notebook.tscn" id="1_ryrls"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/Book.tscn" id="2_k4ecw"]
+[ext_resource type="PackedScene" uid="uid://b24nj3tpx2id6" path="res://Scenes/item_stack.tscn" id="3_a5tbx"]
 [ext_resource type="Texture2D" uid="uid://fj4xp1cjlwe2" path="res://Assets/ui/button_icons/book2.png" id="4_qpobx"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="5_4npfs"]
+[ext_resource type="Texture2D" uid="uid://bx4oc1lowodab" path="res://Assets/ui/button_icons/cupboard.png" id="5_a5tbx"]
 [ext_resource type="Texture2D" uid="uid://dhy80swtuuni4" path="res://Assets/ui/button_icons/scroll.png" id="5_lir8m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_af8pp"]
@@ -20,6 +23,12 @@ mouse_filter = 2
 script = ExtResource("1_k4ecw")
 
 [node name="notebook" parent="." instance=ExtResource("1_ryrls")]
+visible = false
+layout_mode = 1
+offset_left = 175.0
+offset_right = 675.0
+
+[node name="item stack" parent="." instance=ExtResource("3_a5tbx")]
 visible = false
 layout_mode = 1
 
@@ -61,15 +70,31 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = -292.0
-offset_right = 466.0
-offset_bottom = 142.0
+offset_left = 20.0
+offset_top = -440.0
+offset_right = 456.0
+offset_bottom = -6.0
 grow_vertical = 0
 scale = Vector2(0.3, 0.3)
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("5_4npfs")
 toggle_mode = true
 icon = ExtResource("4_qpobx")
+flat = true
+
+[node name="items_button" type="Button" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -300.0
+offset_right = 488.0
+offset_bottom = 172.0
+grow_vertical = 0
+scale = Vector2(0.3, 0.3)
+theme = ExtResource("5_4npfs")
+icon = ExtResource("5_a5tbx")
 flat = true
 
 [node name="notebook_button" type="Button" parent="."]
@@ -78,18 +103,18 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 30.0
+offset_left = 20.0
 offset_top = -153.0
-offset_right = 498.0
+offset_right = 488.0
 offset_bottom = 319.0
 grow_vertical = 0
 scale = Vector2(0.3, 0.3)
-theme_override_font_sizes/font_size = 40
-toggle_mode = true
+theme = ExtResource("5_4npfs")
 icon = ExtResource("5_lir8m")
 flat = true
 
 [connection signal="released" from="book_2D/book_left_b" to="book_2D/book_viewport/Book" method="_on_book_left_b_released"]
 [connection signal="released" from="book_2D/book_right_b" to="book_2D/book_viewport/Book" method="_on_book_right_b_released"]
 [connection signal="toggled" from="book_button" to="." method="_on_book_button_toggled"]
-[connection signal="toggled" from="notebook_button" to="." method="_on_notebook_button_toggled"]
+[connection signal="pressed" from="items_button" to="." method="_on_items_button_pressed"]
+[connection signal="pressed" from="notebook_button" to="." method="_on_notebook_button_pressed"]

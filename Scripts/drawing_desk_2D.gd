@@ -175,7 +175,7 @@ func save_to_disk() -> void:
 	
 	guide_drawer.clear()
 
-func save_to_tex_men() -> void:
+func save_to_tex_mem() -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	TextureManager.chalk_line_org = img
 	TextureManager.chalk_line = Ink_circle.resize_image(img, TextureManager.resize_factor)
@@ -189,14 +189,14 @@ func _on_tool_pressed() -> void:
 	atlas_icon.region.position.x = tool_offset[tool]
 
 func _on_save_pressed() -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	
 func _on_return_pressed() -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
 
 func _on_move_to_floor_pressed() -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	get_tree().change_scene_to_file("res://Scenes/summoning_floor_2D.tscn")
 
 func reset() -> void:
@@ -209,5 +209,5 @@ func reset() -> void:
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
 		"reset": reset()
-		_: prints("error, unknown spell in", 
+		_: printerr("error, unknown spell in ", 
 		get_tree().get_current_scene())

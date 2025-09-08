@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		_: prints("error, unknown spell in", 
+		_: printerr("error, unknown spell in ", 
 		get_tree().get_current_scene())
 
 func book_changed() -> void:

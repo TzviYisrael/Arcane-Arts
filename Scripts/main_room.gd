@@ -18,9 +18,6 @@ var scene_path_to_enter: String = ""
 @onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
-@onready var init_material: ShaderMaterial = load("res://Assets/shaders/init.tres")
-@onready var clear_material: ShaderMaterial = load("res://Assets/shaders/clear.tres")
-
 enum states{ROOM, RITUAL_READY, RITUAL_STARTED, GRAPPLE, CAPTURED}
 @export_enum("room", "ritual_ready", "ritual_started", "grapple", "captured")
 var state: int = 0
@@ -139,17 +136,10 @@ func init_ritual(_category: int) -> void:
 	
 	mage.anim_state.travel("summon")
 	
-	var positions_array := []
-	var colors_array := []
-	for pos: Vector2 in gpu_ink_circle.items_points:
-		positions_array.append(pos)
-		colors_array.append(gpu_ink_circle.items_points[pos])
-	init_material.set_shader_parameter("circle_count", positions_array.size())
-	init_material.set_shader_parameter("circle_positions", positions_array)
-	init_material.set_shader_parameter("circle_colors", colors_array)
-	
-	gpu_ink_circle.one_shot_shader(init_material, 1)
+	#TODO: the init func sould get points dict
+	gpu_ink_circle.init()
 	await get_tree().process_frame
+	
 	print("init ritual")
 	state = states.RITUAL_STARTED
 	Signals.emit_signal("change_ca_state", true)
@@ -208,8 +198,7 @@ func breach() -> void:
 
 func clean_texture() -> void:
 	state = states.RITUAL_READY
-	gpu_ink_circle.one_shot_shader(clear_material, 5)
-	await get_tree().process_frame
+	gpu_ink_circle.clear_colors()
 	print("clear")
 
 func release_summon() -> void:

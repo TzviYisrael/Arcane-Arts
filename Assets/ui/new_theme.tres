@@ -1,4 +1,8 @@
-[gd_resource type="Theme" format=3 uid="uid://uew3hho53u71"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://uew3hho53u71"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jug7t"]
 
 [resource]
 Button/font_sizes/font_size = 25
+Button/styles/focus = SubResource("StyleBoxEmpty_jug7t")
+Button/styles/hover = null

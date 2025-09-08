@@ -16,6 +16,8 @@ var center := Vector2()
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
 
 var touch_point : Vector2 = Vector2.INF
+@export var item_pin_scene: PackedScene
+var item_pin_ghost: Node2D
 
 @export var brush_size : int = 10
 @export var max_clear: float = 100
@@ -30,6 +32,7 @@ enum tools{HAND, INK, COVER}
 
 func _ready() -> void:
 	Signals.connect("spell_chanted", _on_spell_chanted)
+	Signals.connect("item_moved", _on_item_moved)
 	
 	var rect:Rect2 = background.get_rect()
 	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
@@ -44,6 +47,10 @@ func _ready() -> void:
 	
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
+	
+	for pos: Vector2 in SceneManager.placed_item:
+		var item: Item = SceneManager.placed_item[pos]
+		add_item_pin(pos, item)
 	
 	queue_redraw()
 
@@ -62,11 +69,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMagnifyGesture:
 		camera.zoom = camera.zoom * event.factor
 		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
-	elif event is InputEventScreenDrag or (event is InputEventScreenTouch and not event.is_pressed()):
+	elif event is InputEventScreenDrag:
 		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
 		queue_redraw()
 		if event.index < 1:
 			_handle_touch(touch_point)
+	elif event is InputEventScreenTouch and event.is_released():
+		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		queue_redraw()
+		if event.index < 1 and tool == tools.HAND and item_pin_ghost:
+			add_item_pin(touch_point, item_pin_ghost.item)
+			item_pin_ghost.queue_free()
+
 		
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
@@ -81,10 +95,22 @@ func _handle_touch(pos: Vector2) -> void:
 			tools.INK:
 				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.INK))
 			tools.COVER:
-				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))				
+				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))
+			tools.HAND:
+				if item_pin_ghost:
+					item_pin_ghost.position = pos
+
+func add_item_pin(pos: Vector2, item: Item) -> void:
+	var new_item: Node2D = item_pin_scene.instantiate()
+	new_item.item = item
+	new_item.position = pos
+	SceneManager.placed_item[pos / TextureManager.resize_factor] = \
+	new_item.item
+	ink_viewer.add_child(new_item)
+	
 
 func clear_circle(pos: Vector2, radius: float) -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	
 	TextureManager.ink_circle_org = Ink_circle.mask_circle(TextureManager.ink_circle_org, TextureManager.chalk_line_org, pos, radius)
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
@@ -101,7 +127,7 @@ func save_to_disk() -> void:
 	
 	ink_drawer.clear()
 
-func save_to_tex_men()  -> void:
+func save_to_tex_mem()  -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(ink_viewer.texture.get_image(), 1.0)
 	
 	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
@@ -120,15 +146,15 @@ func _on_tool_pressed() -> void:
 
 func _on_save_pressed() -> void:
 	#save_to_disk()
-	save_to_tex_men()
+	save_to_tex_mem()
 	reload_scene()
 
 func _on_return_pressed() -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
 
 func _on_move_to_desk_pressed() -> void:
-	save_to_tex_men()
+	save_to_tex_mem()
 	get_tree().change_scene_to_file("res://Scenes/drawing_desk_2D.tscn")
 
 func _on_clear_pressed() -> void:
@@ -154,5 +180,12 @@ func _on_spell_chanted(spell: String) -> void:
 	match spell:
 		"reset": _on_clear_pressed()
 		"save": _on_save_pressed()
-		_: prints("error, unknown spell in", 
+		_: printerr("error, unknown spell in ", 
 		get_tree().get_current_scene())
+
+func _on_item_moved(item: Item) -> void:
+	tool = tools.HAND
+	item_pin_ghost = item_pin_scene.instantiate()
+	item_pin_ghost.item = item
+	item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
+	add_child(item_pin_ghost)
