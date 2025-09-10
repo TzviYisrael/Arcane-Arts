@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://b24nj3tpx2id6"]
+[gd_scene load_steps=11 format=3 uid="uid://b24nj3tpx2id6"]
 
 [ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="2_62i5q"]
 [ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/item_stack.gd" id="2_ejeh0"]
 [ext_resource type="Script" uid="uid://x1tos0p8cn75" path="res://Scripts/Resources/item.gd" id="4_h75ou"]
 [ext_resource type="Texture2D" uid="uid://1s8ki736twg2" path="res://Assets/textures/items/candles_icon.png" id="5_0h2fs"]
+[ext_resource type="Texture2D" uid="uid://daoln0ndhn0ll" path="res://Assets/textures/items/heart.png" id="6_0h2fs"]
 [ext_resource type="PackedScene" uid="uid://bpdx4jeq2xkom" path="res://Assets/models/candles.glb" id="6_ejeh0"]
+[ext_resource type="PackedScene" uid="uid://b6ci0n3mgnit6" path="res://Assets/models/heart.glb" id="7_ejeh0"]
 
 [sub_resource type="Resource" id="Resource_abiej"]
 script = ExtResource("4_h75ou")
@@ -17,11 +19,11 @@ metadata/_custom_type_script = "uid://x1tos0p8cn75"
 
 [sub_resource type="Resource" id="Resource_nuswv"]
 script = ExtResource("4_h75ou")
-name = "dark meat"
+name = "heart"
 origin = 0
-icon = ExtResource("5_0h2fs")
-color = Color(0, 1, 0.166667, 1)
-model = ExtResource("6_ejeh0")
+icon = ExtResource("6_0h2fs")
+color = Color(1, 0.6, 0, 1)
+model = ExtResource("7_ejeh0")
 metadata/_custom_type_script = "uid://x1tos0p8cn75"
 
 [sub_resource type="Resource" id="Resource_esf2s"]

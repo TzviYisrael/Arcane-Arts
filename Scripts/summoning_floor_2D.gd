@@ -50,7 +50,7 @@ func _ready() -> void:
 	
 	for pos: Vector2 in SceneManager.placed_item:
 		var item: Item = SceneManager.placed_item[pos]
-		add_item_pin(pos, item)
+		add_item_pin(pos * TextureManager.resize_factor, item)
 	
 	queue_redraw()
 
@@ -106,6 +106,7 @@ func add_item_pin(pos: Vector2, item: Item) -> void:
 	new_item.position = pos
 	SceneManager.placed_item[pos / TextureManager.resize_factor] = \
 	new_item.item
+	#SceneManager.placed_item[pos] = new_item.item
 	ink_viewer.add_child(new_item)
 	
 

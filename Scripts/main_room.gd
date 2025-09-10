@@ -7,6 +7,8 @@ const RAYCAST_MAX_D = 1000
 @onready var mage: CharacterBody3D = $Mage
 var summoned: Node3D
 
+var item_amount: int = 0
+
 var input_coll_saver: Node3D = null
 var drag: bool = false
 var scene_path_to_enter: String = ""
@@ -86,6 +88,7 @@ func _handle_release_at(pos: Vector2) -> void:
 		if path == "summon":
 			Signals.emit_signal("walk_destination", 
 				summoning_floor.mage_circle.global_position)
+			
 		else:
 			Signals.emit_signal("walk_destination", coll_pos)
 	else:
@@ -115,14 +118,40 @@ func rotate_camera(deg: float) -> void:
 func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)
 	if scene_path_to_enter == "summon":
-		state = states.RITUAL_READY
-		Signals.emit_signal("change_notebook_page", "summon")
+		setup_items()
 	elif scene_path_to_enter != "":
 		print("entering: ", scene_path_to_enter)
 		get_tree().change_scene_to_file(scene_path_to_enter)
 	elif state == states.RITUAL_READY:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
+
+func setup_items() -> void:
+	state = states.RITUAL_READY
+	Signals.emit_signal("change_notebook_page", "summon")
+	if not item_amount == 0:
+		return
+	
+	mage.navigation_agent_3d.navigation_finished.disconnect(destination_reached)
+	
+	var texture_size: Vector2 = gpu_ink_circle.texture.get_size()
+	var sprite_world_size: Vector2 = texture_size * gpu_ink_circle.pixel_size
+	
+	for v2_pos: Vector2 in SceneManager.placed_item:
+		var local_normalized_pos: Vector2 = v2_pos / texture_size
+		var local_pos_3d: Vector3 = Vector3(
+			(local_normalized_pos.x - 0.5) * sprite_world_size.x,
+			(local_normalized_pos.y - 0.5) * sprite_world_size.y,
+			0)
+		var dest: Vector3 = gpu_ink_circle.to_global(local_pos_3d)
+		Signals.emit_signal("walk_destination", dest)
+		await mage.navigation_agent_3d.navigation_finished
+		var item: Node3D = SceneManager.placed_item[v2_pos].model.instantiate()
+		item.position = dest
+		summoning_floor.add_child(item)
+		item_amount += 1
+	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
+	
 
 func init_ritual(_category: int) -> void:
 	#var summons_res: Dictionary = {

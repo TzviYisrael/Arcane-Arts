@@ -1,6 +1,5 @@
 extends Control
 
-var is_dragging: bool
 @export var items: Array[Item]
 
 @onready var natural: GridContainer = $natural
@@ -20,9 +19,5 @@ func _ready() -> void:
 			2:
 				demonic.add_child(button)
 
-func _process(_delta: float) -> void:
-	if is_dragging:
-		print("draging")
-		
 func item_botton_pressed(item: Item) -> void:
 	Signals.emit_signal("item_moved", item)
