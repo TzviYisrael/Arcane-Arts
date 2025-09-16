@@ -4,14 +4,15 @@ class_name GPU_Ink_Circle
 # We'll give input to the first renderer
 # Then the CA (Cellular Automata) will ping-pong
 # back and forth between the two viewports
-@onready var Renderer := $Viewport/Renderer
-@onready var Renderer2: Sprite2D = $Viewport2/Renderer
+@onready var Renderer := $CA_Display/Viewport/Renderer
+@onready var Renderer2: Sprite2D = $CA_Display/Viewport2/Renderer2
 
-@onready var pixel_reducer: Sprite2D = $pixel_reducer
-@onready var filter_sprite: Sprite2D = $pixel_reducer/level_0_vp/level0_sp
+@onready var ca_display: Sprite3D = $CA_Display
+
+@onready var pixel_reducer: Sprite2D = $CA_Display/pixel_reducer
+@onready var filter_sprite: Sprite2D = $CA_Display/pixel_reducer/level_0_vp/level0_sp
 
 @export var start_texture: Texture2D
-
 
 @onready var init_material: ShaderMaterial = load("res://Assets/shaders/init.tres")
 @onready var clear_material: ShaderMaterial = load("res://Assets/shaders/clear.tres")
@@ -22,8 +23,8 @@ func _ready() -> void:
 	# Godot editor to improve battery life & development time
 	#
 	# Here we enable it again when we load the viewport in game
-	$Viewport.set_update_mode(SubViewport.UPDATE_ALWAYS)
-	$Viewport2.set_update_mode(SubViewport.UPDATE_ALWAYS)
+	$CA_Display/Viewport.set_update_mode(SubViewport.UPDATE_ALWAYS)
+	$CA_Display/Viewport2.set_update_mode(SubViewport.UPDATE_ALWAYS)
 
 	if not Renderer:
 		print("Could not mount renderer")
@@ -91,5 +92,6 @@ func _on_change_ca_state(run: bool) -> void:
 	Renderer.material.set_shader_parameter("run", run)
 
 func clear_colors() -> void:
-	one_shot_shader(clear_material, 5)
+	one_shot_shader(clear_material, 10)
 	await get_tree().process_frame
+	

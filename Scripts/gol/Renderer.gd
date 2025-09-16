@@ -1,6 +1,6 @@
 extends Sprite2D
 
-@onready var viewport_2: SubViewport = $"../../Viewport2"
+@export var viewport_2: SubViewport
 
 func _ready() -> void:
 	self.texture = viewport_2.get_texture()

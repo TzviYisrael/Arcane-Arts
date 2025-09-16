@@ -7,8 +7,8 @@ void fragment() {
 	vec4 current = texture(TEXTURE, uv);
 	if(abs(current.r - current.g) < 0.0001  &&
 	 abs(current.g - current.b) < 0.0001 && current.a > 0.9){
-		COLOR = current;
+		COLOR = vec4(0.0, 0.0, 0.0, 1.0);
 	}
-	else COLOR = vec4(current.rgb, 0.0);
+	else COLOR = vec4(0.0);
 }
 

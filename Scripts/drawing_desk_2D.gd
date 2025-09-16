@@ -15,7 +15,6 @@ var center: Vector2 = Vector2()
 @onready var sub_viewport: SubViewport = $SubViewport
 
 @onready var tools_button: Button = $Control/touch_controls/VBoxContainer/tools
-@onready var debug_label: Label = $Control/touch_controls/debug_label
 
 var points : Array[Vector2] = []
 var points_texture : Texture2D

@@ -131,25 +131,45 @@ func setup_items() -> void:
 	Signals.emit_signal("change_notebook_page", "summon")
 	if not item_amount == 0:
 		return
-	
 	mage.navigation_agent_3d.navigation_finished.disconnect(destination_reached)
 	
-	var texture_size: Vector2 = gpu_ink_circle.texture.get_size()
-	var sprite_world_size: Vector2 = texture_size * gpu_ink_circle.pixel_size
-	
+	var texture_size: Vector2 = gpu_ink_circle.ca_display.texture.get_size()
+	if texture_size.x == 0 or texture_size.y == 0: printerr("Error: Texture size is zero.")
+	var sprite_world_size: Vector2 = texture_size * gpu_ink_circle.ca_display.pixel_size
+
+	# The parent's global position is kept.
+	var parent_global_transform: Transform3D = gpu_ink_circle.ca_display.global_transform
+	parent_global_transform.basis = Basis.from_euler(Vector3(0, parent_global_transform.basis.get_euler().y, 0))
+
 	for v2_pos: Vector2 in SceneManager.placed_item:
+		# Map the 2D texture coordinates to a 3D local position.
+		# This position is relative to the parent Sprite3D's origin.
 		var local_normalized_pos: Vector2 = v2_pos / texture_size
 		var local_pos_3d: Vector3 = Vector3(
 			(local_normalized_pos.x - 0.5) * sprite_world_size.x,
-			(local_normalized_pos.y - 0.5) * sprite_world_size.y,
-			0)
-		var dest: Vector3 = gpu_ink_circle.to_global(local_pos_3d)
-		Signals.emit_signal("walk_destination", dest)
-		await mage.navigation_agent_3d.navigation_finished
+			0, # Y is 0 in the parent's local space to place the item on its floor.
+			-(local_normalized_pos.y - 0.5) * sprite_world_size.y
+		)
+		
+		# Apply the corrected parent transform to get the final global position.
+		var dest: Vector3 = parent_global_transform.origin + parent_global_transform.basis * local_pos_3d
+		
+		# Instantiate and place the item.
 		var item: Node3D = SceneManager.placed_item[v2_pos].model.instantiate()
-		item.position = dest
-		summoning_floor.add_child(item)
+		item.global_position = dest
+		
+		# Correct the item's rotation to match the parent's Y-rotation.
+		var item_transform: Transform3D = item.global_transform
+		item_transform.basis = Basis.from_euler(Vector3(0, parent_global_transform.basis.get_euler().y, 0))
+		item.global_transform = item_transform
+
+		# Add the item as a child of ca_display for logical grouping.
+		gpu_ink_circle.ca_display.add_child(item)
 		item_amount += 1
+		
+	Signals.emit_signal("walk_destination", 
+		summoning_floor.mage_circle.global_position)
+	await mage.navigation_agent_3d.navigation_finished
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	
 
@@ -229,6 +249,7 @@ func clean_texture() -> void:
 	state = states.RITUAL_READY
 	gpu_ink_circle.clear_colors()
 	print("clear")
+	max_green = 0
 
 func release_summon() -> void:
 	if summoned:

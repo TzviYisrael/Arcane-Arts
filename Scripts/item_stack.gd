@@ -10,6 +10,7 @@ func _ready() -> void:
 	for it in items:
 		var button := Button.new()
 		button.text = it.name
+		button.custom_minimum_size = Vector2(150, 150)
 		button.connect("button_down", item_botton_pressed.bind(it))
 		match it.origin:
 			0:
