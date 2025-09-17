@@ -7,7 +7,6 @@ uniform vec4 circle_colors[100];
 
 void fragment() {
     vec2 uv = SCREEN_UV;
-    vec2 sz = SCREEN_PIXEL_SIZE;
     vec4 result_color = texture(TEXTURE, uv);
 
     vec2 center = vec2(0.5, 0.5);
@@ -17,14 +16,9 @@ void fragment() {
 	float circle_radius = 0.01;
 
     for (int i = 0; i < circle_count; ++i) {
-        // Convert the position from pixel space to UV space
-        // Assuming circle_positions are in pixel coordinates (e.g., 100, 200)
-        // If your circle_positions are already in UV space [0,1], remove * sz
-        vec2 circle_uv = circle_positions[i] * sz;
-
+        vec2 circle_uv = (circle_positions[i] + vec2(1.0, 1.0)) / 2.0;
         if (distance(uv, circle_uv) < circle_radius) {
             result_color = circle_colors[i];
-			//break;
         }
     }
 

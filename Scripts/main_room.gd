@@ -8,6 +8,7 @@ const RAYCAST_MAX_D = 1000
 var summoned: Node3D
 
 var item_amount: int = 0
+#@export var item: Item
 
 var input_coll_saver: Node3D = null
 var drag: bool = false
@@ -127,50 +128,32 @@ func destination_reached() -> void:
 		Signals.emit_signal("change_notebook_page", "room_spells")
 
 func setup_items() -> void:
-	state = states.RITUAL_READY
-	Signals.emit_signal("change_notebook_page", "summon")
 	if not item_amount == 0:
 		return
 	mage.navigation_agent_3d.navigation_finished.disconnect(destination_reached)
 	
-	var texture_size: Vector2 = gpu_ink_circle.ca_display.texture.get_size()
-	if texture_size.x == 0 or texture_size.y == 0: printerr("Error: Texture size is zero.")
-	var sprite_world_size: Vector2 = texture_size * gpu_ink_circle.ca_display.pixel_size
-
-	# The parent's global position is kept.
-	var parent_global_transform: Transform3D = gpu_ink_circle.ca_display.global_transform
-	parent_global_transform.basis = Basis.from_euler(Vector3(0, parent_global_transform.basis.get_euler().y, 0))
-
-	for v2_pos: Vector2 in SceneManager.placed_item:
-		# Map the 2D texture coordinates to a 3D local position.
-		# This position is relative to the parent Sprite3D's origin.
-		var local_normalized_pos: Vector2 = v2_pos / texture_size
-		var local_pos_3d: Vector3 = Vector3(
-			(local_normalized_pos.x - 0.5) * sprite_world_size.x,
-			0, # Y is 0 in the parent's local space to place the item on its floor.
-			-(local_normalized_pos.y - 0.5) * sprite_world_size.y
-		)
+	var rotation_basis := Basis.from_euler(Vector3(0, deg_to_rad(90), 0))
+	for pos: Vector2 in SceneManager.placed_item:
+		var item := SceneManager.placed_item[pos]
 		
-		# Apply the corrected parent transform to get the final global position.
-		var dest: Vector3 = parent_global_transform.origin + parent_global_transform.basis * local_pos_3d
+		var new_item: Node3D = item.model.instantiate()
+		var original_relative_pos := Vector3(pos.x, 0, pos.y) * 2.5
+		var rotated_relative_pos: Vector3 = rotation_basis * original_relative_pos
+		new_item.position = rotated_relative_pos
+		new_item.add_to_group("items")
 		
-		# Instantiate and place the item.
-		var item: Node3D = SceneManager.placed_item[v2_pos].model.instantiate()
-		item.global_position = dest
-		
-		# Correct the item's rotation to match the parent's Y-rotation.
-		var item_transform: Transform3D = item.global_transform
-		item_transform.basis = Basis.from_euler(Vector3(0, parent_global_transform.basis.get_euler().y, 0))
-		item.global_transform = item_transform
-
-		# Add the item as a child of ca_display for logical grouping.
-		gpu_ink_circle.ca_display.add_child(item)
+		Signals.emit_signal("walk_destination", 
+			new_item.position)
+		await mage.navigation_agent_3d.navigation_finished
+		gpu_ink_circle.add_child(new_item)
 		item_amount += 1
 		
 	Signals.emit_signal("walk_destination", 
 		summoning_floor.mage_circle.global_position)
 	await mage.navigation_agent_3d.navigation_finished
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
+	state = states.RITUAL_READY
+	Signals.emit_signal("change_notebook_page", "summon")
 	
 
 func init_ritual(_category: int) -> void:
@@ -235,6 +218,7 @@ func summon() -> void:
 		summoned.position = gpu_ink_circle.global_position
 		summoned.look_at_from_position(gpu_ink_circle.global_position, mage.global_position) 
 		root.add_child(summoned)
+		clear_items()
 		state = states.GRAPPLE
 	else:
 		print("no fight")
@@ -248,8 +232,14 @@ func breach() -> void:
 func clean_texture() -> void:
 	state = states.RITUAL_READY
 	gpu_ink_circle.clear_colors()
+	clear_items()
 	print("clear")
 	max_green = 0
+
+func clear_items() -> void:
+	for item in gpu_ink_circle.get_children():
+		if item.is_in_group("items"):
+			item.queue_free()
 
 func release_summon() -> void:
 	if summoned:

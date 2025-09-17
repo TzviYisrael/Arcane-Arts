@@ -48,10 +48,8 @@ func _ready() -> void:
 	brush_size = int(brush_slider.value)
 	tool = TextureManager.s_tool
 	
-	for pos: Vector2 in SceneManager.placed_item:
-		var item: Item = SceneManager.placed_item[pos]
-		add_item_pin(pos * TextureManager.resize_factor, item)
-	
+	call_deferred("add_initial_pins")
+		
 	queue_redraw()
 
 func _process(_delta: float)  -> void:
@@ -78,8 +76,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
 		queue_redraw()
 		if event.index < 1 and tool == tools.HAND and item_pin_ghost:
-			add_item_pin(touch_point, item_pin_ghost.item)
-			item_pin_ghost.queue_free()
+			if add_item_pin(touch_point, item_pin_ghost.item):
+				item_pin_ghost.queue_free()
+			else:
+				item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
 
 		
 	if event is InputEventMouseButton:
@@ -100,14 +100,29 @@ func _handle_touch(pos: Vector2) -> void:
 				if item_pin_ghost:
 					item_pin_ghost.position = pos
 
-func add_item_pin(pos: Vector2, item: Item) -> void:
+func add_initial_pins() -> void:
+	for pos: Vector2 in SceneManager.placed_item:
+		var item: Item = SceneManager.placed_item[pos]
+		var size: Vector2 = ink_viewer.texture.get_size()
+		var new_x: float = ((pos.x + 1.0) / 2.0) * size.x
+		var new_y: float = ((pos.y + 1.0) / 2.0) * size.y
+		var denormalized_pos := Vector2(new_x, new_y)
+		add_item_pin(denormalized_pos, item)
+
+func add_item_pin(pos: Vector2, item: Item) -> bool:
+	var size: Vector2 = ink_viewer.texture.get_size()
+	if not (0 <= pos.x and pos.x < size.x and 0 <= pos.y and pos.y < size.y):
+		printerr("Trying to add pin outside the zone: ", pos)
+		return false
 	var new_item: Node2D = item_pin_scene.instantiate()
 	new_item.item = item
 	new_item.position = pos
-	SceneManager.placed_item[pos / TextureManager.resize_factor] = \
-	new_item.item
-	#SceneManager.placed_item[pos] = new_item.item
+#	normalize the positions for the SceneManager from 0 <-> size to -1 <-> 1
+	var normalized_pos: Vector2 = (2.0 * pos / ink_viewer.texture.get_size()) - Vector2(1, 1)
+	SceneManager.placed_item[normalized_pos] = new_item.item
+	
 	ink_viewer.add_child(new_item)
+	return true
 	
 
 func clear_circle(pos: Vector2, radius: float) -> void:
