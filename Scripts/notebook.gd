@@ -12,7 +12,7 @@ var pages: Dictionary = {
 	MODES.SUMMON_SPELLS : [],
 	MODES.ROOM_SPELLS : ["clear"],
 	MODES.CHALKBOARD : ["reset"],
-	MODES.FLOOR: ["reset", "save"],
+	MODES.FLOOR: ["reset", "clear pins", "save"],
 	MODES.STUDY: []
 	}
 

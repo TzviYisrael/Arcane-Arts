@@ -13,11 +13,13 @@ extends CharacterBody3D
 @onready var anim_tree := $AnimationTree
 @onready var anim_state: AnimationNodeStateMachinePlayback = \
 						$AnimationTree.get("parameters/playback")
+var look_to: Vector3 = Vector3.INF
 @onready var gpu_particles_3d: GPUParticles3D = $Rig/GPUParticles3D
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
 
 func  _ready() -> void:
 	Signals.connect("spell_chanted", emit_spell)
+	Signals.connect("mage_look", look)
 	Signals.connect("walk_destination", set_walk_destination)
 	SceneManager.set_mage(self)
 
@@ -25,6 +27,8 @@ func _physics_process(delta: float) -> void:
 	var destination: Vector3 = navigation_agent_3d.get_next_path_position()
 	var local_destination: Vector3 = destination - global_position
 	var direction: Vector3 = local_destination.normalized()
+	if not look_to == Vector3.INF:
+		direction = look_to
 	if not navigation_agent_3d.is_navigation_finished():
 		velocity = direction * speed
 	else:
@@ -46,6 +50,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func set_walk_destination(dest: Vector3) -> void:
 	navigation_agent_3d.target_position = dest
+
+func look(pos: Vector3) -> void:
+	look_to = pos
+	await get_tree().create_timer(2.0).timeout 
+	look_to = Vector3.INF
 
 func emit_spell(spell: String) -> void:
 	anim_state.travel("summon")

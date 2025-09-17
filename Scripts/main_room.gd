@@ -26,10 +26,11 @@ enum states{ROOM, RITUAL_READY, RITUAL_STARTED, GRAPPLE, CAPTURED}
 var state: int = 0
 
 var frame_counter: int = 0
+var colors_to_count: Dictionary[Color, bool] = {}
 var max_green: int = 0
 
 func _ready() -> void:
-	Signals.connect("init_ritual", init_ritual)
+	Signals.connect("start_ritual", start_ritual)
 	Signals.connect("breach", breach)
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	
@@ -51,6 +52,11 @@ func _ready() -> void:
 		#book.content = SceneManager.current_book
 		#book.setup()
 		#$Control/touch_controls/book_b.show()
+
+	colors_to_count[Color.RED] = true
+	colors_to_count[Color.GREEN] = true
+	for p in SceneManager.placed_item:
+		colors_to_count[SceneManager.placed_item[p].color] = true
 
 func _process(_delta: float) -> void:
 	if state == states.RITUAL_STARTED || state == states.GRAPPLE:
@@ -129,6 +135,8 @@ func destination_reached() -> void:
 
 func setup_items() -> void:
 	if not item_amount == 0:
+		state = states.RITUAL_READY
+		Signals.emit_signal("change_notebook_page", "summon")
 		return
 	mage.navigation_agent_3d.navigation_finished.disconnect(destination_reached)
 	
@@ -152,41 +160,39 @@ func setup_items() -> void:
 		summoning_floor.mage_circle.global_position)
 	await mage.navigation_agent_3d.navigation_finished
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
+	Signals.emit_signal("mage_look", gpu_ink_circle.global_position)
 	state = states.RITUAL_READY
 	Signals.emit_signal("change_notebook_page", "summon")
 	
 
-func init_ritual(_category: int) -> void:
-	#var summons_res: Dictionary = {
-		#"bull": "res://GameData/resources/summons/bull.tres",
-		#"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
-		#"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
-	#}
+func start_ritual(_category: int) -> void:
 	if not summoned == null: print("existing summon"); return
 	if not TextureManager.ink_circle: print("no circle"); return
 	if not state == states.RITUAL_READY: print("wrong state"); return
-	
 	mage.anim_state.travel("summon")
 	
-	#TODO: the init func sould get points dict
 	gpu_ink_circle.init()
 	await get_tree().process_frame
 	
-	print("init ritual")
+	print("start ritual")
 	state = states.RITUAL_STARTED
 	Signals.emit_signal("change_ca_state", true)
 	
 func summon() -> void:
-	if not summoned == null: print("existing summon"); return
-	if not state == states.RITUAL_STARTED: print("wrong state"); return
+	if not summoned == null: printerr("existing summon"); return
+	if not state == states.RITUAL_STARTED: printerr("wrong state"); return
 	
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/summons/bull.tres",
 		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
 		"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
 	}
-	
-	var power : float = await gpu_ink_circle.count_color(Color.RED)
+	var color_amount: Dictionary[Color, float]
+	for color: Color in colors_to_count.keys():
+		color_amount[color] = await gpu_ink_circle.count_color(color)
+	print("colors ", color_amount)
+	var power: float = color_amount[Color.RED]
+	#var power : float = await gpu_ink_circle.count_color(Color.RED)
 	prints("power:", power)
 	var answering_summon : Node3D = null
 	var answer : int = -1
@@ -240,6 +246,7 @@ func clear_items() -> void:
 	for item in gpu_ink_circle.get_children():
 		if item.is_in_group("items"):
 			item.queue_free()
+	SceneManager.placed_item.clear()
 
 func release_summon() -> void:
 	if summoned:
@@ -250,7 +257,6 @@ func release_summon() -> void:
 	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
-	#gpu_ink_circle.count_color(Color.RED)
 	#gpu_ink_circle.save_small_image()
 	if summoned:
 		prints("loot: ", summoned.data.loot.pick_random())
@@ -262,9 +268,9 @@ func _on_return_b_pressed() -> void:
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		"Terra Vinculum": init_ritual(SummonData.CATEGORY.ANIMAL)
-		"Astralis Vinculum": init_ritual(SummonData.CATEGORY.MONSTER)
-		"Infernum Vinculum": init_ritual(SummonData.CATEGORY.DEMON)
+		"Terra Vinculum": start_ritual(SummonData.CATEGORY.ANIMAL)
+		"Astralis Vinculum": start_ritual(SummonData.CATEGORY.MONSTER)
+		"Infernum Vinculum": start_ritual(SummonData.CATEGORY.DEMON)
 		"Evoco Vos": summon()
 		"kill": kill_summon()
 		"release": release_summon()

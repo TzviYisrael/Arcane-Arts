@@ -43,6 +43,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/rubonnek.inventory_manager/plugin.cfg", "res://addons/script-ide/plugin.cfg")
 
+[global_group]
+
+items=""
+
 [input]
 
 forward={

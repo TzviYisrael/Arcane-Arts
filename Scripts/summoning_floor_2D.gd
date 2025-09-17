@@ -80,6 +80,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				item_pin_ghost.queue_free()
 			else:
 				item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
+			
+			tool = TextureManager.s_tool
+			var tool_offset : Array = [0, 450, 905]
+			var atlas_icon := tools_button.icon as AtlasTexture
+			atlas_icon.region.position.x = tool_offset[tool]
 
 		
 	if event is InputEventMouseButton:
@@ -117,6 +122,7 @@ func add_item_pin(pos: Vector2, item: Item) -> bool:
 	var new_item: Node2D = item_pin_scene.instantiate()
 	new_item.item = item
 	new_item.position = pos
+	new_item.add_to_group("items")
 #	normalize the positions for the SceneManager from 0 <-> size to -1 <-> 1
 	var normalized_pos: Vector2 = (2.0 * pos / ink_viewer.texture.get_size()) - Vector2(1, 1)
 	SceneManager.placed_item[normalized_pos] = new_item.item
@@ -178,6 +184,12 @@ func _on_clear_pressed() -> void:
 	TextureManager.ink_circle = null
 	reload_scene()
 
+func _on_clear_pins_pressed() -> void:
+	for item in ink_viewer.get_children():
+		if item.is_in_group("items"):
+			item.queue_free()
+	SceneManager.placed_item.clear()
+
 func reload_scene() -> void:
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	ink_drawer.clear()
@@ -196,11 +208,15 @@ func _on_spell_chanted(spell: String) -> void:
 	match spell:
 		"reset": _on_clear_pressed()
 		"save": _on_save_pressed()
+		"clear pins": _on_clear_pins_pressed()
 		_: printerr("error, unknown spell in ", 
 		get_tree().get_current_scene())
 
 func _on_item_moved(item: Item) -> void:
 	tool = tools.HAND
+	var atlas_icon := tools_button.icon as AtlasTexture
+	atlas_icon.region.position.x = 0
+	
 	item_pin_ghost = item_pin_scene.instantiate()
 	item_pin_ghost.item = item
 	item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
