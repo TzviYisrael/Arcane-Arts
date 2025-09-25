@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ojtlnin1bjr7"]
+[gd_scene load_steps=21 format=3 uid="uid://ojtlnin1bjr7"]
 
 [ext_resource type="Script" uid="uid://b8xn47hjcduhl" path="res://Scripts/gol/gpu_ink_circle.gd" id="2"]
 [ext_resource type="Material" uid="uid://dj5l2qhcjxrw3" path="res://Assets/shaders/gpu_ca.tres" id="2_pqhco"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/gol/Renderer2.gd" id="6"]
 [ext_resource type="Material" uid="uid://ogqveovydvqn" path="res://Assets/shaders/average_reducer.tres" id="6_c24rx"]
 [ext_resource type="Shader" uid="uid://vjveqyuihmna" path="res://Assets/shaders/color_fillter.gdshader" id="6_jb18e"]
+[ext_resource type="Shader" uid="uid://bg5qy5bkwc6sr" path="res://Assets/shaders/flying_particles.gdshader" id="7_jb18e"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_c24rx"]
 viewport_path = NodePath("CA_Display/Viewport")
@@ -35,6 +36,32 @@ viewport_path = NodePath("CA_Display/pixel_reducer/level_3_vp")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5m6bw"]
 viewport_path = NodePath("CA_Display/pixel_reducer/level_4_vp")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_v27yx"]
+viewport_path = NodePath("CA_Display/Viewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6j4kl"]
+resource_local_to_scene = true
+shader = ExtResource("7_jb18e")
+shader_parameter/grid_size_x = 20
+shader_parameter/grid_size_z = 20
+shader_parameter/spacing = 0.25
+shader_parameter/speed = 2.0
+shader_parameter/color_texture = SubResource("ViewportTexture_v27yx")
+shader_parameter/filter_color = Color(0, 0, 0, 0)
+shader_parameter/total_lifetime = 3.0
+shader_parameter/initial_flight_duration = 0.5
+shader_parameter/target_position = Vector3(0, 1.7, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pnqp1"]
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_l5woo"]
+material = SubResource("StandardMaterial3D_pnqp1")
+radius = 0.075
+height = 0.15
 
 [node name="root" type="Sprite3D"]
 script = ExtResource("2")
@@ -134,3 +161,13 @@ material = ExtResource("6_c24rx")
 scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_5m6bw")
 centered = false
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+cast_shadow = 0
+emitting = false
+amount = 400
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ShaderMaterial_6j4kl")
+draw_pass_1 = SubResource("SphereMesh_l5woo")

@@ -30,6 +30,7 @@ var colors_to_count: Dictionary[Color, bool] = {}
 var max_green: int = 0
 
 func _ready() -> void:
+	gpu_ink_circle.process_mode = Node.PROCESS_MODE_INHERIT
 	Signals.connect("start_ritual", start_ritual)
 	Signals.connect("breach", breach)
 	Signals.connect("spell_chanted", _on_spell_chanted)
@@ -181,6 +182,9 @@ func start_ritual(_category: int) -> void:
 func summon() -> void:
 	if not summoned == null: printerr("existing summon"); return
 	if not state == states.RITUAL_STARTED: printerr("wrong state"); return
+	
+	Signals.emit_signal("summon_particles", gpu_ink_circle.global_position)
+	await get_tree().create_timer(2.0).timeout 
 	
 	var summons_res: Dictionary = {
 		"bull": "res://GameData/resources/summons/bull.tres",

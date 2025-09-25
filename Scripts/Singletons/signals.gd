@@ -7,6 +7,7 @@ signal walk_destination(target_position: Vector3)
 
 signal spell_chanted(spell: String)
 signal breach
+signal summon_particles(target: Vector3, color: Color)
 signal item_moved(item: Item)
 
 signal book_changed

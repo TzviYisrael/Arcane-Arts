@@ -17,8 +17,11 @@ class_name GPU_Ink_Circle
 @onready var init_material: ShaderMaterial = load("res://Assets/shaders/init.tres")
 @onready var clear_material: ShaderMaterial = load("res://Assets/shaders/clear.tres")
 
+@onready var gpu_particles_3d: GPUParticles3D = $GPUParticles3D
+
 func _ready() -> void:
 	Signals.connect("change_ca_state", _on_change_ca_state)
+	Signals.connect("summon_particles", summon_particles)
 	# We've turned off the viewport rendering in the
 	# Godot editor to improve battery life & development time
 	#
@@ -95,3 +98,7 @@ func clear_colors() -> void:
 	one_shot_shader(clear_material, 10)
 	await get_tree().process_frame
 	
+func summon_particles(target: Vector3) -> void:
+	var particle_process_material: ShaderMaterial = gpu_particles_3d.process_material
+	particle_process_material.set_shader_parameter("target_position", target)
+	gpu_particles_3d.emitting = true

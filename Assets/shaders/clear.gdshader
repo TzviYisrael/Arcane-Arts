@@ -11,4 +11,3 @@ void fragment() {
 	}
 	else COLOR = vec4(0.0);
 }
-
