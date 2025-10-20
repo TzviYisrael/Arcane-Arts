@@ -46,7 +46,7 @@ func _ready() -> void:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_org)
 	
 	brush_size = int(brush_slider.value)
-	tool = TextureManager.s_tool
+	tool = SceneManager.summoning_floor_current_tool
 	
 	call_deferred("add_initial_pins")
 		
@@ -81,7 +81,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
 			
-			tool = TextureManager.s_tool
+			tool = SceneManager.summoning_floor_current_tool
 			var tool_offset : Array = [0, 450, 905]
 			var atlas_icon := tools_button.icon as AtlasTexture
 			atlas_icon.region.position.x = tool_offset[tool]
@@ -160,7 +160,7 @@ func save_to_tex_mem()  -> void:
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
-	TextureManager.s_tool = tool
+	SceneManager.summoning_floor_current_tool = tool
 	
 	var tool_offset : Array = [0, 450, 905]
 	var atlas_icon := tools_button.icon as AtlasTexture

@@ -31,14 +31,15 @@ void start() {
         bool is_transparent = tex_color.a < 0.01;
         bool is_black = dot(tex_color.rgb, vec3(1.0)) < 0.01;
         bool is_white = dot(tex_color.rgb, vec3(1.0)) > 2.99;
-        
-        if (!is_transparent && !is_black && !is_white) {
+		bool is_green = tex_color.g > 0.9 && tex_color.r < 0.1 && tex_color.b < 0.1;
+
+        if (!is_transparent && !is_black && !is_white && !is_green) {
             should_be_active = true;
         }
     } else {
         float color_distance = distance(tex_color.rgb, filter_color.rgb);
         float alpha_distance = abs(tex_color.a - filter_color.a);
-        
+
         if (color_distance < 0.05 && alpha_distance < 0.05) {
             should_be_active = true;
         }
@@ -46,15 +47,15 @@ void start() {
 
     if (should_be_active) {
         TRANSFORM[3].xyz = (EMISSION_TRANSFORM * vec4(initial_pos, 1.0)).xyz;
-        
+
         // --- Radial Outward and Upward Velocity ---
         // Calculate the vector pointing from the center of the grid to the particle.
         // We use initial_pos because it's already centered.
         vec3 outward_direction = normalize(initial_pos);
-        
+
         // Set the initial velocity to go outward and up.
         vec3 initial_velocity = vec3(outward_direction.x * speed, speed * 2.0, outward_direction.z * speed);
-        
+
         VELOCITY = (EMISSION_TRANSFORM * vec4(initial_velocity, 0.0)).xyz;
 
         COLOR = tex_color;
@@ -65,15 +66,15 @@ void start() {
 
 void process() {
     float age = LIFETIME * total_lifetime;
-    
+
     if (age > initial_flight_duration) {
         vec3 direction_to_target = normalize(target_position - TRANSFORM[3].xyz);
-        
+
         float time_in_flight = age - initial_flight_duration;
         float remaining_lifetime = total_lifetime - initial_flight_duration;
         float normalized_time = time_in_flight / remaining_lifetime;
         float acceleration_factor = pow(normalized_time, 2.0);
-        
+
         VELOCITY = mix(VELOCITY, direction_to_target * speed * (1.0 + acceleration_factor), 0.1);
     }
 }

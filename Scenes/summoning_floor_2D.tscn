@@ -122,7 +122,7 @@ scale = Vector2(1.5, 1.5)
 min_value = 15.0
 max_value = 300.0
 step = 3.0
-value = 150.0
+value = 51.0
 tick_count = 20
 
 [node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("5_jc3jh")]

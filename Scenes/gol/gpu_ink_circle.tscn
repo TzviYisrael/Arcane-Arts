@@ -54,6 +54,7 @@ shader_parameter/initial_flight_duration = 0.5
 shader_parameter/target_position = Vector3(0, 1.7, 0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pnqp1"]
+shading_mode = 0
 disable_ambient_light = true
 vertex_color_use_as_albedo = true
 disable_receive_shadows = true

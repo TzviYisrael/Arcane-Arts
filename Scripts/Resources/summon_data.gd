@@ -6,6 +6,7 @@ class_name SummonData
 @export var power: int
 @export var size: int
 @export var loot: Array[String] # Array[Item]
+@export var colors_rec: Dictionary[Color, Vector2]
 
 #TODO replace with packedScene
 @export var model_path: String 

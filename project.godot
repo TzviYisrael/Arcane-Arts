@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="summon"
-run/main_scene="uid://c7jlh34oe660m"
+run/main_scene="uid://cfi3fcg5v5n2d"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 TextureManager="*res://Scripts/Singletons/Texture_manager.gd"
 Signals="*res://Scripts/Singletons/signals.gd"
 SceneManager="*res://Scripts/Singletons/Scene_manager.gd"
+Database="*res://Scripts/Singletons/Database.gd"
 
 [debug]
 
@@ -33,15 +34,11 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/always_on_top=true
 window/stretch/mode="viewport"
-
-[editor]
-
-version_control/plugin_name="GitPlugin"
-version_control/autoload_on_startup=true
+window/stretch/aspect="keep_height"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/rubonnek.inventory_manager/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/script-ide/plugin.cfg")
 
 [global_group]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b24nj3tpx2id6"]
+[gd_scene load_steps=14 format=3 uid="uid://b24nj3tpx2id6"]
 
 [ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="2_62i5q"]
 [ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/item_stack.gd" id="2_ejeh0"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://daoln0ndhn0ll" path="res://Assets/textures/items/heart.png" id="6_0h2fs"]
 [ext_resource type="PackedScene" uid="uid://bpdx4jeq2xkom" path="res://Assets/models/candles.glb" id="6_ejeh0"]
 [ext_resource type="PackedScene" uid="uid://b6ci0n3mgnit6" path="res://Assets/models/heart.glb" id="7_ejeh0"]
+[ext_resource type="Texture2D" uid="uid://dufayis0r7c1e" path="res://Assets/textures/items/leaves.png" id="8_abiej"]
+[ext_resource type="PackedScene" uid="uid://c1l0acc8fjwak" path="res://Assets/models/leaves.glb" id="9_nuswv"]
 
 [sub_resource type="Resource" id="Resource_abiej"]
 script = ExtResource("4_h75ou")
@@ -33,6 +35,15 @@ origin = 0
 icon = ExtResource("5_0h2fs")
 color = Color(1, 0, 0.566667, 1)
 model = ExtResource("6_ejeh0")
+metadata/_custom_type_script = "uid://x1tos0p8cn75"
+
+[sub_resource type="Resource" id="Resource_wobeq"]
+script = ExtResource("4_h75ou")
+name = "leaves"
+origin = 0
+icon = ExtResource("8_abiej")
+color = Color(0, 0.886275, 0, 1)
+model = ExtResource("9_nuswv")
 metadata/_custom_type_script = "uid://x1tos0p8cn75"
 
 [node name="item stack" type="Control"]
@@ -89,7 +100,7 @@ theme_override_font_sizes/font_size = 30
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("2_ejeh0")
-items = Array[ExtResource("4_h75ou")]([SubResource("Resource_abiej"), SubResource("Resource_nuswv"), SubResource("Resource_esf2s")])
+items = Array[ExtResource("4_h75ou")]([SubResource("Resource_abiej"), SubResource("Resource_nuswv"), SubResource("Resource_esf2s"), SubResource("Resource_wobeq")])
 
 [node name="natural" type="GridContainer" parent="Control/type_tabs"]
 layout_mode = 2

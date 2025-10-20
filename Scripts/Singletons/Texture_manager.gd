@@ -1,15 +1,17 @@
 extends Node
 
-var chalk_line_org : Image
-var ink_circle_org : Image
+var resize_factor: int = 4 # the 2d version are 'resize_factor' bigger
 
-var chalk_line : Image
-var ink_circle : Image
-var resize_factor: int = 4
+var surface_pos: Array[Vector2] # to be removed 
 
-var surface_pos: Array[Vector2]
+#main room
+var chalk_line: Image
+var ink_circle: Image
 
-##save the drawing room active tool
-var g_tool: int = 1
-##save the summoning room active tool
-var s_tool: int = 1
+#drawing desk
+var chalk_line_2d: Image
+##save the drawing desk active tool
+var g_tool: int = 1 # need to changed
+
+#summoning floor
+var ink_circle_2d: Image
