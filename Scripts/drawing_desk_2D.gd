@@ -49,6 +49,8 @@ func _ready() -> void:
 	if TextureManager.chalk_line_2d:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
 	
+	tool = SceneManager.drawing_desk_current_tool
+	set_tool_icon()
 	
 	queue_redraw()
 
@@ -166,6 +168,11 @@ func find_closest_point(target_point: Vector2, point_array: Array[Vector2]) -> V
 	
 	return closest_point
 
+func set_tool_icon() -> void:
+	var tool_offset : Array = [0, 450, 905]
+	var atlas_icon := tools_button.icon as AtlasTexture
+	atlas_icon.region.position.x = tool_offset[tool]
+
 func save_to_disk() -> void:
 	var save_path: String = "res://GameData/chalk.png"
 	var img : Image = guide_viewer.texture.get_image()
@@ -182,21 +189,16 @@ func save_to_tex_mem() -> void:
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
+	set_tool_icon()
 	
-	var tool_offset : Array = [0, 450, 905]
-	var atlas_icon := tools_button.icon as AtlasTexture
-	atlas_icon.region.position.x = tool_offset[tool]
-
 func _on_save_pressed() -> void:
 	save_to_tex_mem()
 	
 func _on_return_pressed() -> void:
-	save_to_tex_mem()
-	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
-
+	save_and_change_scene("res://Scenes/main_room.tscn")
+	
 func _on_move_to_floor_pressed() -> void:
-	save_to_tex_mem()
-	get_tree().change_scene_to_file("res://Scenes/summoning_floor_2D.tscn")
+	save_and_change_scene("res://Scenes/summoning_floor_2D.tscn")
 
 func reset() -> void:
 	TextureManager.chalk_line_2d = null
@@ -210,3 +212,9 @@ func _on_spell_chanted(spell: String) -> void:
 		"reset": reset()
 		_: printerr("error, unknown spell in ", 
 		get_tree().get_current_scene())
+
+func save_and_change_scene(scene_path: String) -> void:
+	save_to_tex_mem()
+	SceneManager.drawing_desk_current_tool = tool
+	
+	get_tree().change_scene_to_file(scene_path)

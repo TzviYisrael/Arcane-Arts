@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="summon"
+config/name="The tower of Arcane Arts"
 run/main_scene="uid://cfi3fcg5v5n2d"
-config/features=PackedStringArray("4.4", "Mobile")
+config/quit_on_go_back=false
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]

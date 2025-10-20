@@ -39,14 +39,15 @@ func _ready() -> void:
 					background.position.y + (rect.size.y) * 0.5)
 	camera.position = center
 	
-	if TextureManager.chalk_line_org:
-		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_org)
+	if TextureManager.chalk_line_2d:
+		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
 	
-	if TextureManager.ink_circle_org:
-		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_org)
+	if TextureManager.ink_circle_2d:
+		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_2d)
 	
 	brush_size = int(brush_slider.value)
 	tool = SceneManager.summoning_floor_current_tool
+	set_tool_icon()
 	
 	call_deferred("add_initial_pins")
 		
@@ -131,10 +132,15 @@ func add_item_pin(pos: Vector2, item: Item) -> bool:
 	return true
 	
 
+func set_tool_icon() -> void:
+	var tool_offset : Array = [0, 450, 905]
+	var atlas_icon := tools_button.icon as AtlasTexture
+	atlas_icon.region.position.x = tool_offset[tool]
+
 func clear_circle(pos: Vector2, radius: float) -> void:
 	save_to_tex_mem()
 	
-	TextureManager.ink_circle_org = Ink_circle.mask_circle(TextureManager.ink_circle_org, TextureManager.chalk_line_org, pos, radius)
+	TextureManager.ink_circle_2d = Ink_circle.mask_circle(TextureManager.ink_circle_2d, TextureManager.chalk_line_2d, pos, radius)
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	ink_drawer.clear()
 	get_tree().reload_current_scene()
@@ -143,7 +149,7 @@ func save_to_disk() -> void:
 	var save_path:String = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
-	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line_2d)
 	img = Ink_circle.resize_image(img, TextureManager.resize_factor)
 	img.save_png(save_path)
 	
@@ -152,19 +158,16 @@ func save_to_disk() -> void:
 func save_to_tex_mem()  -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(ink_viewer.texture.get_image(), 1.0)
 	
-	img = Ink_circle.mask_image(img, TextureManager.chalk_line_org)
+	img = Ink_circle.mask_image(img, TextureManager.chalk_line_2d)
 	
-	TextureManager.ink_circle_org = img
+	TextureManager.ink_circle_2d = img
 	TextureManager.ink_circle = Ink_circle.resize_image(img, TextureManager.resize_factor)
 	ink_drawer.clear()
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
 	SceneManager.summoning_floor_current_tool = tool
-	
-	var tool_offset : Array = [0, 450, 905]
-	var atlas_icon := tools_button.icon as AtlasTexture
-	atlas_icon.region.position.x = tool_offset[tool]
+	set_tool_icon()
 
 func _on_save_pressed() -> void:
 	#save_to_disk()
@@ -172,15 +175,13 @@ func _on_save_pressed() -> void:
 	reload_scene()
 
 func _on_return_pressed() -> void:
-	save_to_tex_mem()
-	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
+	save_and_change_scene("res://Scenes/main_room.tscn")
 
 func _on_move_to_desk_pressed() -> void:
-	save_to_tex_mem()
-	get_tree().change_scene_to_file("res://Scenes/drawing_desk_2D.tscn")
+	save_and_change_scene("res://Scenes/drawing_desk_2D.tscn")
 
 func _on_clear_pressed() -> void:
-	TextureManager.ink_circle_org = null
+	TextureManager.ink_circle_2d = null
 	TextureManager.ink_circle = null
 	reload_scene()
 
@@ -221,3 +222,9 @@ func _on_item_moved(item: Item) -> void:
 	item_pin_ghost.item = item
 	item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
 	add_child(item_pin_ghost)
+
+func save_and_change_scene(scene_path: String) -> void:
+	save_to_tex_mem()
+	
+	SceneManager.summoning_floor_current_tool = tool
+	get_tree().change_scene_to_file(scene_path)

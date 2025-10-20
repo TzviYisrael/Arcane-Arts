@@ -35,6 +35,8 @@ func _ready() -> void:
 	Signals.connect("breach", breach)
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	
+	mage.position = SceneManager.mage_pos
+	mage.model.rotation = SceneManager.mage_rot
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	
 	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
@@ -42,7 +44,6 @@ func _ready() -> void:
 	state = states.ROOM
 	if TextureManager.ink_circle:
 		var ink := ImageTexture.create_from_image(TextureManager.ink_circle)
-		#ink_circle.texture = ink
 		gpu_ink_circle.set_ca_texture(ink)
 	
 	if TextureManager.chalk_line:
@@ -129,7 +130,7 @@ func destination_reached() -> void:
 		setup_items()
 	elif scene_path_to_enter != "":
 		print("entering: ", scene_path_to_enter)
-		get_tree().change_scene_to_file(scene_path_to_enter)
+		save_and_change_scene(scene_path_to_enter)
 	elif state == states.RITUAL_READY:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
@@ -281,3 +282,9 @@ func _on_spell_chanted(spell: String) -> void:
 		"clear": clean_texture()
 		_: prints("the spell", spell.to_upper(), "is unknown in", 
 		get_tree().get_current_scene())
+
+func save_and_change_scene(scene_path: String) -> void:
+	SceneManager.mage_pos = mage.position
+	SceneManager.mage_rot = mage.model.rotation
+	
+	get_tree().change_scene_to_file(scene_path)
