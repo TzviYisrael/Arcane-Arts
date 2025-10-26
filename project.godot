@@ -19,9 +19,9 @@ config/icon="res://icon.svg"
 [autoload]
 
 TextureManager="*res://Scripts/Singletons/Texture_manager.gd"
-Signals="*res://Scripts/Singletons/signals.gd"
+Signals="*res://Scripts/Singletons/Signals.gd"
 SceneManager="*res://Scripts/Singletons/Scene_manager.gd"
-Database="*res://Scripts/Singletons/Database.gd"
+GameData="*res://Scripts/Singletons/Game_data.gd"
 
 [debug]
 

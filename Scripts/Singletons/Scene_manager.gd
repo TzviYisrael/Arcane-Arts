@@ -1,7 +1,7 @@
 extends Node
 
 #global data
-var summons_array: Array[SummonData]
+
 
 #main room
 var mage: Node

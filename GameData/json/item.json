@@ -1,0 +1,26 @@
+{
+  "leaves": {
+	"origin": "0",
+	"icon": "leaves.png",
+	"color": "#00ff11",
+	"model": "leaves.glb"
+  },
+  "heart": {
+	"origin": "2",
+	"icon": "heart.png",
+	"color": "#ff0011",
+	"model": "heart.glb"
+  },
+  "salt": {
+	"origin": "0",
+	"icon": "salt.png",
+	"color": "#ffffdd",
+	"model": "salt.glb"
+  },
+  "nails": {
+	"origin": "0",
+	"icon": "nails.png",
+	"color": "#000011",
+	"model": "nails.glb"
+  }
+}

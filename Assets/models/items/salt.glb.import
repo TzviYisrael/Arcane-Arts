@@ -3,21 +3,23 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bpdx4jeq2xkom"
-path="res://.godot/imported/candles.glb-902f4bdf67f7e3e2cc58d7eac475bf0f.scn"
+uid="uid://d06l4k5lsyp33"
+path="res://.godot/imported/salt.glb-6c2f4d4465941d7cb5e1608bfc89afdd.scn"
 
 [deps]
 
-source_file="res://Assets/models/candles.glb"
-dest_files=["res://.godot/imported/candles.glb-902f4bdf67f7e3e2cc58d7eac475bf0f.scn"]
+source_file="res://Assets/models/items/salt.glb"
+dest_files=["res://.godot/imported/salt.glb-6c2f4d4465941d7cb5e1608bfc89afdd.scn"]
 
 [params]
 
 nodes/root_type=""
 nodes/root_name=""
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
@@ -32,6 +34,9 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
 _subresources={}
-gltf/naming_version=1
+gltf/naming_version=2
 gltf/embedded_image_handling=1

@@ -7,12 +7,13 @@ extends Control
 @onready var demonic: GridContainer = $demonic
 
 func _ready() -> void:
-	for it in items:
+	for item_key: String in GameData.items_data.keys():
+		var item: Item = GameData.items_data[item_key]
 		var button := Button.new()
-		button.text = it.name
+		button.text = item.name
 		button.custom_minimum_size = Vector2(150, 150)
-		button.connect("button_down", item_botton_pressed.bind(it))
-		match it.origin:
+		button.connect("button_down", item_botton_pressed.bind(item))
+		match item.origin:
 			0:
 				natural.add_child(button)
 			1:

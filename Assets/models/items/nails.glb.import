@@ -3,21 +3,23 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b6ci0n3mgnit6"
-path="res://.godot/imported/heart.glb-3111f862384a19a082fea486b96bf7bc.scn"
+uid="uid://bj0kcx7sseguj"
+path="res://.godot/imported/nails.glb-e30a5e2cf556599e8502db0499ad9e4e.scn"
 
 [deps]
 
-source_file="res://Assets/models/heart.glb"
-dest_files=["res://.godot/imported/heart.glb-3111f862384a19a082fea486b96bf7bc.scn"]
+source_file="res://Assets/models/items/nails.glb"
+dest_files=["res://.godot/imported/nails.glb-e30a5e2cf556599e8502db0499ad9e4e.scn"]
 
 [params]
 
 nodes/root_type=""
 nodes/root_name=""
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
@@ -32,6 +34,9 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
 _subresources={}
-gltf/naming_version=1
+gltf/naming_version=2
 gltf/embedded_image_handling=1

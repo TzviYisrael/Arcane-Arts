@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://b24nj3tpx2id6"]
+
+[ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="1_xcphp"]
+[ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/item_stack.gd" id="2_t0hs8"]
+
+[node name="item stack" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(500, 1080)
+layout_mode = 3
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 550.0
+offset_bottom = 50.0
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="background" type="Sprite2D" parent="Control"]
+scale = Vector2(1.19326, 1.77124)
+texture = ExtResource("1_xcphp")
+centered = false
+
+[node name="title" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_right = 48.0
+offset_bottom = 69.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "items"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="type_tabs" type="TabContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+tab_alignment = 1
+current_tab = 0
+script = ExtResource("2_t0hs8")
+
+[node name="natural" type="GridContainer" parent="Control/type_tabs"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="mystic" type="GridContainer" parent="Control/type_tabs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="demonic" type="GridContainer" parent="Control/type_tabs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
