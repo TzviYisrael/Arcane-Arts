@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://bpp0c3q5wldrr"]
 
-[ext_resource type="PackedScene" uid="uid://bi1b6r5ingl42" path="res://Assets/summons/Bull.gltf" id="1_jf13v"]
+[ext_resource type="PackedScene" uid="uid://bi1b6r5ingl42" path="res://Assets/models/summons/Bull.gltf" id="1_jf13v"]
 [ext_resource type="Script" uid="uid://brfukq74nspcp" path="res://Scripts/summons/bull.gd" id="2_832kw"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qwhva"]

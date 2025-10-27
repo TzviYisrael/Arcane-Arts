@@ -20,7 +20,7 @@
   "nails": {
 	"origin": "0",
 	"icon": "nails.png",
-	"color": "#000011",
+	"color": "#acacba",
 	"model": "nails.glb"
   }
 }

@@ -3,21 +3,23 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b0nbq2v6cpdeq"
-path="res://.godot/imported/eye_monster.glb-edb9c32019409ff9c9994ddca270c0e6.scn"
+uid="uid://ch4d5g5xmk7yf"
+path="res://.godot/imported/ink_toad.glb-e445e065dc6351c051146cffd5e26853.scn"
 
 [deps]
 
-source_file="res://Assets/summons/eye_monster.glb"
-dest_files=["res://.godot/imported/eye_monster.glb-edb9c32019409ff9c9994ddca270c0e6.scn"]
+source_file="res://Assets/models/summons/ink_toad.glb"
+dest_files=["res://.godot/imported/ink_toad.glb-e445e065dc6351c051146cffd5e26853.scn"]
 
 [params]
 
-nodes/root_type=""
-nodes/root_name=""
+nodes/root_type="Node3D"
+nodes/root_name="ink_toad"
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
@@ -32,17 +34,9 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"materials": {
-"eye white.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://dh58qfoeopqn4"
-},
-"iris": {
-"use_external/enabled": true,
-"use_external/path": "uid://dh58qfoeopqn4"
-}
-}
-}
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

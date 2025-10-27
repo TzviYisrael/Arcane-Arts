@@ -1,0 +1,45 @@
+{
+  "bull": {
+	"category": "0",
+	"model": "Bull.gltf",
+	"model_scale": "0.5",
+	"color_rec": {
+		"#ff0000" : 20,
+		"#00ff11" : 50
+	},
+	"hp": "100",
+	"mp": "0",
+	"power": "12000",
+	"size": "10000",
+	"loot": ["meat", "blood", "bones"]
+  },
+  "ink_toad": {
+	"category": "1",
+	"model": "ink_toad.glb",
+	"model_scale": "0.7",
+	"color_rec": {
+		"#ff0000" : 40,
+		"#acacba" : 50
+	},
+	"hp": "100",
+	"mp": "100",
+	"power": "10000",
+	"size": "5000",
+	"loot": ["mana_ink", "toad_acid", "ooze"]
+  },
+  "eye_demon": {
+	"category": "2",
+	"model": "eye_monster.glb",
+	"model_scale": "1",
+	"color_rec": {
+		"#ff0000" : 70,
+		"#ffffdd" : 20,
+		"#ff0011" : 100
+	},
+	"hp": "500",
+	"mp": "500",
+	"power": "20000",
+	"size": "5000",
+	"loot": ["demon_meat", "demon_eye"]
+  }
+}

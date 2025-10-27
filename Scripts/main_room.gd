@@ -28,6 +28,7 @@ var state: int = 0
 var frame_counter: int = 0
 var colors_to_count: Dictionary[Color, bool] = {}
 var max_green: int = 0
+#@export var color_diff: int = 10
 
 func _ready() -> void:
 	gpu_ink_circle.process_mode = Node.PROCESS_MODE_INHERIT
@@ -165,7 +166,6 @@ func setup_items() -> void:
 	Signals.emit_signal("mage_look", gpu_ink_circle.global_position)
 	state = states.RITUAL_READY
 	Signals.emit_signal("change_notebook_page", "summon")
-	
 
 func start_ritual(_category: int) -> void:
 	if not summoned == null: print("existing summon"); return
@@ -179,7 +179,7 @@ func start_ritual(_category: int) -> void:
 	print("start ritual")
 	state = states.RITUAL_STARTED
 	Signals.emit_signal("change_ca_state", true)
-	
+
 func summon() -> void:
 	if not summoned == null: printerr("existing summon"); return
 	if not state == states.RITUAL_STARTED: printerr("wrong state"); return
@@ -187,42 +187,36 @@ func summon() -> void:
 	Signals.emit_signal("summon_particles", gpu_ink_circle.global_position)
 	await get_tree().create_timer(2.0).timeout 
 	
-	var summons_res: Dictionary = {
-		"bull": "res://GameData/resources/summons/bull.tres",
-		"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
-		"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
-	}
-	var color_amount: Dictionary[Color, float]
+	#var summons_res: Dictionary = {
+		#"bull": "res://GameData/resources/summons/bull.tres",
+		#"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
+		#"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
+	#}
+	var colors_amount: Dictionary[Color, float]
 	for color: Color in colors_to_count.keys():
-		color_amount[color] = await gpu_ink_circle.count_color(color)
-	print("colors ", color_amount)
-	var power: float = color_amount[Color.RED]
-	#var power : float = await gpu_ink_circle.count_color(Color.RED)
-	prints("power:", power)
+		colors_amount[color] = await gpu_ink_circle.count_color(color)
+	print("colors ", colors_amount)
+	GameData.print_colors()
+	#var power: float = color_amount[Color.RED]
+	##var power : float = await gpu_ink_circle.count_color(Color.RED)
+	#prints("power:", power)
 	var answering_summon : Node3D = null
-	var answer : int = -1
-	if power < 20: prints("too low power", power)
-	elif 20 <= power && power < 50: answer = SummonData.CATEGORY.ANIMAL
-	elif 50 <= power && power < 100: answer = SummonData.CATEGORY.MONSTER
-	elif 100 <= power && power < 150: answer = SummonData.CATEGORY.DEMON
-	else: prints("too high power", power)
-	
-	var scene: Resource
-	var summon_name: String
-	match answer:
-		SummonData.CATEGORY.ANIMAL:
-			scene = load("res://Scenes/summons/animal.tscn")
-			summon_name = "bull"
-		SummonData.CATEGORY.MONSTER:
-			scene = load("res://Scenes/summons/monster.tscn")
-			summon_name = "ink_toad"
-		SummonData.CATEGORY.DEMON:
-			scene = load("res://Scenes/summons/demon.tscn")
-			summon_name = "eye_demon"
-	
-	if not answer == -1:
+	var select_summoned: String = ""
+	select_summoned = select_summon(colors_amount)
+
+	if not select_summoned == "":
+		print("select_summoned: ", select_summoned)
+		var scene: Resource
+		match GameData.summons_data[select_summoned].category:
+			SummonData.CATEGORY.ANIMAL:
+				scene = load("res://Scenes/summons/animal.tscn")
+			SummonData.CATEGORY.MONSTER:
+				scene = load("res://Scenes/summons/monster.tscn")
+			SummonData.CATEGORY.DEMON:
+				scene = load("res://Scenes/summons/demon.tscn")
+				
 		answering_summon = scene.instantiate()
-		answering_summon.data = load(summons_res[summon_name])
+		answering_summon.data = GameData.summons_data[select_summoned]
 		print("fight!")
 		smoke_puff.emitting = true
 		summoned = answering_summon
@@ -247,6 +241,26 @@ func clean_texture() -> void:
 	print("clear")
 	max_green = 0
 
+func select_summon(colors: Dictionary) -> String:
+	for summon_key: String in GameData.summons_data.keys():
+		var color_rec: Dictionary = GameData.summons_data[summon_key].colors_rec
+		if compare_color_dicts(colors, color_rec): return summon_key
+		else: print(summon_key, " not selected")
+	return ""
+
+func compare_color_dicts(colors: Dictionary, color_rec: Dictionary) -> bool:
+	for required_color: Color in color_rec.keys():
+		if not colors.has(required_color):
+			return false
+			
+		var required_weight: int = int(color_rec[required_color])
+		var actual_weight: int = int(colors[required_color])
+		
+		if actual_weight < required_weight:
+			return false
+
+	return true
+
 func clear_items() -> void:
 	for item in gpu_ink_circle.get_children():
 		if item.is_in_group("items"):
@@ -264,7 +278,8 @@ func release_summon() -> void:
 func kill_summon() -> void:
 	#gpu_ink_circle.save_small_image()
 	if summoned:
-		prints("loot: ", summoned.data.loot.pick_random())
+		#TODO: add_to_invetory(GameData.summons_data[summoned.data.loot.pick_random()])
+		print(summoned.data.loot.pick_random())
 	release_summon()
 
 func _on_return_b_pressed() -> void:

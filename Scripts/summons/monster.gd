@@ -4,7 +4,12 @@ extends CharacterBody3D
 
 var mage: Node
 func _ready() -> void:
-	data.load_model()
-	add_child(data.model)
+	load_model()
 	mage = SceneManager.mage
-	data.model.rotate_y(PI)
+
+func load_model() -> void:
+	var model := data.model.instantiate()
+	model.scale = Vector3(data.model_scale, data.model_scale, data.model_scale)
+	model.rotate_y(PI)
+	add_child(model)
+	assert(model != null)
