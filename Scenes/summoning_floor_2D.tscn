@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbw7pmrwoar5r"]
+[gd_scene load_steps=14 format=3 uid="uid://cbw7pmrwoar5r"]
 
 [ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summoning_floor_2D.gd" id="1_jc3jh"]
 [ext_resource type="PackedScene" uid="uid://3tkmsmvy5kqa" path="res://Scenes/UI/item_pin.tscn" id="2_4246d"]
-[ext_resource type="Texture2D" uid="uid://b32f2mmc3jsk4" path="res://Assets/textures/clay_floor_001_rough_2k.jpg" id="2_oyhf0"]
+[ext_resource type="Texture2D" uid="uid://b8d2uxv0sepeg" path="res://Assets/textures/summon_floor.png" id="3_633pv"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/UI/touch_controls.tscn" id="3_nkr0i"]
+[ext_resource type="Texture2D" uid="uid://bwtdld6l6oobf" path="res://Assets/textures/main_room_floor.png" id="3_wemtm"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_7mdlq"]
 [ext_resource type="Texture2D" uid="uid://d13jskad8hsam" path="res://Assets/ui/button_icons/coloring_tools.png" id="5_7mdlq"]
 [ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/UI/book_and_notebook_ui.tscn" id="5_jc3jh"]
@@ -23,13 +24,19 @@ script = ExtResource("1_jc3jh")
 item_pin_scene = ExtResource("2_4246d")
 brush_size = 300
 
-[node name="background" type="Sprite2D" parent="."]
-z_index = -2
-texture_repeat = 2
-texture = ExtResource("2_oyhf0")
-centered = false
-region_enabled = true
-region_rect = Rect2(0, 0, 2024, 2024)
+[node name="Parallax2D" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.75, 0.75)
+
+[node name="MainRoomFloor" type="Sprite2D" parent="Parallax2D"]
+position = Vector2(1012, 1012)
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("3_wemtm")
+
+[node name="SummonFloor" type="Sprite2D" parent="."]
+position = Vector2(1012, 1012)
+rotation = 2.3561945
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_633pv")
 
 [node name="chalk_lines" type="Sprite2D" parent="."]
 centered = false

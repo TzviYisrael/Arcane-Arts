@@ -3,7 +3,7 @@ extends Node2D
 @onready var camera := $Camera2D
 @export var cam_speed: float = 5.0
 
-@onready var background := $background
+@onready var background := $SummonFloor
 @onready var chalk_lines: Sprite2D = $chalk_lines
 
 var center := Vector2()
