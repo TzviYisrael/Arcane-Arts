@@ -20,7 +20,7 @@ func _ready() -> void:
 	items_data = load_items_from_json(items_file_path)
 	summons_data = load_summons_from_json(summons_file_path)
 	print("game data loaded...")
-	print_colors()
+	#print_colors()
 	
 func print_colors() -> void:
 	for i: String in summons_data.keys():
