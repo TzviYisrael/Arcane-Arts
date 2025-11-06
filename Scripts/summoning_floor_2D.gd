@@ -1,9 +1,12 @@
 extends Node2D
 
 @onready var camera := $Camera2D
-@export var cam_speed: float = 5.0
+@export var cam_speed: float = 16.0
+@export var min_zoom:float = 0.3
+@export var max_zoom: float = 2.0
+@export var zoom_speed: float = 0.05
 
-@onready var background := $SummonFloor
+@onready var background := $Parallax2D/MainRoomFloor
 @onready var chalk_lines: Sprite2D = $chalk_lines
 
 var center := Vector2()
@@ -22,10 +25,6 @@ var item_pin_ghost: Node2D
 @export var brush_size : int = 10
 @export var max_clear: float = 100
 
-@export var min_zoom:float = 0.5
-@export var max_zoom: float = 2.0
-@export var zoom_speed: float = 0.05
-
 enum tools{HAND, INK, COVER}
 @export_enum("hand", "ink", "cover") var tool: int = 1
 
@@ -34,10 +33,10 @@ func _ready() -> void:
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	Signals.connect("item_moved", _on_item_moved)
 	
-	var rect:Rect2 = background.get_rect()
-	center = Vector2(background.position.x + (rect.size.x) * 0.5, 
-					background.position.y + (rect.size.y) * 0.5)
-	camera.position = center
+	#var rect: Rect2 = background.get_rect()
+	#center = Vector2(background.position.x + (rect.size.x) * 0.5, 
+					#background.position.y + (rect.size.y) * 0.5)
+	camera.position = Vector2.ZERO
 	
 	if TextureManager.chalk_line_2d:
 		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
@@ -64,30 +63,29 @@ func _draw()  -> void:
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
-		camera.position += event.delta
+		camera.position += event.delta * cam_speed
 	elif event is InputEventMagnifyGesture:
 		camera.zoom = camera.zoom * event.factor
 		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 	elif event is InputEventScreenDrag:
-		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position + Vector2(1012, 1012)
 		queue_redraw()
 		if event.index < 1:
 			_handle_touch(touch_point)
 	elif event is InputEventScreenTouch and event.is_released():
-		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position + Vector2(1012, 1012)
 		queue_redraw()
 		if event.index < 1 and tool == tools.HAND and item_pin_ghost:
-			if add_item_pin(touch_point, item_pin_ghost.item):
+			if add_item_pin(touch_point - Vector2(1012, 1012), item_pin_ghost.item):
 				item_pin_ghost.queue_free()
 			else:
-				item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
+				item_pin_ghost.position = camera.get_screen_center_position()
 			
 			tool = SceneManager.summoning_floor_current_tool
 			var tool_offset : Array = [0, 450, 905]
 			var atlas_icon := tools_button.icon as AtlasTexture
 			atlas_icon.region.position.x = tool_offset[tool]
 
-		
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
 			camera.zoom = camera.zoom * (1 + zoom_speed)
@@ -104,33 +102,33 @@ func _handle_touch(pos: Vector2) -> void:
 				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))
 			tools.HAND:
 				if item_pin_ghost:
-					item_pin_ghost.position = pos
+					item_pin_ghost.position = pos - Vector2(1012, 1012)
 
 func add_initial_pins() -> void:
 	for pos: Vector2 in SceneManager.placed_item:
 		var item: Item = SceneManager.placed_item[pos]
-		var size: Vector2 = ink_viewer.texture.get_size()
-		var new_x: float = ((pos.x + 1.0) / 2.0) * size.x
-		var new_y: float = ((pos.y + 1.0) / 2.0) * size.y
-		var denormalized_pos := Vector2(new_x, new_y)
+		var half_size: Vector2 = ink_viewer.texture.get_size() * 0.5
+		var denormalized_pos := pos * half_size
 		add_item_pin(denormalized_pos, item)
 
+
 func add_item_pin(pos: Vector2, item: Item) -> bool:
-	var size: Vector2 = ink_viewer.texture.get_size()
-	if not (0 <= pos.x and pos.x < size.x and 0 <= pos.y and pos.y < size.y):
-		printerr("Trying to add pin outside the zone: ", pos)
+	var half_size: Vector2 = ink_viewer.texture.get_size() * 0.5
+	if not (-half_size.x <= pos.x and pos.x < half_size.x and -half_size.y <= pos.y and pos.y < half_size.y):
+		print("Trying to add pin outside the zone: ", pos)
 		return false
+	
 	var new_item: Node2D = item_pin_scene.instantiate()
 	new_item.item = item
 	new_item.position = pos
 	new_item.add_to_group("items")
-#	normalize the positions for the SceneManager from 0 <-> size to -1 <-> 1
-	var normalized_pos: Vector2 = (2.0 * pos / ink_viewer.texture.get_size()) - Vector2(1, 1)
+	
+	# Normalize positions from -half_size <-> half_size to -1 <-> 1
+	var normalized_pos: Vector2 = pos / half_size
 	SceneManager.placed_item[normalized_pos] = new_item.item
 	
 	ink_viewer.add_child(new_item)
 	return true
-	
 
 func set_tool_icon() -> void:
 	var tool_offset : Array = [0, 450, 905]
@@ -220,7 +218,7 @@ func _on_item_moved(item: Item) -> void:
 	
 	item_pin_ghost = item_pin_scene.instantiate()
 	item_pin_ghost.item = item
-	item_pin_ghost.position = get_viewport().get_visible_rect().size / 2.0
+	item_pin_ghost.position = camera.get_screen_center_position()
 	add_child(item_pin_ghost)
 
 func save_and_change_scene(scene_path: String) -> void:

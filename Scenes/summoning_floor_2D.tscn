@@ -25,25 +25,23 @@ item_pin_scene = ExtResource("2_4246d")
 brush_size = 300
 
 [node name="Parallax2D" type="Parallax2D" parent="."]
-scroll_scale = Vector2(0.75, 0.75)
+scroll_scale = Vector2(0.85, 0.85)
 
 [node name="MainRoomFloor" type="Sprite2D" parent="Parallax2D"]
-position = Vector2(1012, 1012)
 scale = Vector2(3.5, 3.5)
 texture = ExtResource("3_wemtm")
 
 [node name="SummonFloor" type="Sprite2D" parent="."]
-position = Vector2(1012, 1012)
 rotation = 2.3561945
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("3_633pv")
 
 [node name="chalk_lines" type="Sprite2D" parent="."]
+position = Vector2(-1012, -1012)
 centered = false
 
 [node name="ink_viewer" type="Sprite2D" parent="."]
 texture = SubResource("ViewportTexture_5a8fl")
-centered = false
 
 [node name="Control" type="Control" parent="."]
 top_level = true
@@ -76,27 +74,6 @@ theme = ExtResource("4_7mdlq")
 icon = SubResource("AtlasTexture_4246d")
 flat = true
 icon_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="showGuides" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_7mdlq")
-text = "show guides"
-metadata/_edit_use_anchors_ = true
-
-[node name="clear" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_7mdlq")
-text = "reset"
-metadata/_edit_use_anchors_ = true
-
-[node name="save" type="Button" parent="Control/touch_controls/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_7mdlq")
-text = "save"
 metadata/_edit_use_anchors_ = true
 
 [node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
@@ -136,12 +113,12 @@ tick_count = 20
 notebook_page = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1012, 1012)
-zoom = Vector2(0.8, 0.8)
-limit_left = -1000
-limit_top = -1000
-limit_right = 2500
-limit_bottom = 2500
+zoom = Vector2(0.5, 0.5)
+limit_enabled = false
+limit_left = 6750
+limit_top = 3820
+limit_right = -6750
+limit_bottom = -3820
 limit_smoothed = true
 position_smoothing_enabled = true
 
@@ -158,9 +135,6 @@ script = ExtResource("6_633pv")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/showGuides" to="." method="_on_show_guides_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/clear" to="." method="_on_clear_pressed"]
-[connection signal="pressed" from="Control/touch_controls/VBoxContainer/save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToDesk" to="." method="_on_move_to_desk_pressed"]
 [connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_h_slider_value_changed"]
