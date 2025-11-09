@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cbw7pmrwoar5r"]
+[gd_scene load_steps=17 format=3 uid="uid://cbw7pmrwoar5r"]
 
 [ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/summoning_floor_2D.gd" id="1_jc3jh"]
 [ext_resource type="PackedScene" uid="uid://3tkmsmvy5kqa" path="res://Scenes/UI/item_pin.tscn" id="2_4246d"]
@@ -11,9 +11,12 @@
 [ext_resource type="Script" uid="uid://cgnacxk5m2e56" path="res://Scripts/ink_drawer.gd" id="6_633pv"]
 [ext_resource type="Texture2D" uid="uid://cqekf328f7243" path="res://Assets/ui/button_icons/room.png" id="6_4246d"]
 [ext_resource type="Texture2D" uid="uid://deniiifo46gmb" path="res://Assets/ui/button_icons/drawing1.png" id="7_633pv"]
+[ext_resource type="Material" uid="uid://nv34lixkykc7" path="res://Assets/shaders/drawing_ca.tres" id="12_fa5v7"]
+[ext_resource type="Script" uid="uid://c00pubvwks5hc" path="res://Scripts/gol/Renderer.gd" id="13_owfn2"]
+[ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/gol/Renderer2.gd" id="15_hasf7"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("Viewport")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4246d"]
 atlas = ExtResource("5_7mdlq")
@@ -123,6 +126,7 @@ limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="SubViewport" type="SubViewport" parent="."]
+process_mode = 4
 transparent_bg = true
 size = Vector2i(2024, 2024)
 render_target_clear_mode = 2
@@ -133,6 +137,32 @@ centered = false
 [node name="ink_drawer" type="Node2D" parent="SubViewport"]
 script = ExtResource("6_633pv")
 metadata/_edit_use_anchors_ = true
+
+[node name="Viewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer" type="Sprite2D" parent="Viewport" node_paths=PackedStringArray("viewport_2")]
+texture_filter = 1
+material = ExtResource("12_fa5v7")
+scale = Vector2(2, 2)
+script = ExtResource("13_owfn2")
+viewport_2 = NodePath("../../Viewport2")
+
+[node name="Viewport2" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer2" type="Sprite2D" parent="Viewport2" node_paths=PackedStringArray("viewport")]
+texture_filter = 1
+material = ExtResource("12_fa5v7")
+scale = Vector2(2, 2)
+script = ExtResource("15_hasf7")
+viewport = NodePath("../../Viewport")
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]

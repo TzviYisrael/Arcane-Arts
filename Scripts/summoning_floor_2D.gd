@@ -15,6 +15,9 @@ var center := Vector2()
 @onready var saved_texture: Sprite2D = $SubViewport/saved_texture
 @onready var sub_viewport: SubViewport = $SubViewport
 
+@onready var Renderer := $Viewport/Renderer
+@onready var Renderer2: Sprite2D = $Viewport2/Renderer2
+
 @onready var tools_button: Button = $Control/touch_controls/VBoxContainer/tools
 @onready var brush_slider: HSlider = $Control/touch_controls/brushSlider
 
@@ -33,16 +36,23 @@ func _ready() -> void:
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	Signals.connect("item_moved", _on_item_moved)
 	
-	#var rect: Rect2 = background.get_rect()
-	#center = Vector2(background.position.x + (rect.size.x) * 0.5, 
-					#background.position.y + (rect.size.y) * 0.5)
+	$Viewport.set_update_mode(SubViewport.UPDATE_ALWAYS)
+	$Viewport2.set_update_mode(SubViewport.UPDATE_ALWAYS)
+
+	if not Renderer:
+		print("Could not mount renderer")
+		return
+	
 	camera.position = Vector2.ZERO
 	
 	if TextureManager.chalk_line_2d:
 		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
-	
+		Renderer.material.set_shader_parameter("chalk_lines", chalk_lines.texture)
+		Renderer.material.set_shader_parameter("is_chalk", true)
+
 	if TextureManager.ink_circle_2d:
 		saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_2d)
+	
 	
 	brush_size = int(brush_slider.value)
 	tool = SceneManager.summoning_floor_current_tool
@@ -111,6 +121,8 @@ func _handle_pan(delta: Vector2) -> void:
 func _handle_touch(pos: Vector2) -> void:
 		match tool:
 			tools.INK:
+				#print( pos / Vector2(2024, 2024))
+				Renderer.material.set_shader_parameter("brush_pos", pos / Vector2(2024, 2024))
 				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.INK))
 			tools.COVER:
 				ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))

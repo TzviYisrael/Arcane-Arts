@@ -31,7 +31,7 @@ func _ready() -> void:
 
 	if not Renderer:
 		print("Could not mount renderer")
-		return	
+		return
 	set_ca_texture(start_texture)
 
 func init() -> void:

@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://nv34lixkykc7"]
+
+[ext_resource type="Shader" uid="uid://cepkk4u0hnou6" path="res://Assets/shaders/gol/drawing.gdshader" id="1_yhavg"]
+
+[resource]
+shader = ExtResource("1_yhavg")
+shader_parameter/is_chalk = false
+shader_parameter/brush_pos = Vector2(0, 0)
