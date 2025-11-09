@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var camera := $Camera2D
-@export var cam_speed: float = 16.0
+@export var cam_speed: float = 4.0
 @export var min_zoom:float = 0.3
 @export var max_zoom: float = 2.0
 @export var zoom_speed: float = 0.05
@@ -63,10 +63,10 @@ func _draw()  -> void:
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
-		camera.position += event.delta * cam_speed
+		_handle_pan(event.delta)
 	elif event is InputEventMagnifyGesture:
-		camera.zoom = camera.zoom * event.factor
-		camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+		_handle_zoom(event.factor)
+		
 	elif event is InputEventScreenDrag:
 		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position + Vector2(1012, 1012)
 		queue_redraw()
@@ -86,13 +86,27 @@ func _unhandled_input(event: InputEvent) -> void:
 			var atlas_icon := tools_button.icon as AtlasTexture
 			atlas_icon.region.position.x = tool_offset[tool]
 
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # Zoom in
-			camera.zoom = camera.zoom * (1 + zoom_speed)
-			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+	#for debug only
+	elif event is InputEventMouseButton:
+		var factor := 1.0
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			factor = (1.0 + zoom_speed)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			camera.zoom = camera.zoom * (1 - zoom_speed) # Zoom out
-			camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+			factor = (1.0 - zoom_speed)
+
+		if factor != 1.0:
+			_handle_zoom(factor)
+
+func _handle_zoom(zoom_factor: float) -> void:
+	camera.zoom *= zoom_factor
+	camera.zoom = camera.zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+	get_viewport().set_input_as_handled()
+
+func _handle_pan(delta: Vector2) -> void:
+	var current_zoom_factor: float  = camera.zoom.x
+	var adjusted_speed: float = cam_speed / current_zoom_factor
+	camera.position += delta * adjusted_speed
+	get_viewport().set_input_as_handled()
 
 func _handle_touch(pos: Vector2) -> void:
 		match tool:
