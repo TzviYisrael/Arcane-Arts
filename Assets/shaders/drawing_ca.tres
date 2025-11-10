@@ -1,8 +1,22 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://nv34lixkykc7"]
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://nv34lixkykc7"]
 
 [ext_resource type="Shader" uid="uid://cepkk4u0hnou6" path="res://Assets/shaders/gol/drawing.gdshader" id="1_yhavg"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yhavg"]
+noise_type = 5
+frequency = 0.0421
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_riq88"]
+width = 2024
+height = 2024
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_yhavg")
+
 [resource]
 shader = ExtResource("1_yhavg")
+shader_parameter/noise = SubResource("NoiseTexture2D_riq88")
+shader_parameter/time = 0.0
 shader_parameter/is_chalk = false
-shader_parameter/brush_pos = Vector2(0, 0)
+shader_parameter/brush_pos = Vector2(-1, -1)
+shader_parameter/brush_size = 0.03
