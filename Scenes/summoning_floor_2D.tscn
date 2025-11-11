@@ -152,4 +152,4 @@ viewport = NodePath("../../Viewport")
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToDesk" to="." method="_on_move_to_desk_pressed"]
-[connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_h_slider_value_changed"]
+[connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_brush_slider_value_changed"]
