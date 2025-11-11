@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b43ea1qbu75vk"
-path="res://.godot/imported/main_room_floor_n_coll.glb-a535ff8950df1dfe9ea7822b8c28ba1b.scn"
+uid="uid://d3qc8622pxb56"
+path="res://.godot/imported/bones.glb-81cf39667552551d57c68505ebe870ec.scn"
 
 [deps]
 
-source_file="res://Assets/models/main_room_floor_n_coll.glb"
-dest_files=["res://.godot/imported/main_room_floor_n_coll.glb-a535ff8950df1dfe9ea7822b8c28ba1b.scn"]
+source_file="res://Assets/models/items/bones.glb"
+dest_files=["res://.godot/imported/bones.glb-81cf39667552551d57c68505ebe870ec.scn"]
 
 [params]
 
@@ -38,5 +38,5 @@ materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
 _subresources={}
-gltf/naming_version=1
+gltf/naming_version=2
 gltf/embedded_image_handling=1

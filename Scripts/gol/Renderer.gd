@@ -11,4 +11,3 @@ func setup(tex: Texture2D) -> void:
 func setup_loop() -> void:
 	await get_tree().process_frame
 	self.texture = viewport_2.get_texture()
-	

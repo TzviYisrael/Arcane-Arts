@@ -89,6 +89,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _handle_release_at(pos: Vector2) -> void:
 	var ret_arr: Array = get_camera_ray_collider(pos)
+	if ret_arr[0] == null:
+		return
 	var coll_pos: Vector3 = ret_arr[0]
 	var coll: Node = ret_arr[1]
 	#print("coll:",coll.name)
@@ -119,7 +121,7 @@ func get_camera_ray_collider(pos: Vector2) -> Array:
 		var coll: Node3D = coll_dict["collider"]
 		return [coll_dict["position"], coll]
 	else:
-		return [coll_dict["position"], null]
+		return [null, null]
 
 func rotate_camera(deg: float) -> void:
 	camera_spring_arm.rotate_y(deg_to_rad(deg))

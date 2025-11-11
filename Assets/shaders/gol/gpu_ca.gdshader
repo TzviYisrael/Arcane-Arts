@@ -1,7 +1,6 @@
 shader_type canvas_item;
 //render_mode blend_sub;
 
-
 uniform bool run = false;
 uniform float power = 0.007;
 

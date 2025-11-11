@@ -11,7 +11,7 @@ var placed_item: Dictionary[Vector2, Item]
 var drawing_desk_current_tool: int = 1
 
 #summoning floor
-var brush_size: int
+var summoning_floor_brush_size: float = 0.29
 var summoning_floor_current_tool: int = 1
 
 #ui

@@ -2,7 +2,7 @@
   "leaves": {
 	"origin": "0",
 	"icon": "leaves.png",
-	"color": "#00ff11",
+	"color": "#008000",
 	"model": "leaves.glb"
   },
   "heart": {
@@ -22,5 +22,11 @@
 	"icon": "nails.png",
 	"color": "#acacba",
 	"model": "nails.glb"
+  },
+  "bones": {
+	"origin": "0",
+	"icon": "bones.png",
+	"color": "#ffeeee",
+	"model": "bones.glb"
   }
 }
