@@ -20,3 +20,4 @@ shader_parameter/time = 0.0
 shader_parameter/is_chalk = false
 shader_parameter/brush_pos = Vector2(-1, -1)
 shader_parameter/brush_size = 0.03
+shader_parameter/ink_color = Vector4(0, 0, 0, 1)

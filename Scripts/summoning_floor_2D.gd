@@ -25,12 +25,13 @@ var touch_point : Vector2 = Vector2.INF
 @export var item_pin_scene: PackedScene
 var item_pin_ghost: Node2D
 
-@export var brush_size : int = 10
-@export var max_clear: float = 100
+@export var brush_size: float = 0.505
+#@export var max_clear: float = 100
 
 enum tools{HAND, INK, COVER}
 @export_enum("hand", "ink", "cover") var tool: int = 1
 
+const TEXTURE_SIZE := Vector2(2024, 2024)
 
 func _ready() -> void:
 	Signals.connect("spell_chanted", _on_spell_chanted)
@@ -49,29 +50,30 @@ func _ready() -> void:
 		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
 		Renderer.material.set_shader_parameter("chalk_lines", chalk_lines.texture)
 		Renderer.material.set_shader_parameter("is_chalk", true)
+	else:
+		Renderer.material.set_shader_parameter("is_chalk", false)
 
 	if TextureManager.ink_circle_2d:
-		#saved_texture.texture = ImageTexture.create_from_image(TextureManager.ink_circle_2d)
 		set_ca_texture(ImageTexture.create_from_image(TextureManager.ink_circle_2d))
 	
-	brush_size = int(brush_slider.value)
+	_on_h_slider_value_changed(brush_slider.value)
 	tool = SceneManager.summoning_floor_current_tool
 	set_tool_icon()
 	
 	call_deferred("add_initial_pins")
 		
-	queue_redraw()
+	#queue_redraw()
 
 func _process(_delta: float)  -> void:
 	var input_dir: Vector2 = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	camera.position += input_dir * cam_speed
-	queue_redraw()
+	#queue_redraw()
 	
 	Renderer.material.set_shader_parameter("time", randf())
 
-func _draw()  -> void:
-	#center
-	draw_circle(center, 20.0, Color.RED)
+#func _draw()  -> void:
+	##center
+	#draw_circle(center, 20.0, Color.RED)
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
@@ -81,12 +83,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	elif event is InputEventScreenDrag:
 		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position + Vector2(1012, 1012)
-		queue_redraw()
+		#queue_redraw()
 		if event.index < 1:
 			_handle_screen_drag(touch_point)
 	elif event is InputEventScreenTouch and event.is_released():
 		touch_point = get_viewport().get_canvas_transform().affine_inverse() * event.position + Vector2(1012, 1012)
-		queue_redraw()
+		#queue_redraw()
 		_handle_release(touch_point)
 
 	#for debug only
@@ -114,20 +116,17 @@ func _handle_pan(delta: Vector2) -> void:
 func _handle_screen_drag(pos: Vector2) -> void:
 		match tool:
 			tools.INK:
-				#print( pos / Vector2(2024, 2024))
 				Renderer.material.set_shader_parameter("brush_pos", pos / Vector2(2024, 2024))
-				#ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.INK))
 			tools.COVER:
 				Renderer.material.set_shader_parameter("brush_pos", pos / Vector2(2024, 2024))
-				#ink_drawer.points.append(Vector4(pos.x, pos.y, brush_size, tools.COVER))
 			tools.HAND:
 				if item_pin_ghost:
-					item_pin_ghost.position = pos - Vector2(1012, 1012)
+					item_pin_ghost.position = pos - TEXTURE_SIZE / 2
 
 func _handle_release(pos: Vector2) -> void:
 	Renderer.material.set_shader_parameter("brush_pos", Vector2(-1, -1))
 	if tool == tools.HAND and item_pin_ghost:
-		if add_item_pin(pos - Vector2(1012, 1012), item_pin_ghost.item):
+		if add_item_pin(pos - TEXTURE_SIZE / 2, item_pin_ghost.item):
 			item_pin_ghost.queue_free()
 		else:
 			item_pin_ghost.position = camera.get_screen_center_position()
@@ -182,7 +181,6 @@ func save_to_disk() -> void:
 	
 func save_to_tex_mem()  -> void:
 	var img : Image = ink_viewer.texture.get_image()
-	
 	#img = Ink_circle.mask_image(img, TextureManager.chalk_line_2d)
 	TextureManager.ink_circle_2d = img
 	TextureManager.ink_circle = Ink_circle.resize_image(img, TextureManager.resize_factor)
@@ -211,12 +209,10 @@ func clear_ink() -> void:
 	TextureManager.ink_circle_2d = null
 	TextureManager.ink_circle = null
 	
-	var img := Image.create(2024, 2024, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))  # transparent black
+	var img := Image.create(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
 	var clear_tex := ImageTexture.create_from_image(img)
 	set_ca_texture(clear_tex)
-	
-	reload_scene()
 
 func _on_clear_pins_pressed() -> void:
 	for item in ink_viewer.get_children():
@@ -236,11 +232,11 @@ func _on_show_guides_pressed() -> void:
 		chalk_lines.show()
 
 func _on_h_slider_value_changed(value: float) -> void:
-	brush_size = int(value)
+	Renderer.material.set_shader_parameter("brush_size", value)
 
 func _on_spell_chanted(spell: String) -> void:
 	match spell:
-		"reset": clear_ink()
+		"clear ink": clear_ink()
 		"save": _on_save_pressed()
 		"clear pins": _on_clear_pins_pressed()
 		_: printerr("error, unknown spell in ", 
