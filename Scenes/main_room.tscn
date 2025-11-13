@@ -128,7 +128,7 @@ metadata/scene_path = "res://Scenes/drawing_desk_2D.tscn"
 
 [node name="summoning_floor" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("7_v1qvw")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -0.519, 0.066, -0.268)
-metadata/scene_path = "summon"
+metadata/scene_path = "summon_floor"
 
 [node name="gpu_ink_circle" parent="NavigationRegion3D/summoning_floor" instance=ExtResource("7_xqkij")]
 process_mode = 4
