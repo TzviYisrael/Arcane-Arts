@@ -92,17 +92,19 @@ func _handle_release_at(pos: Vector2) -> void:
 		return
 	var coll_pos: Vector3 = ret_arr[0]
 	var coll: Node = ret_arr[1]
-	#print("coll:",coll.get_parent())
-	if coll and coll.get_parent().is_in_group("items"):
-		print("item: ", coll.get_parent().name)
-		#TODO: collect the item
+	#print("coll owner:",coll.owner)
+	if coll and coll.owner.is_in_group("items"):
+		if not coll.owner.has_meta("item_name"): printerr("missing item_name metadata")
+		var item_name: String = coll.owner.get_meta("item_name")
+		if not SceneManager.invantory.has(item_name): printerr("missing key in invantory")
+		SceneManager.invantory[item_name] += 1
+		coll.owner.queue_free()
 	elif coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
 		var path: String = coll.get_meta("scene_path")
 		scene_path_to_enter = path
 		if path == "summon_floor":
 			Signals.emit_signal("walk_destination", 
 				summoning_floor.mage_circle.global_position)
-			
 		else:
 			Signals.emit_signal("walk_destination", coll_pos)
 	else:
@@ -132,7 +134,7 @@ func rotate_camera(deg: float) -> void:
 func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)
 	if scene_path_to_enter == "summon_floor":
-		setup_items()
+		place_items()
 	elif scene_path_to_enter != "":
 		print("entering: ", scene_path_to_enter)
 		save_and_change_scene(scene_path_to_enter)
@@ -140,7 +142,7 @@ func destination_reached() -> void:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
 
-func setup_items() -> void:
+func place_items() -> void:
 	if not item_amount == 0:
 		state = states.RITUAL_READY
 		Signals.emit_signal("change_notebook_page", "summon")
@@ -152,6 +154,7 @@ func setup_items() -> void:
 		var item := SceneManager.placed_item[pos]
 		
 		var new_item: Node3D = item.model.instantiate()
+		new_item.set_meta("item_name", item.name)
 		var original_relative_pos := Vector3(pos.x, 0, pos.y) * 2.5
 		var rotated_relative_pos: Vector3 = rotation_basis * original_relative_pos
 		new_item.position = rotated_relative_pos
@@ -265,9 +268,9 @@ func compare_color_dicts(colors: Dictionary, color_rec: Dictionary) -> bool:
 
 	return true
 	
-func setup_loot(loot: Array[String], pos: Vector3) -> void:
-	const radius := 5
+func place_loot(loot: Array[String]) -> void:
 	var count: int = loot.size()
+	var radius := 0.5
 	var angle_diff: float = TAU / float(count)
 	for i in range(count):
 		var item: Item = GameData.items_data[loot[i]]
@@ -277,11 +280,12 @@ func setup_loot(loot: Array[String], pos: Vector3) -> void:
 			var x_offset: float = radius * cos(angle)
 			var z_offset: float = radius * sin(angle)
 			var item_position := Vector3(
-				pos.x + x_offset, pos.y, pos.z + z_offset)
+				x_offset, 0.0, z_offset)
 
 			var new_item: Node3D = item.model.instantiate()
 			new_item.position = item_position
 			new_item.add_to_group("items")
+			new_item.set_meta("item_name", item.name)
 			gpu_ink_circle.add_child(new_item)
 			item_amount += 1
 
@@ -296,14 +300,15 @@ func release_summon() -> void:
 		summoned.queue_free()
 		summoned = null
 	state = states.RITUAL_READY
-	#summon_power = 0
 	Signals.emit_signal("change_ca_state", false)
 
 func kill_summon() -> void:
 	#gpu_ink_circle.save_small_image()
 	if summoned:
-		#TODO: add_to_invetory(GameData.summons_data[summoned.data.loot.pick_random()])
-		print(summoned.data.loot.pick_random())
+		print("loot: ", GameData.summons_data[summoned.data.name].loot)
+		place_loot(["meat"])
+		#TODO: add_to_invetory(.data.loot.pick_random()])
+		#place_loot(GameData.summons_data[summoned.name].loot, summoned.position)
 	release_summon()
 
 func _on_return_b_pressed() -> void:

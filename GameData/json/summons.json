@@ -11,7 +11,7 @@
 	"mp": "0",
 	"power": "12000",
 	"size": "10000",
-	"loot": ["meat", "blood", "bones"]
+	"loot": ["meat", "bones"]
   },
   "ink_toad": {
 	"category": "1",

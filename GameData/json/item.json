@@ -28,5 +28,17 @@
 	"icon": "bones.png",
 	"color": "#ffeeee",
 	"model": "bones.glb"
+  },
+  "candles": {
+	"origin": "1",
+	"icon": "candles.png",
+	"color": "#fffb00",
+	"model": "candles.glb"
+  },
+  "meat": {
+	"origin": "0",
+	"icon": "meat.png",
+	"color": "#ffbbbb",
+	"model": "meat.glb"
   }
 }

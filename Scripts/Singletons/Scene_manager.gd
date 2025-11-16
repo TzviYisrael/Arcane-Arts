@@ -1,5 +1,8 @@
 extends Node
 
+#global
+var invantory: Dictionary[String, int]
+
 #main room
 var mage: Node
 var mage_pos: Vector3 = Vector3(7.733, 0.192, 0.802)

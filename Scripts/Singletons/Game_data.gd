@@ -86,9 +86,10 @@ func load_items_from_json(path: String) -> Dictionary:
 				push_warning("Failed to load model for '%s' from path: %s" % [item_name, model_path])
 		elif not model_path.is_empty():
 			push_warning("Model not found for '%s': %s" % [item_name, model_path])
-			
+		
 		items[item_name] = item
-			
+		
+		SceneManager.invantory[item_name] = 0
 	return items
 
 ## Loads summon data from a JSON file and returns a dictionary of SummonData resources.
