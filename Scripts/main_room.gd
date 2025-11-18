@@ -98,6 +98,7 @@ func _handle_release_at(pos: Vector2) -> void:
 		var item_name: String = coll.owner.get_meta("item_name")
 		if not SceneManager.invantory.has(item_name): printerr("missing key in invantory")
 		SceneManager.invantory[item_name] += 1
+		SceneManager.placed_item.erase(coll.owner.get_meta("item_pos"))
 		coll.owner.queue_free()
 	elif coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
 		var path: String = coll.get_meta("scene_path")
@@ -134,7 +135,7 @@ func rotate_camera(deg: float) -> void:
 func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)
 	if scene_path_to_enter == "summon_floor":
-		place_items()
+		walk_and_place_items()
 	elif scene_path_to_enter != "":
 		print("entering: ", scene_path_to_enter)
 		save_and_change_scene(scene_path_to_enter)
@@ -142,7 +143,7 @@ func destination_reached() -> void:
 		state = states.ROOM
 		Signals.emit_signal("change_notebook_page", "room_spells")
 
-func place_items() -> void:
+func walk_and_place_items() -> void:
 	if not item_amount == 0:
 		state = states.RITUAL_READY
 		Signals.emit_signal("change_notebook_page", "summon")
@@ -150,14 +151,15 @@ func place_items() -> void:
 	mage.navigation_agent_3d.navigation_finished.disconnect(destination_reached)
 	
 	var rotation_basis := Basis.from_euler(Vector3(0, deg_to_rad(90), 0))
-	for pos: Vector2 in SceneManager.placed_item:
+	for pos: Vector2 in SceneManager.placed_item.keys():
 		var item := SceneManager.placed_item[pos]
 		
 		var new_item: Node3D = item.model.instantiate()
-		new_item.set_meta("item_name", item.name)
 		var original_relative_pos := Vector3(pos.x, 0, pos.y) * 2.5
 		var rotated_relative_pos: Vector3 = rotation_basis * original_relative_pos
 		new_item.position = rotated_relative_pos
+		new_item.set_meta("item_name", item.name)
+		new_item.set_meta("item_pos", pos)
 		new_item.add_to_group("items")
 		
 		Signals.emit_signal("walk_destination", 
@@ -173,6 +175,24 @@ func place_items() -> void:
 	Signals.emit_signal("mage_look", gpu_ink_circle.global_position)
 	state = states.RITUAL_READY
 	Signals.emit_signal("change_notebook_page", "summon")
+
+func place_item(pos: Vector2, item_data: Item) -> void:
+	if SceneManager.placed_item.has(pos):
+		print("can't place item, place occupied")
+		return
+	SceneManager.placed_item[pos] = item_data
+	
+	var new_item: Node3D = item_data.model.instantiate()
+	var rotation_basis := Basis.from_euler(Vector3(0, deg_to_rad(90), 0))
+	var original_relative_pos := Vector3(pos.x, 0, pos.y) * 2.5
+	var rotated_relative_pos: Vector3 = rotation_basis * original_relative_pos
+	new_item.position = rotated_relative_pos
+	
+	new_item.set_meta("item_name", item_data.name)
+	new_item.set_meta("item_pos", pos)
+	new_item.add_to_group("items")
+	gpu_ink_circle.add_child(new_item)
+	item_amount += 1
 
 func start_ritual(_category: int) -> void:
 	if not summoned == null: print("existing summon"); return
@@ -268,27 +288,27 @@ func compare_color_dicts(colors: Dictionary, color_rec: Dictionary) -> bool:
 
 	return true
 	
-func place_loot(loot: Array[String]) -> void:
+func place_loot(loot: Array) -> void:
 	var count: int = loot.size()
-	var radius := 0.5
+	if count == 0:
+		return
+	const BASE_SCALE: float = 0.1 
+	var radius: float = BASE_SCALE * sqrt(max(0.0, count - 1))
 	var angle_diff: float = TAU / float(count)
+
 	for i in range(count):
-		var item: Item = GameData.items_data[loot[i]]
-		if not item: print("missing loot item")
+		var item_name: String = loot[i]
+		
+		var item: Item = GameData.items_data.get(item_name) 
+		if not item:
+			print("Missing loot item for name: ", item_name)
 		else:
 			var angle: float = angle_diff * i
 			var x_offset: float = radius * cos(angle)
 			var z_offset: float = radius * sin(angle)
-			var item_position := Vector3(
-				x_offset, 0.0, z_offset)
-
-			var new_item: Node3D = item.model.instantiate()
-			new_item.position = item_position
-			new_item.add_to_group("items")
-			new_item.set_meta("item_name", item.name)
-			gpu_ink_circle.add_child(new_item)
-			item_amount += 1
-
+			print(Vector2(x_offset, z_offset))
+			place_item(Vector2(x_offset, z_offset), item)
+	
 func clear_items() -> void:
 	for item in gpu_ink_circle.get_children():
 		if item.is_in_group("items"):
@@ -305,10 +325,8 @@ func release_summon() -> void:
 func kill_summon() -> void:
 	#gpu_ink_circle.save_small_image()
 	if summoned:
-		print("loot: ", GameData.summons_data[summoned.data.name].loot)
-		place_loot(["meat"])
-		#TODO: add_to_invetory(.data.loot.pick_random()])
-		#place_loot(GameData.summons_data[summoned.name].loot, summoned.position)
+		print("loot: ", summoned.data.loot)
+		place_loot(summoned.data.loot)
 	release_summon()
 
 func _on_return_b_pressed() -> void:
@@ -324,6 +342,7 @@ func _on_spell_chanted(spell: String) -> void:
 		"kill": kill_summon()
 		"release": release_summon()
 		"clear": clean_texture()
+		"debug": place_loot(["candles"])
 		_: prints("the spell", spell.to_upper(), "is unknown in", 
 		get_tree().get_current_scene())
 

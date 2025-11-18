@@ -8,9 +8,9 @@ enum MODES {SUMMON, SUMMON_SPELLS, ROOM_SPELLS, CHALKBOARD, FLOOR, STUDY}
 
 var pages: Dictionary = {
 	MODES.SUMMON : ["Terra Vinculum", "Astralis Vinculum", "Infernum Vinculum", "",
-					 "Evoco Vos", "", "kill", "release"],
+					 "Evoco Vos", "", "kill", "release", "debug"],
 	MODES.SUMMON_SPELLS : [],
-	MODES.ROOM_SPELLS : ["clear"],
+	MODES.ROOM_SPELLS : ["clear", "debug"],
 	MODES.CHALKBOARD : ["reset"],
 	MODES.FLOOR: ["clear ink", "clear pins", "save"],
 	MODES.STUDY: []
