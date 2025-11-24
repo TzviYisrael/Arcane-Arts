@@ -1,0 +1,5 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bvgtyp828xg6w"]
+
+[resource]
+resource_name = "gradient-palette"
+cull_mode = 2

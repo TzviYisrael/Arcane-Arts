@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://7pu63q5tg1ef"]
+
+[ext_resource type="Script" uid="uid://bgya1q628fxdq" path="res://Scripts/new_main_roon_structure.gd" id="1_bcool"]
+[ext_resource type="PackedScene" uid="uid://co75emskv5jqq" path="res://Assets/models/new_main_room_floor_and_coll.gltf" id="1_d0fj2"]
+[ext_resource type="PackedScene" uid="uid://vqp8wtmgrxoy" path="res://Assets/models/new_main_room_walls.gltf" id="2_tssr5"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ibfp5"]
+sky_top_color = Color(0.2129679, 0.67689914, 0.7589825, 1)
+sky_curve = 0.038822465
+ground_bottom_color = Color(0.549589, 0.75706834, 0.3509812, 1)
+ground_energy_multiplier = 0.45
+
+[sub_resource type="Sky" id="Sky_tssr5"]
+sky_material = SubResource("ProceduralSkyMaterial_ibfp5")
+
+[sub_resource type="Environment" id="Environment_81txx"]
+background_mode = 2
+sky = SubResource("Sky_tssr5")
+ambient_light_color = Color(0.69135684, 0.6913568, 0.69135684, 1)
+ambient_light_sky_contribution = 0.3
+ambient_light_energy = 0.0
+tonemap_mode = 3
+tonemap_exposure = 1.35
+tonemap_white = 2.62
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.1
+
+[node name="main_roon_structure" type="Node3D"]
+script = ExtResource("1_bcool")
+
+[node name="new_main_room_floor_and_coll" parent="." instance=ExtResource("1_d0fj2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="new_main_room_walls" parent="." instance=ExtResource("2_tssr5")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="SpotLight" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.747215, 32.217033, -5.340236e-07)
+light_energy = 30.0
+shadow_enabled = true
+spot_range = 59.215935
+
+[node name="roomLight1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.415295, 8.058266, 11.71034)
+light_color = Color(0.97, 0.79831, 0.3977, 1)
+light_energy = 5.0
+
+[node name="roomLight2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.773247, 8.058266, 10.825319)
+light_color = Color(0.97, 0.79831, 0.3977, 1)
+light_energy = 5.0
+
+[node name="roomLight3" type="OmniLight3D" parent="."]
+transform = Transform3D(0.20425688, -0.9789173, 0, 0.9789173, 0.20425688, 0, 0, 0, 1, 25.909313, 8.058266, 5.921838)
+light_color = Color(0.97, 0.79831, 0.3977, 1)
+light_energy = 5.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_81txx")
