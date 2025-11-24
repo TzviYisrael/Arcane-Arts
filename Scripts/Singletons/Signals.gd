@@ -12,4 +12,6 @@ signal item_moved(item: Item)
 
 signal book_changed
 signal change_notebook_page(page: String)
-signal view_angle_changed(angle: float)
+
+signal rotate_camera(angle: float)
+signal camera_position_changed(camera_position: Vector3)

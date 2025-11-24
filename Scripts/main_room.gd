@@ -14,10 +14,12 @@ var input_coll_saver: Node3D = null
 var drag: bool = false
 var scene_path_to_enter: String = ""
 
+
 @onready var root: Node3D = $"."
 @onready var summoning_floor: StaticBody3D = $NavigationRegion3D/summoning_floor
 @onready var smoke_puff: GPUParticles3D = $NavigationRegion3D/summoning_floor/smoke_puff
-@onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
+#@onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
+#@onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 @onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
@@ -39,7 +41,7 @@ func _ready() -> void:
 	mage.model.rotation = SceneManager.mage_rot
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	
-	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
+	#Signals.emit_signal("view_angle_changed",camera_3d.global_position)
 	
 	state = states.ROOM
 	if TextureManager.ink_circle:
@@ -75,7 +77,7 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
 		#set input_coll_saver to random node so it will not register as press
-		input_coll_saver = camera_spring_arm 
+		input_coll_saver = mage 
 		rotate_camera(-event.screen_relative.x / 10)
 
 	if event is InputEventScreenTouch:
@@ -110,7 +112,7 @@ func _handle_release_at(pos: Vector2) -> void:
 			Signals.emit_signal("walk_destination", coll_pos)
 	else:
 		scene_path_to_enter = ""
-		if input_coll_saver != camera_spring_arm:
+		if input_coll_saver != mage:
 			Signals.emit_signal("walk_destination", coll_pos)
 
 func get_camera_ray_collider(pos: Vector2) -> Array:
@@ -129,8 +131,9 @@ func get_camera_ray_collider(pos: Vector2) -> Array:
 		return [null, null]
 
 func rotate_camera(deg: float) -> void:
-	camera_spring_arm.rotate_y(deg_to_rad(deg))
-	Signals.emit_signal("view_angle_changed",-camera_spring_arm.rotation.y + PI)
+	#camera_spring_arm.rotate_y(deg_to_rad(deg))
+	Signals.emit_signal("rotate_camera",deg_to_rad(deg))
+	
 
 func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)

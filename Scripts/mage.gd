@@ -17,6 +17,8 @@ extends CharacterBody3D
  
 @onready var gpu_particles_3d: GPUParticles3D = $Rig/GPUParticles3D
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
+@onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
+@onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
 
 var target_rotation_y: float = -1.0 
 
@@ -24,6 +26,7 @@ func _ready() -> void:
 	Signals.connect("spell_chanted", emit_spell)
 	Signals.connect("mage_look", look)
 	Signals.connect("walk_destination", set_walk_destination)
+	Signals.connect("rotate_camera", rotate_camera)
 	SceneManager.set_mage(self)
 
 func _physics_process(delta: float) -> void:
@@ -74,6 +77,10 @@ func set_walk_destination(dest: Vector3) -> void:
 
 func set_rotation_smooth(new_yaw_radians: float) -> void:
 	target_rotation_y = new_yaw_radians
+
+func rotate_camera(angle: float) -> void:
+	camera_spring_arm.rotate_y(angle)
+	Signals.emit_signal("camera_position_changed",camera_3d.global_position)
 
 func look(pos: Vector3) -> void:
 	var target_direction: Vector3 = pos - global_position
