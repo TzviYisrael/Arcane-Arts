@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://o3b6bwfk3vo7"
-path="res://.godot/imported/new_main_room.glb-b11bbc837d1a010226eb432b7ed30b7c.scn"
+uid="uid://bq6ujfuwvlooq"
+path="res://.godot/imported/drawing_desk.gltf-d3967eedbeb87316e9208616d1f8d695.scn"
 
 [deps]
 
-source_file="res://Assets/models/new_main_room.glb"
-dest_files=["res://.godot/imported/new_main_room.glb-b11bbc837d1a010226eb432b7ed30b7c.scn"]
+source_file="res://Assets/models/drawing_desk.gltf"
+dest_files=["res://.godot/imported/drawing_desk.gltf-d3967eedbeb87316e9208616d1f8d695.scn"]
 
 [params]
 
@@ -39,14 +39,9 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "materials": {
-"floor": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://Assets/models/floor.tres",
-"use_external/path": "uid://kalepq4bhqrq"
-},
 "gradient-palette": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://Assets/models/gradient-palette.tres",
+"use_external/fallback_path": "res://Assets/models/small-gradient-palette.tres",
 "use_external/path": "uid://bvgtyp828xg6w"
 }
 }

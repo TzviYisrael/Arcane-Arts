@@ -37,6 +37,7 @@ func _physics_process(delta: float) -> void:
 	
 	if not navigation_agent_3d.is_navigation_finished():
 		velocity = movement_direction * speed
+		Signals.emit_signal("camera_position_changed",camera_3d.global_position)
 	else:
 		velocity = lerp(velocity, Vector3.ZERO, delta * 8.0)
 		

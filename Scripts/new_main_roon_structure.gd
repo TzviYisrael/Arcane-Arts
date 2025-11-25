@@ -13,6 +13,14 @@ func show_all_walls() -> void:
 		walls[i].show()
 
 func hide_walls_by_distance(camera_pos: Vector3) -> void:
+	var _str: String = ""
 	for i in walls.size():
-		var dis: float = camera_pos.distance_to(walls[i].position)
-		walls[i].visible = dis > hide_distance
+		var wall_pos: Vector3 = walls[i].position
+		var dis: float = Vector2(camera_pos.x, camera_pos.z).	distance_to(
+			Vector2(wall_pos.x, wall_pos.z))
+		if dis > hide_distance:
+			walls[i].visible = true
+		else:
+			walls[i].visible = false
+		_str = walls[0].name + " " + str(dis) + " " + str(walls[0].visible)
+	print(_str)

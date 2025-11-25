@@ -121,10 +121,10 @@ notebook_page = 2
 navigation_mesh = SubResource("NavigationMesh_cw24y")
 
 [node name="main_roon_structure" parent="NavigationRegion3D" instance=ExtResource("10_aorri")]
-hide_distance = 11.0
+hide_distance = 3.0
 
 [node name="work_desk" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("6_8147l")]
-transform = Transform3D(-0.670141, 0, 0.742233, 0, 1, 0, -0.742233, 0, -0.670141, 6.628, 0.353, -6.178)
+transform = Transform3D(-0.85895026, 0, 0.51205784, 0, 1, 0, -0.51205784, 0, -0.85895026, 21.548271, 0.353, -16.179176)
 metadata/scene_path = "res://Scenes/drawing_desk_2D.tscn"
 
 [node name="summoning_floor" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("7_v1qvw")]
@@ -150,7 +150,7 @@ process_material = SubResource("ParticleProcessMaterial_dxdgq")
 draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [node name="bookcase" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("14_xqkij")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -6.78215, 0, 7.00986)
+transform = Transform3D(0.5987024, 0, 0.800972, 0, 1, 0, -0.800972, 0, 0.5987024, 14.077815, 0, -15.625825)
 metadata/scene_path = "res://Scenes/study_desk_2D.tscn"
 
 [node name="Mage" parent="." instance=ExtResource("3_6mt2a")]

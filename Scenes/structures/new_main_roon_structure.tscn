@@ -43,16 +43,19 @@ spot_range = 59.215935
 
 [node name="roomLight1" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.415295, 8.058266, 11.71034)
+visible = false
 light_color = Color(0.97, 0.79831, 0.3977, 1)
 light_energy = 5.0
 
 [node name="roomLight2" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.773247, 8.058266, 10.825319)
+visible = false
 light_color = Color(0.97, 0.79831, 0.3977, 1)
 light_energy = 5.0
 
 [node name="roomLight3" type="OmniLight3D" parent="."]
 transform = Transform3D(0.20425688, -0.9789173, 0, 0.9789173, 0.20425688, 0, 0, 0, 1, 25.909313, 8.058266, 5.921838)
+visible = false
 light_color = Color(0.97, 0.79831, 0.3977, 1)
 light_energy = 5.0
 

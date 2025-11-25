@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://eyxu78xewiuj"]
 
-[ext_resource type="PackedScene" uid="uid://c6mqsdc4o5ku1" path="res://Assets/models/drawing_desk.glb" id="1_y4lli"]
+[ext_resource type="PackedScene" uid="uid://bq6ujfuwvlooq" path="res://Assets/models/drawing_desk.gltf" id="1_27wsv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0c4bl"]
 size = Vector3(3.20471, 3.43322, 2.03116)
@@ -14,7 +14,7 @@ metadata/scene_path = "res://Scenes/drawing_room.tscn"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0105591, 0.838654, -0.000137329)
 shape = SubResource("BoxShape3D_0c4bl")
 
-[node name="model" parent="." instance=ExtResource("1_y4lli")]
+[node name="model" parent="." instance=ExtResource("1_27wsv")]
 
 [node name="chalk" type="Sprite3D" parent="."]
 transform = Transform3D(0.32, 0, 0, 0, 0.218786, -0.233522, 0, 0.233522, 0.218786, 0, 1.9058, -0.00678161)
