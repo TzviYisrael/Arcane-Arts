@@ -12,7 +12,6 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0,
 				1
 			]
 		}
@@ -20,25 +19,17 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"main_structure-colonly",
-			"rotation":[
-				0,
-				0.060378383845090866,
-				0,
-				0.9981755614280701
-			],
-			"scale":[
-				2.7684311866760254,
-				2.7684311866760254,
-				2.7684311866760254
-			],
+			"name":"main_structure_floor-colonly",
 			"translation":[
 				0,
-				0.006718829739838839,
+				0.002426944673061371,
 				0
 			]
 		},
 		{
+			"children":[
+				0
+			],
 			"mesh":1,
 			"name":"main_structure_floor",
 			"rotation":[
@@ -83,7 +74,7 @@
 	],
 	"meshes":[
 		{
-			"name":"room.001",
+			"name":"main_structure_floor_cm",
 			"primitives":[
 				{
 					"attributes":{
@@ -96,7 +87,7 @@
 			]
 		},
 		{
-			"name":"room.003",
+			"name":"main_structure_floor_mesh",
 			"primitives":[
 				{
 					"attributes":{
@@ -145,15 +136,15 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":704,
+			"count":164,
 			"max":[
 				4.058253288269043,
-				1.4448614120483398,
-				2.349703788757324
+				0.6076463460922241,
+				2.252790927886963
 			],
 			"min":[
 				-1.2424046993255615,
-				-0.03907138109207153,
+				-0.02974616549909115,
 				-2.4914534091949463
 			],
 			"type":"VEC3"
@@ -161,19 +152,19 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":704,
+			"count":164,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":704,
+			"count":164,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1290,
+			"count":348,
 			"type":"SCALAR"
 		},
 		{
@@ -248,74 +239,74 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":8448,
+			"byteLength":1968,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8448,
-			"byteOffset":8448,
+			"byteLength":1968,
+			"byteOffset":1968,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5632,
-			"byteOffset":16896,
+			"byteLength":1312,
+			"byteOffset":3936,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2580,
-			"byteOffset":22528,
+			"byteLength":696,
+			"byteOffset":5248,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":11004,
-			"byteOffset":25108,
+			"byteOffset":5944,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":11004,
-			"byteOffset":36112,
+			"byteOffset":16948,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":7336,
-			"byteOffset":47116,
+			"byteOffset":27952,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":3258,
-			"byteOffset":54452,
+			"byteOffset":35288,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":2556,
-			"byteOffset":57712,
+			"byteOffset":38548,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2556,
-			"byteOffset":60268,
+			"byteOffset":41104,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1704,
-			"byteOffset":62824,
+			"byteOffset":43660,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":738,
-			"byteOffset":64528,
+			"byteOffset":45364,
 			"target":34963
 		}
 	],
@@ -327,7 +318,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":65268,
+			"byteLength":46104,
 			"uri":"new_main_room_floor_and_coll.bin"
 		}
 	]

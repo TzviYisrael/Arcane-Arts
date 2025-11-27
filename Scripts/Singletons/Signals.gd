@@ -14,4 +14,4 @@ signal book_changed
 signal change_notebook_page(page: String)
 
 signal rotate_camera(angle: float)
-signal camera_position_changed(camera_position: Vector3)
+signal hide_wall(wall: Node3D)

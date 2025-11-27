@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://7pu63q5tg1ef"]
 
 [ext_resource type="Script" uid="uid://bgya1q628fxdq" path="res://Scripts/new_main_roon_structure.gd" id="1_bcool"]
-[ext_resource type="PackedScene" uid="uid://co75emskv5jqq" path="res://Assets/models/new_main_room_floor_and_coll.gltf" id="1_d0fj2"]
+[ext_resource type="PackedScene" uid="uid://co75emskv5jqq" path="res://Assets/models/new_main_room_floor.gltf" id="2_d0fj2"]
 [ext_resource type="PackedScene" uid="uid://vqp8wtmgrxoy" path="res://Assets/models/new_main_room_walls.gltf" id="2_tssr5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ibfp5"]
@@ -29,7 +29,7 @@ adjustment_saturation = 1.1
 [node name="main_roon_structure" type="Node3D"]
 script = ExtResource("1_bcool")
 
-[node name="new_main_room_floor_and_coll" parent="." instance=ExtResource("1_d0fj2")]
+[node name="new_main_room_floor" parent="." instance=ExtResource("2_d0fj2")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 
 [node name="new_main_room_walls" parent="." instance=ExtResource("2_tssr5")]

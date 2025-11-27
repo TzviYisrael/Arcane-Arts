@@ -19,6 +19,7 @@ extends CharacterBody3D
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 @onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
+@onready var camera_ray_cast: RayCast3D = $camera_spring_arm/RayCast3D
 
 var target_rotation_y: float = -1.0 
 
@@ -81,7 +82,11 @@ func set_rotation_smooth(new_yaw_radians: float) -> void:
 
 func rotate_camera(angle: float) -> void:
 	camera_spring_arm.rotate_y(angle)
-	Signals.emit_signal("camera_position_changed",camera_3d.global_position)
+	var collider: Object = camera_ray_cast.get_collider()
+	if collider and collider.name.begins_with("wall"):
+		Signals.emit_signal("hide_wall", collider.get_parent())
+	else:
+		Signals.emit_signal("hide_wall", null)
 
 func look(pos: Vector3) -> void:
 	var target_direction: Vector3 = pos - global_position

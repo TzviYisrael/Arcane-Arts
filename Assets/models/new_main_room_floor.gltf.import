@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://co75emskv5jqq"
-path="res://.godot/imported/new_main_room_floor_and_coll.gltf-02bc5e7a8dacce5e2a5570f79ff581f5.scn"
+path="res://.godot/imported/new_main_room_floor.gltf-01af7af5bec274583db32809d1a87034.scn"
 
 [deps]
 
-source_file="res://Assets/models/new_main_room_floor_and_coll.gltf"
-dest_files=["res://.godot/imported/new_main_room_floor_and_coll.gltf-02bc5e7a8dacce5e2a5570f79ff581f5.scn"]
+source_file="res://Assets/models/new_main_room_floor.gltf"
+dest_files=["res://.godot/imported/new_main_room_floor.gltf-01af7af5bec274583db32809d1a87034.scn"]
 
 [params]
 
