@@ -1,5 +1,6 @@
 {
 	"asset":{
+		"copyright":"tzbd",
 		"generator":"Khronos glTF Blender I/O v4.5.49",
 		"version":"2.0"
 	},
@@ -74,8 +75,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"gradient-palette",
-			"uri":"gradient-palette.png"
+			"name":"small-gradient-palette",
+			"uri":"small-gradient-palette.png"
 		}
 	],
 	"accessors":[
@@ -119,7 +120,7 @@
 			"count":66,
 			"max":[
 				4.07149600982666,
-				0.7916943430900574,
+				0.7335719466209412,
 				2.5989186763763428
 			],
 			"min":[

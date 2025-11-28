@@ -38,7 +38,7 @@ func _physics_process(delta: float) -> void:
 	
 	if not navigation_agent_3d.is_navigation_finished():
 		velocity = movement_direction * speed
-		Signals.emit_signal("camera_position_changed",camera_3d.global_position)
+		rotate_camera(0.0)
 	else:
 		velocity = lerp(velocity, Vector3.ZERO, delta * 8.0)
 		
@@ -82,6 +82,7 @@ func set_rotation_smooth(new_yaw_radians: float) -> void:
 
 func rotate_camera(angle: float) -> void:
 	camera_spring_arm.rotate_y(angle)
+	camera_ray_cast.target_position = camera_ray_cast.to_local(global_position)
 	var collider: Object = camera_ray_cast.get_collider()
 	if collider and collider.name.begins_with("wall"):
 		Signals.emit_signal("hide_wall", collider.get_parent())

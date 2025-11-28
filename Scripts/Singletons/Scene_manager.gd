@@ -5,7 +5,7 @@ var invantory: Dictionary[String, int]
 
 #main room
 var mage: Node
-var mage_pos: Vector3 = Vector3(7.733, 0.192, 0.802)
+var mage_pos: Vector3 = Vector3(10, 0.192, -5)
 var mage_rot: Vector3 = Vector3(0.0, 0.0, 0.0)
 
 var placed_item: Dictionary[Vector2, Item]

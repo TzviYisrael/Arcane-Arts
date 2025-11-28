@@ -16,7 +16,6 @@ func show_all_walls() -> void:
 		walls[i].show()
 
 func hide_wall(wall: Node3D) -> void:
-	print(wall)
 	if not wall:
 		if hidden_wall:
 			hidden_wall.visible = true
