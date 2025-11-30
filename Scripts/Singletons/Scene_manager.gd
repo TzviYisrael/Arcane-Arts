@@ -3,10 +3,14 @@ extends Node
 #global
 var invantory: Dictionary[String, int]
 
+#mage
+var camera_rot:= Vector3(-30.0, 0.0, 0.0)
+
 #main room
 var mage: Node
-var mage_pos: Vector3 = Vector3(10, 0.192, -5)
-var mage_rot: Vector3 = Vector3(0.0, 0.0, 0.0)
+var mage_pos := Vector3(10, 0.192, -5)
+var mage_rot := Vector3(0.0, 0.0, 0.0)
+
 
 var placed_item: Dictionary[Vector2, Item]
 

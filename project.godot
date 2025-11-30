@@ -100,6 +100,11 @@ attack={
 pointing/android/enable_pan_and_scale_gestures=true
 pointing/emulate_touch_from_mouse=true
 
+[layer_names]
+
+3d_physics/layer_1="globals"
+3d_physics/layer_2="walls"
+
 [rendering]
 
 renderer/rendering_method="mobile"

@@ -29,6 +29,8 @@ func _ready() -> void:
 	Signals.connect("walk_destination", set_walk_destination)
 	Signals.connect("rotate_camera", rotate_camera)
 	SceneManager.set_mage(self)
+	
+	camera_spring_arm.rotation_degrees = SceneManager.camera_rot
 
 func _physics_process(delta: float) -> void:
 	var destination: Vector3 = navigation_agent_3d.get_next_path_position()
@@ -82,6 +84,7 @@ func set_rotation_smooth(new_yaw_radians: float) -> void:
 
 func rotate_camera(angle: float) -> void:
 	camera_spring_arm.rotate_y(angle)
+	SceneManager.camera_rot = camera_spring_arm.rotation_degrees
 	camera_ray_cast.target_position = camera_ray_cast.to_local(global_position)
 	var collider: Object = camera_ray_cast.get_collider()
 	if collider and collider.name.begins_with("wall"):

@@ -19,12 +19,15 @@ func hide_wall(wall: Node3D) -> void:
 	if not wall:
 		if hidden_wall:
 			hidden_wall.visible = true
+			hidden_wall.process_mode = Node.PROCESS_MODE_INHERIT
 			hidden_wall = null
 	else:
 		if hidden_wall:
 			hidden_wall.visible = true
+			hidden_wall.process_mode = Node.PROCESS_MODE_INHERIT
 		hidden_wall = wall
 		hidden_wall.visible = false
+		hidden_wall.process_mode = Node.PROCESS_MODE_DISABLED
 		
 	
 		

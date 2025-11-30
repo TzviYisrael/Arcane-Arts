@@ -1,0 +1,26 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cg84l5ewch13l"]
+
+[ext_resource type="Texture2D" uid="uid://tec1xofhpx5k" path="res://Assets/models/small-gradient-palette.png" id="1_6b3ij"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6b3ij"]
+render_priority = 1
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.21321136, 0.3319496, 1, 1)
+grow = true
+grow_amount = 0.1
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+metadata/_stencil_owned = true
+
+[resource]
+resource_name = "gradient-palette"
+next_pass = SubResource("StandardMaterial3D_6b3ij")
+cull_mode = 2
+shading_mode = 0
+albedo_texture = ExtResource("1_6b3ij")
+stencil_mode = 1
+stencil_flags = 2
+stencil_color = Color(0.21321136, 0.3319496, 1, 1)
+stencil_outline_thickness = 0.1

@@ -8,18 +8,16 @@ const RAYCAST_MAX_D = 1000
 var summoned: Node3D
 
 var item_amount: int = 0
-#@export var item: Item
 
+## to check for taps instead of drags, this var save the coll at the start of a input
 var input_coll_saver: Node3D = null
 var drag: bool = false
 var scene_path_to_enter: String = ""
 
 
 @onready var root: Node3D = $"."
-@onready var summoning_floor: StaticBody3D = $NavigationRegion3D/summoning_floor
+@onready var summoning_floor: Node3D = $NavigationRegion3D/summoning_floor
 @onready var smoke_puff: GPUParticles3D = $NavigationRegion3D/summoning_floor/smoke_puff
-#@onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
-#@onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 @onready var gpu_ink_circle: Sprite3D = $NavigationRegion3D/summoning_floor/gpu_ink_circle
 @onready var work_desk: StaticBody3D = $NavigationRegion3D/work_desk
 
@@ -90,11 +88,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _handle_release_at(pos: Vector2) -> void:
 	var ret_arr: Array = get_camera_ray_collider(pos)
-	if ret_arr[0] == null:
+	if  ret_arr[0] == null:
 		return
 	var coll_pos: Vector3 = ret_arr[0]
 	var coll: Node = ret_arr[1]
-	#print("coll owner:",coll.owner)
+	#print("coll ",coll.name)
 	if coll and coll.owner.is_in_group("items"):
 		if not coll.owner.has_meta("item_name"): printerr("missing item_name metadata")
 		var item_name: String = coll.owner.get_meta("item_name")
@@ -103,13 +101,13 @@ func _handle_release_at(pos: Vector2) -> void:
 		SceneManager.placed_item.erase(coll.owner.get_meta("item_pos"))
 		coll.owner.queue_free()
 	elif coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
-		var path: String = coll.get_meta("scene_path")
-		scene_path_to_enter = path
-		if path == "summon_floor":
-			Signals.emit_signal("walk_destination", 
-				summoning_floor.mage_circle.global_position)
-		else:
-			Signals.emit_signal("walk_destination", coll_pos)
+		scene_path_to_enter = coll.get_meta("scene_path")
+		Signals.emit_signal("walk_destination", coll_pos)
+	elif coll and coll == input_coll_saver and \
+	 coll.owner.has_meta("scene_path") and \
+	 coll.owner.get_meta("scene_path") == "summon_floor":
+		Signals.emit_signal("walk_destination", 
+			summoning_floor.get_child(1).global_position)
 	else:
 		scene_path_to_enter = ""
 		if input_coll_saver != mage:
@@ -120,6 +118,7 @@ func get_camera_ray_collider(pos: Vector2) -> Array:
 	var start: Vector3 = get_viewport().get_camera_3d().project_ray_origin(pos)
 	var end: Vector3 = get_viewport().get_camera_3d().project_position(pos, RAYCAST_MAX_D)
 	var params := PhysicsRayQueryParameters3D.new()
+	#params.exclude = 
 	params.from = start
 	params.to = end
 
@@ -134,7 +133,6 @@ func rotate_camera(deg: float) -> void:
 	#camera_spring_arm.rotate_y(deg_to_rad(deg))
 	Signals.emit_signal("rotate_camera",deg_to_rad(deg))
 	
-
 func destination_reached() -> void:
 	#print("destination reached: ", scene_path_to_enter)
 	if scene_path_to_enter == "summon_floor":
