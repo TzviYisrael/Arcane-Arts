@@ -6,20 +6,17 @@ extends Control
 @onready var mystic: GridContainer = $mystic
 @onready var demonic: GridContainer = $demonic
 
+@export var Inventory_item_slot_scene: PackedScene
+
 func _ready() -> void:
 	for item_key: String in GameData.items_data.keys():
 		var item: Item = GameData.items_data[item_key]
-		var button := Button.new()
-		button.text = item.name
-		button.custom_minimum_size = Vector2(150, 150)
-		button.connect("button_down", item_botton_pressed.bind(item))
+		var new_slot: Control = Inventory_item_slot_scene.instantiate()
 		match item.origin:
 			0:
-				natural.add_child(button)
+				natural.add_child(new_slot)
 			1:
-				mystic.add_child(button)
+				mystic.add_child(new_slot)
 			2:
-				demonic.add_child(button)
-
-func item_botton_pressed(item: Item) -> void:
-	Signals.emit_signal("item_moved", item)
+				demonic.add_child(new_slot)
+		new_slot.init_item(item)

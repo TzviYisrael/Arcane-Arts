@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var mp := 100
 
 
-@export var speed := 5.0
+@export var speed := 8.0
 @export var acceleration := 5.0
 @export var rot_speed := 8.0 # Increased rotation speed for smooth turning
 
@@ -19,7 +19,8 @@ extends CharacterBody3D
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 @onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
-@onready var camera_ray_cast: RayCast3D = $camera_spring_arm/RayCast3D
+@onready var camera_shape_cast: ShapeCast3D = $camera_spring_arm/Camera3D/ShapeCast3D 
+var camera_last_angle: float = 0.0
 
 var target_rotation_y: float = -1.0 
 
@@ -30,7 +31,7 @@ func _ready() -> void:
 	Signals.connect("rotate_camera", rotate_camera)
 	SceneManager.set_mage(self)
 	
-	camera_spring_arm.rotation_degrees = SceneManager.camera_rot
+	camera_spring_arm.rotation_degrees = SceneManager.camera_rot_deg
 
 func _physics_process(delta: float) -> void:
 	var destination: Vector3 = navigation_agent_3d.get_next_path_position()
@@ -84,13 +85,16 @@ func set_rotation_smooth(new_yaw_radians: float) -> void:
 
 func rotate_camera(angle: float) -> void:
 	camera_spring_arm.rotate_y(angle)
-	SceneManager.camera_rot = camera_spring_arm.rotation_degrees
-	camera_ray_cast.target_position = camera_ray_cast.to_local(global_position)
-	var collider: Object = camera_ray_cast.get_collider()
-	if collider and collider.name.begins_with("wall"):
-		Signals.emit_signal("hide_wall", collider.get_parent())
-	else:
+	SceneManager.camera_rot_deg = camera_spring_arm.rotation_degrees
+	#camera_shape_cast.target_position = camera_ray_cast.to_local(global_position)
+	if abs(camera_last_angle - SceneManager.camera_rot_deg.y) > 15:
+		#prints("show walls!", abs(camera_last_angle - SceneManager.camera_rot_deg.y))
 		Signals.emit_signal("hide_wall", null)
+		camera_last_angle = SceneManager.camera_rot_deg.y
+	for i: int in camera_shape_cast.get_collision_count():
+		var collider: Object = camera_shape_cast.get_collider(i)
+		if collider and collider.name.begins_with("wall"):
+			Signals.emit_signal("hide_wall", collider.get_parent())
 
 func look(pos: Vector3) -> void:
 	var target_direction: Vector3 = pos - global_position

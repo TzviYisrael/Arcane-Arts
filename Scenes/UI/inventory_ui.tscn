@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b24nj3tpx2id6"]
+[gd_scene load_steps=5 format=3 uid="uid://b24nj3tpx2id6"]
 
-[ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="1_xcphp"]
-[ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/item_stack.gd" id="2_t0hs8"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="1_sfqc8"]
+[ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="2_kyjlm"]
+[ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/UI/inventory_ui.gd" id="3_sxwjb"]
+[ext_resource type="PackedScene" uid="uid://br7k0438vwgh4" path="res://Scenes/UI/inventory_item_slot.tscn" id="4_dpv37"]
 
-[node name="item stack" type="Control"]
+[node name="inventory_ui" type="Control"]
 clip_contents = true
 custom_minimum_size = Vector2(500, 1080)
 layout_mode = 3
@@ -15,6 +17,7 @@ offset_right = 550.0
 offset_bottom = 50.0
 grow_vertical = 2
 mouse_filter = 1
+theme = ExtResource("1_sfqc8")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -27,7 +30,7 @@ mouse_filter = 1
 
 [node name="background" type="Sprite2D" parent="Control"]
 scale = Vector2(1.19326, 1.77124)
-texture = ExtResource("1_xcphp")
+texture = ExtResource("2_kyjlm")
 centered = false
 
 [node name="title" type="Label" parent="Control"]
@@ -56,18 +59,22 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 30
 tab_alignment = 1
 current_tab = 0
-script = ExtResource("2_t0hs8")
+script = ExtResource("3_sxwjb")
+Inventory_item_slot_scene = ExtResource("4_dpv37")
 
 [node name="natural" type="GridContainer" parent="Control/type_tabs"]
 layout_mode = 2
+columns = 3
 metadata/_tab_index = 0
 
 [node name="mystic" type="GridContainer" parent="Control/type_tabs"]
 visible = false
 layout_mode = 2
+columns = 3
 metadata/_tab_index = 1
 
 [node name="demonic" type="GridContainer" parent="Control/type_tabs"]
 visible = false
 layout_mode = 2
+columns = 3
 metadata/_tab_index = 2

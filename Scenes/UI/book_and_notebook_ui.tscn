@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://d1pcsiccnkvw7"]
 
-[ext_resource type="Script" uid="uid://ckmj2c0falhe1" path="res://Scripts/book_and__notebook_ui.gd" id="1_k4ecw"]
+[ext_resource type="Script" uid="uid://ckmj2c0falhe1" path="res://Scripts/UI/book_and__notebook_ui.gd" id="1_k4ecw"]
 [ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/UI/notebook.tscn" id="1_ryrls"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/UI/Book.tscn" id="2_k4ecw"]
-[ext_resource type="PackedScene" uid="uid://b24nj3tpx2id6" path="res://Scenes/UI/item_stack.tscn" id="3_a5tbx"]
+[ext_resource type="PackedScene" uid="uid://b24nj3tpx2id6" path="res://Scenes/UI/inventory_ui.tscn" id="3_a5tbx"]
 [ext_resource type="Texture2D" uid="uid://fj4xp1cjlwe2" path="res://Assets/ui/button_icons/book2.png" id="4_qpobx"]
 [ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="5_4npfs"]
 [ext_resource type="Texture2D" uid="uid://bx4oc1lowodab" path="res://Assets/ui/button_icons/cupboard.png" id="5_a5tbx"]
@@ -28,7 +28,7 @@ layout_mode = 1
 offset_left = 175.0
 offset_right = 675.0
 
-[node name="item stack" parent="." instance=ExtResource("3_a5tbx")]
+[node name="inventory_ui" parent="." instance=ExtResource("3_a5tbx")]
 visible = false
 layout_mode = 1
 

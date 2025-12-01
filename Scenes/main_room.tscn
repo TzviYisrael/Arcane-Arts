@@ -128,7 +128,6 @@ navigation_mesh = SubResource("NavigationMesh_cw24y")
 hide_distance = 3.0
 
 [node name="summoning_floor" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("5_aorri")]
-metadata/scene_path = "summon_floor"
 
 [node name="gpu_ink_circle" parent="NavigationRegion3D/summoning_floor" instance=ExtResource("7_xqkij")]
 process_mode = 4
@@ -149,12 +148,11 @@ process_material = SubResource("ParticleProcessMaterial_dxdgq")
 draw_pass_1 = SubResource("QuadMesh_xqkij")
 
 [node name="work_desk" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("6_8147l")]
-transform = Transform3D(-0.85895026, 0, 0.51205784, 0, 1, 0, -0.51205784, 0, -0.85895026, 21.548271, 0.353, -16.179176)
+transform = Transform3D(-0.85895026, 0, 0.51205784, 0, 1, 0, -0.51205784, 0, -0.85895026, 21.548271, 0.8329449, -16.179176)
 metadata/scene_path = "res://Scenes/drawing_desk_2D.tscn"
 
 [node name="bookcase" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("14_xqkij")]
-transform = Transform3D(0.5987024, 0, 0.800972, 0, 1, 0, -0.800972, 0, 0.5987024, 14.077815, 0, -15.625825)
-metadata/scene_path = "res://Scenes/study_desk_2D.tscn"
+transform = Transform3D(0.5987024, 0, 0.800972, 0, 1, 0, -0.800972, 0, 0.5987024, 14.077815, 0, -15.625826)
 
 [node name="summoning_floor_old" parent="NavigationRegion3D" groups=["tap_to_enter"] instance=ExtResource("7_v1qvw")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -0.519, 0.066, -0.268)

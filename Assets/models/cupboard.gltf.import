@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cmyxftbnhkevp"
-path="res://.godot/imported/new_summon_platform.gltf-ef5bf7ecf240c7bdf840df5ca67c1ebf.scn"
+uid="uid://bx8fs124eubxq"
+path="res://.godot/imported/cupboard.gltf-097f220c30b07e0dc74c510d7f906d9c.scn"
 
 [deps]
 
-source_file="res://Assets/models/new_summon_platform.gltf"
-dest_files=["res://.godot/imported/new_summon_platform.gltf-ef5bf7ecf240c7bdf840df5ca67c1ebf.scn"]
+source_file="res://Assets/models/cupboard.gltf"
+dest_files=["res://.godot/imported/cupboard.gltf-097f220c30b07e0dc74c510d7f906d9c.scn"]
 
 [params]
 

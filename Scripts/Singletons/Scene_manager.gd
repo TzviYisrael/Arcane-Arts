@@ -4,7 +4,7 @@ extends Node
 var invantory: Dictionary[String, int]
 
 #mage
-var camera_rot:= Vector3(-30.0, 0.0, 0.0)
+var camera_rot_deg:= Vector3(-30.0, 0.0, 0.0)
 
 #main room
 var mage: Node

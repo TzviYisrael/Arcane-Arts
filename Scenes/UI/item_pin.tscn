@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://3tkmsmvy5kqa"]
 
 [ext_resource type="Texture2D" uid="uid://dwtlrxnppvq1q" path="res://Assets/ui/button_icons/ring.png" id="1_kbldc"]
-[ext_resource type="Script" uid="uid://w83yj3k7i434" path="res://Scripts/item_pin.gd" id="1_ljbdq"]
+[ext_resource type="Script" uid="uid://w83yj3k7i434" path="res://Scripts/UI/item_pin.gd" id="1_ljbdq"]
 
 [node name="item_pin" type="Node2D"]
 script = ExtResource("1_ljbdq")

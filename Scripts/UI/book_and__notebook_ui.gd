@@ -7,7 +7,7 @@ extends Control
 @onready var notebook: Control = $notebook
 @onready var notebook_button: Button = $notebook_button
 
-@onready var item_list: Control = $"item stack"
+@onready var item_list: Control = $inventory_ui
 @onready var item_list_button: Button = $items_button
 
 @export_enum("summon", "summon_spells",

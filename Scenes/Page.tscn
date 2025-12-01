@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dyspm3hy6o2oi"]
 
-[ext_resource type="Script" uid="uid://04oopq8uqonj" path="res://Scripts/Page.gd" id="2"]
+[ext_resource type="Script" uid="uid://04oopq8uqonj" path="res://Scripts/UI/Page.gd" id="2"]
 [ext_resource type="FontFile" uid="uid://bi2qn46sg7rk1" path="res://Assets/fonts/Sniglet-Regular.ttf" id="2_hfk0q"]
 [ext_resource type="Texture2D" uid="uid://ihjbova3o54r" path="res://GameData/ink.png" id="3_7ls5m"]
 

@@ -47,7 +47,7 @@ func set_page(p: int = page) -> void:
 			button.icon = icon
 			button.expand_icon = true
 			button.flat = true
-			button.add_theme_font_size_override("font_size", 30)
+			button.add_theme_font_size_override("font_size", 45)
 			button.add_theme_color_override("font_color", Color.BLACK)
 			#button.connect("pressed", 
 				#get_tree().get_current_scene()._on_spell_chanted.bind(spl))

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://th7jt0wnioms" path="res://Assets/textures/point.png" id="3_65hgv"]
 
 [node name="summoning_floor_3D" type="Node3D"]
-metadata/scene_path = ""
+metadata/scene_path = "summon_floor"
 
 [node name="summon_platform" parent="." instance=ExtResource("1_k1jgx")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)

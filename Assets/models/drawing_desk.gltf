@@ -69,7 +69,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":478,
+			"count":191,
 			"max":[
 				1.5825214385986328,
 				3.4244251251220703,
@@ -85,13 +85,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":478,
+			"count":191,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":478,
+			"count":191,
 			"type":"VEC2"
 		},
 		{
@@ -104,26 +104,26 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":5736,
+			"byteLength":2292,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5736,
-			"byteOffset":5736,
+			"byteLength":2292,
+			"byteOffset":2292,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3824,
-			"byteOffset":11472,
+			"byteLength":1528,
+			"byteOffset":4584,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1824,
-			"byteOffset":15296,
+			"byteOffset":6112,
 			"target":34963
 		}
 	],
@@ -135,7 +135,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":17120,
+			"byteLength":7936,
 			"uri":"drawing_desk.bin"
 		}
 	]

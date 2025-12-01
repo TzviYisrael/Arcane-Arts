@@ -37,6 +37,7 @@ func _ready() -> void:
 	
 	mage.position = SceneManager.mage_pos
 	mage.model.rotation = SceneManager.mage_rot
+	rotate_camera(0)
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	
 	#Signals.emit_signal("view_angle_changed",camera_3d.global_position)
@@ -106,6 +107,7 @@ func _handle_release_at(pos: Vector2) -> void:
 	elif coll and coll == input_coll_saver and \
 	 coll.owner.has_meta("scene_path") and \
 	 coll.owner.get_meta("scene_path") == "summon_floor":
+		scene_path_to_enter = "summon_floor"
 		Signals.emit_signal("walk_destination", 
 			summoning_floor.get_child(1).global_position)
 	else:
@@ -130,7 +132,6 @@ func get_camera_ray_collider(pos: Vector2) -> Array:
 		return [null, null]
 
 func rotate_camera(deg: float) -> void:
-	#camera_spring_arm.rotate_y(deg_to_rad(deg))
 	Signals.emit_signal("rotate_camera",deg_to_rad(deg))
 	
 func destination_reached() -> void:
@@ -170,7 +171,7 @@ func walk_and_place_items() -> void:
 		item_amount += 1
 		
 	Signals.emit_signal("walk_destination", 
-		summoning_floor.mage_circle.global_position)
+		summoning_floor.get_child(1).global_position)
 	await mage.navigation_agent_3d.navigation_finished
 	mage.navigation_agent_3d.navigation_finished.connect(destination_reached)
 	Signals.emit_signal("mage_look", gpu_ink_circle.global_position)
