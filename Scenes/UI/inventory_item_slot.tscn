@@ -25,8 +25,15 @@ mouse_filter = 2
 texture = ExtResource("1_hglio")
 expand_mode = 4
 
-[node name="Label" type="Label" parent="."]
+[node name="NameLabel" type="Label" parent="."]
 layout_mode = 2
 size_flags_vertical = 8
+
+[node name="AmountLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "5"
+horizontal_alignment = 2
 
 [connection signal="button_down" from="Button" to="." method="item_botton_pressed"]

@@ -33,6 +33,8 @@ enum tools{HAND, CIRCLE, LINE}
 @export_enum("hand", "circle", "line") var tool: int = 1
 
 func _ready() -> void:
+	SceneManager.current_room = SceneManager.DRAWING_DESK
+	
 	Signals.connect("spell_chanted", _on_spell_chanted)
 
 	
@@ -46,8 +48,8 @@ func _ready() -> void:
 	
 	points_texture = load("res://Assets/textures/point.png")
 	
-	if TextureManager.chalk_line_2d:
-		saved_texture.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
+	if SceneManager.chalk_line_2d:
+		saved_texture.texture = ImageTexture.create_from_image(SceneManager.chalk_line_2d)
 	
 	tool = SceneManager.drawing_desk_current_tool
 	set_tool_icon()
@@ -183,8 +185,8 @@ func save_to_disk() -> void:
 
 func save_to_tex_mem() -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
-	TextureManager.chalk_line_2d = img
-	TextureManager.chalk_line = Ink_circle.resize_image(img, TextureManager.resize_factor)
+	SceneManager.chalk_line_2d = img
+	SceneManager.chalk_line = Ink_circle.resize_image(img, SceneManager.resize_factor)
 	guide_drawer.clear()
 
 func _on_tool_pressed() -> void:
@@ -201,8 +203,8 @@ func _on_move_to_floor_pressed() -> void:
 	save_and_change_scene("res://Scenes/summoning_floor_2D.tscn")
 
 func reset() -> void:
-	TextureManager.chalk_line_2d = null
-	TextureManager.chalk_line = null
+	SceneManager.chalk_line_2d = null
+	SceneManager.chalk_line = null
 	sub_viewport.render_target_clear_mode = SubViewport.ClearMode.CLEAR_MODE_ONCE
 	guide_drawer.clear()
 	get_tree().reload_current_scene()

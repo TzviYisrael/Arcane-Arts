@@ -2,7 +2,7 @@ extends Node2D
 
 @export var item: Item
 
-@onready var icon: Sprite2D = $icon
+@onready var icon: TextureRect = $icon
 
 func _ready() -> void:
 	icon.texture = item.icon
@@ -15,6 +15,7 @@ func _draw() -> void:
 
 
 func _on_button_button_down() -> void:
+	#print(get_meta("placement"))
+	SceneManager.placed_item.erase(get_meta("placement"))
 	Signals.emit_signal("item_moved", item)
-	SceneManager.placed_item.erase(position)
 	queue_free()

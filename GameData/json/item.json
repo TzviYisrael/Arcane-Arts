@@ -3,42 +3,42 @@
 	"origin": "0",
 	"icon": "leaves.png",
 	"color": "#008000",
-	"model": "leaves.glb"
+	"model": "leaves.gltf"
   },
   "heart": {
 	"origin": "2",
 	"icon": "heart.png",
 	"color": "#ff0011",
-	"model": "heart.glb"
+	"model": "heart.gltf"
   },
   "salt": {
 	"origin": "0",
 	"icon": "salt.png",
 	"color": "#ffffdd",
-	"model": "salt.glb"
+	"model": "salt.gltf"
   },
   "nails": {
 	"origin": "0",
 	"icon": "nails.png",
 	"color": "#acacba",
-	"model": "nails.glb"
+	"model": "nails.gltf"
   },
   "bones": {
 	"origin": "0",
 	"icon": "bones.png",
 	"color": "#ffeeee",
-	"model": "bones.glb"
+	"model": "bones.gltf"
   },
   "candles": {
 	"origin": "1",
 	"icon": "candles.png",
 	"color": "#fffb00",
-	"model": "candles.glb"
+	"model": "candles.gltf"
   },
   "meat": {
 	"origin": "0",
 	"icon": "meat.png",
 	"color": "#ffbbbb",
-	"model": "meat.glb"
+	"model": "meat.gltf"
   }
 }

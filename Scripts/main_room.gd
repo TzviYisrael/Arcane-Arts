@@ -30,6 +30,8 @@ var colors_to_count: Dictionary[Color, bool] = {}
 var max_green: int = 0
 
 func _ready() -> void:
+	SceneManager.current_room = SceneManager.MAIN
+	
 	gpu_ink_circle.process_mode = Node.PROCESS_MODE_INHERIT
 	Signals.connect("start_ritual", start_ritual)
 	Signals.connect("breach", breach)
@@ -43,12 +45,12 @@ func _ready() -> void:
 	#Signals.emit_signal("view_angle_changed",camera_3d.global_position)
 	
 	state = states.ROOM
-	if TextureManager.ink_circle:
-		var ink := ImageTexture.create_from_image(TextureManager.ink_circle)
+	if SceneManager.ink_circle:
+		var ink := ImageTexture.create_from_image(SceneManager.ink_circle)
 		gpu_ink_circle.set_ca_texture(ink)
 	
-	if TextureManager.chalk_line:
-		var chalk := ImageTexture.create_from_image(TextureManager.chalk_line)
+	if SceneManager.chalk_line:
+		var chalk := ImageTexture.create_from_image(SceneManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
 	
 	#if SceneManager.current_book:
@@ -97,8 +99,9 @@ func _handle_release_at(pos: Vector2) -> void:
 	if coll and coll.owner.is_in_group("items"):
 		if not coll.owner.has_meta("item_name"): printerr("missing item_name metadata")
 		var item_name: String = coll.owner.get_meta("item_name")
-		if not SceneManager.invantory.has(item_name): printerr("missing key in invantory")
-		SceneManager.invantory[item_name] += 1
+		if not SceneManager.inventory.has(item_name): printerr("missing key in inventory")
+		Signals.emit_signal("add_to_inventory", item_name, +1)
+		#SceneManager.inventory[item_name] += 1
 		SceneManager.placed_item.erase(coll.owner.get_meta("item_pos"))
 		coll.owner.queue_free()
 	elif coll and coll.is_in_group("tap_to_enter") and coll == input_coll_saver:
@@ -198,7 +201,7 @@ func place_item(pos: Vector2, item_data: Item) -> void:
 
 func start_ritual(_category: int) -> void:
 	if not summoned == null: print("existing summon"); return
-	if not TextureManager.ink_circle: print("no circle"); return
+	if not SceneManager.ink_circle: print("no circle"); return
 	if not state == states.RITUAL_READY: print("wrong state"); return
 	mage.anim_state.travel("summon")
 	
@@ -244,6 +247,7 @@ func summon() -> void:
 			SummonData.CATEGORY.DEMON:
 				scene = load("res://Scenes/summons/demon.tscn")
 				
+		Signals.emit_signal("summon_effect")
 		answering_summon = scene.instantiate()
 		answering_summon.data = GameData.summons_data[select_summoned]
 		print("fight!")
@@ -308,7 +312,7 @@ func place_loot(loot: Array) -> void:
 			var angle: float = angle_diff * i
 			var x_offset: float = radius * cos(angle)
 			var z_offset: float = radius * sin(angle)
-			print(Vector2(x_offset, z_offset))
+			#print(Vector2(x_offset, z_offset))
 			place_item(Vector2(x_offset, z_offset), item)
 	
 func clear_items() -> void:
@@ -344,7 +348,7 @@ func _on_spell_chanted(spell: String) -> void:
 		"kill": kill_summon()
 		"release": release_summon()
 		"clear": clean_texture()
-		"debug": place_loot(["candles"])
+		"debug": Signals.emit_signal("summon_effect")
 		_: prints("the spell", spell.to_upper(), "is unknown in", 
 		get_tree().get_current_scene())
 

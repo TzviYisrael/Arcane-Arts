@@ -89,7 +89,7 @@ func load_items_from_json(path: String) -> Dictionary:
 		
 		items[item_name] = item
 		
-		SceneManager.invantory[item_name] = 0
+		SceneManager.inventory[item_name] = 0
 	return items
 
 ## Loads summon data from a JSON file and returns a dictionary of SummonData resources.

@@ -1,11 +1,11 @@
 [gd_resource type="Theme" load_steps=3 format=3 uid="uid://uew3hho53u71"]
 
-[ext_resource type="FontFile" uid="uid://dl8v6xqeop83a" path="res://Assets/fonts/BluuNext-Bold.otf" id="1_kr0ko"]
+[ext_resource type="FontFile" uid="uid://dl8v6xqeop83a" path="res://Assets/fonts/BluuNext-Bold.otf" id="1_rpavn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jug7t"]
 
 [resource]
-default_font = ExtResource("1_kr0ko")
+default_font = ExtResource("1_rpavn")
 default_font_size = 50
 Button/font_sizes/font_size = 25
 Button/styles/focus = SubResource("StyleBoxEmpty_jug7t")

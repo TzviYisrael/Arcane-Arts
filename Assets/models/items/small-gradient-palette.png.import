@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4hafg52tvpk4"
-path.s3tc="res://.godot/imported/floor_tex.png-030671f18cfe9d81814cedf7ad88198a.s3tc.ctex"
-path.etc2="res://.godot/imported/floor_tex.png-030671f18cfe9d81814cedf7ad88198a.etc2.ctex"
+uid="uid://j0uh3py83ajs"
+path.s3tc="res://.godot/imported/small-gradient-palette.png-1df16f70e1bfecefa26b50d244e770ff.s3tc.ctex"
+path.etc2="res://.godot/imported/small-gradient-palette.png-1df16f70e1bfecefa26b50d244e770ff.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/models/floor_tex.png"
-dest_files=["res://.godot/imported/floor_tex.png-030671f18cfe9d81814cedf7ad88198a.s3tc.ctex", "res://.godot/imported/floor_tex.png-030671f18cfe9d81814cedf7ad88198a.etc2.ctex"]
+source_file="res://Assets/models/items/small-gradient-palette.png"
+dest_files=["res://.godot/imported/small-gradient-palette.png-1df16f70e1bfecefa26b50d244e770ff.s3tc.ctex", "res://.godot/imported/small-gradient-palette.png-1df16f70e1bfecefa26b50d244e770ff.etc2.ctex"]
 
 [params]
 

@@ -239,7 +239,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 	var summon_color := Color.RED
 	
 	if img == null:
-		TextureManager.surface_pos = []
+		SceneManager.surface_pos = []
 	
 	var buffer: Image = img.duplicate()
 	var width: float = img.get_width()
@@ -252,7 +252,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 	var is_in_border := func borders(v: Vector2) -> bool: 
 		return center.distance_to(v) <= radius - 0.5
 
-	if TextureManager.surface_pos.is_empty():
+	if SceneManager.surface_pos.is_empty():
 		for y in range(height):
 			for x in range(width):
 				if not compare_rgb(buffer.get_pixel(x, y), Color.BLACK):
@@ -261,12 +261,12 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			 		Vector2(x, y - 1), Vector2(x, y + 1)].filter(is_in_border).map(buffer.get_pixelv)
 				#prints(x, y, nei, Color.RED in nei, Color.GREEN in nei)
 				if portal_color in nei or outside_color in nei or summon_color in nei:
-						TextureManager.surface_pos.append(Vector2(x, y))
+						SceneManager.surface_pos.append(Vector2(x, y))
 				
-		return not TextureManager.surface_pos.is_empty()
+		return not SceneManager.surface_pos.is_empty()
 	
 	else:
-		for p in TextureManager.surface_pos:
+		for p in SceneManager.surface_pos:
 			var x: float = p.x
 			var y: float = p.y
 			var p_color: Color = buffer.get_pixelv(p)
@@ -303,7 +303,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			
 		
 		var new_surface_pos: Array[Vector2] = []
-		for p in TextureManager.surface_pos:
+		for p in SceneManager.surface_pos:
 			var x: float = p.x
 			var y: float = p.y
 			if compare_rgb(img.get_pixelv(p), Color.BLACK):
@@ -316,13 +316,13 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 					if not n in new_surface_pos: new_surface_pos.append(n)
 
 		if new_surface_pos.is_empty():
-			TextureManager.surface_pos = []
+			SceneManager.surface_pos = []
 			return changed
 		else:
-			#for p in TextureManager.surface_pos:
+			#for p in SceneManager.surface_pos:
 				#img.set_pixelv(p, img.get_pixelv(p).blend(Color(0.627451, 0.12549, 0.941176, 0.75)))
-			TextureManager.surface_pos = new_surface_pos
-			#print("surface_pos size: ", TextureManager.surface_pos.size())
+			SceneManager.surface_pos = new_surface_pos
+			#print("surface_pos size: ", SceneManager.surface_pos.size())
 			Signals.emit_signal("add_summon_power", power)
 			#power = 0
 			return changed

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://djbfbqqr220rv" path="res://Scripts/drawing_desk_2D.gd" id="1_h044k"]
 [ext_resource type="Texture2D" uid="uid://d3ogl5qqw2d5o" path="res://Assets/textures/grunge-style-blackboard-texture.jpg" id="2_o82lr"]
 [ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/UI/touch_controls.tscn" id="3_cvmnq"]
-[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="4_4bnpw"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/main_theme.tres" id="4_4bnpw"]
 [ext_resource type="Texture2D" uid="uid://cpmf3fw8q2nn3" path="res://Assets/ui/button_icons/drawing_tools.png" id="5_4bnpw"]
 [ext_resource type="Texture2D" uid="uid://cqekf328f7243" path="res://Assets/ui/button_icons/room.png" id="5_cvmnq"]
 [ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/UI/book_and_notebook_ui.tscn" id="5_h044k"]

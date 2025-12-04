@@ -28,6 +28,8 @@ enum tools{HAND, INK, COVER}
 const TEXTURE_SIZE := Vector2(2024, 2024)
 
 func _ready() -> void:
+	SceneManager.current_room = SceneManager.SUMMON_FLOOR
+	
 	Signals.connect("spell_chanted", _on_spell_chanted)
 	Signals.connect("item_moved", _on_item_moved)
 	
@@ -40,15 +42,15 @@ func _ready() -> void:
 	
 	camera.position = Vector2.ZERO
 	
-	if TextureManager.chalk_line_2d:
-		chalk_lines.texture = ImageTexture.create_from_image(TextureManager.chalk_line_2d)
+	if SceneManager.chalk_line_2d:
+		chalk_lines.texture = ImageTexture.create_from_image(SceneManager.chalk_line_2d)
 		Renderer.material.set_shader_parameter("chalk_lines", chalk_lines.texture)
 		Renderer.material.set_shader_parameter("is_chalk", true)
 	else:
 		Renderer.material.set_shader_parameter("is_chalk", false)
 
-	if TextureManager.ink_circle_2d:
-		set_ca_texture(ImageTexture.create_from_image(TextureManager.ink_circle_2d))
+	if SceneManager.ink_circle_2d:
+		set_ca_texture(ImageTexture.create_from_image(SceneManager.ink_circle_2d))
 	
 	
 	brush_slider.value = SceneManager.summoning_floor_brush_size
@@ -149,6 +151,7 @@ func add_item_pin(pos: Vector2, item: Item) -> bool:
 	
 	# Normalize positions from -half_size <-> half_size to -1 <-> 1
 	var normalized_pos: Vector2 = pos / half_size
+	new_item.set_meta("placement", normalized_pos)
 	SceneManager.placed_item[normalized_pos] = new_item.item
 	
 	ink_viewer.add_child(new_item)
@@ -170,15 +173,16 @@ func save_to_disk() -> void:
 	var save_path:String = "res://GameData/ink.png"
 	var img : Image = ink_viewer.texture.get_image()
 	print("saving... ", img)
-	img = TextureManager.chalk_line_2d
-	img = Ink_circle.resize_image(img, TextureManager.resize_factor)
+	img = SceneManager.chalk_line_2d
+	img = SceneManager.resize_image(img, SceneManager.resize_factor)
 	img.save_png(save_path)
 	
 func save_to_TextureManager()  -> void:
 	var img : Image = ink_viewer.texture.get_image()
-	#img = Ink_circle.mask_image(img, TextureManager.chalk_line_2d)
-	TextureManager.ink_circle_2d = img
-	TextureManager.ink_circle = Ink_circle.resize_image(img, TextureManager.resize_factor)
+	#img = Ink_circle.mask_image(img, SceneManager.chalk_line_2d)
+	SceneManager.ink_circle_2d = img
+	SceneManager.ink_circle = SceneManager.resize_image(img,
+	 	SceneManager.resize_factor)
 
 func _on_tool_pressed() -> void:
 	tool = (tool + 1) % tools.size()
@@ -196,8 +200,8 @@ func _on_move_to_desk_pressed() -> void:
 	save_and_change_scene("res://Scenes/drawing_desk_2D.tscn")
 
 func clear_ink() -> void:
-	TextureManager.ink_circle_2d = null
-	TextureManager.ink_circle = null
+	SceneManager.ink_circle_2d = null
+	SceneManager.ink_circle = null
 	
 	var img := Image.create(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
@@ -234,10 +238,13 @@ func _on_item_moved(item: Item) -> void:
 	tool = tools.HAND
 	var atlas_icon := tools_button.icon as AtlasTexture
 	atlas_icon.region.position.x = 0
-	
+	if item_pin_ghost:
+		item_pin_ghost.queue_free()
+
 	item_pin_ghost = item_pin_scene.instantiate()
 	item_pin_ghost.item = item
 	item_pin_ghost.position = camera.get_screen_center_position()
+	item_pin_ghost.modulate = Color(2.385, 2.385, 2.385, 0.463)
 	add_child(item_pin_ghost)
 
 func save_and_change_scene(scene_path: String) -> void:

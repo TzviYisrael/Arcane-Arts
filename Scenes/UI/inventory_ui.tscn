@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b24nj3tpx2id6"]
 
-[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/new_theme.tres" id="1_sfqc8"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/main_theme.tres" id="1_sfqc8"]
 [ext_resource type="Texture2D" uid="uid://bqiwdwjpy2sef" path="res://Assets/textures/scroll.jpg" id="2_kyjlm"]
 [ext_resource type="Script" uid="uid://i4hejvv15eg6" path="res://Scripts/UI/inventory_ui.gd" id="3_sxwjb"]
 [ext_resource type="PackedScene" uid="uid://br7k0438vwgh4" path="res://Scenes/UI/inventory_item_slot.tscn" id="4_dpv37"]
@@ -60,7 +60,7 @@ theme_override_font_sizes/font_size = 30
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("3_sxwjb")
-Inventory_item_slot_scene = ExtResource("4_dpv37")
+inventory_item_slot_scene = ExtResource("4_dpv37")
 
 [node name="natural" type="GridContainer" parent="Control/type_tabs"]
 layout_mode = 2

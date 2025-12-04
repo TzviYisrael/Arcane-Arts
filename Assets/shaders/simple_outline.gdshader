@@ -8,6 +8,7 @@ uniform vec3 edge_color : source_color = vec3(0.);
 uniform float fade_start : hint_range(1.0, 1000.0, 0.1) = 100.0;
 uniform float fade_length : hint_range(1.0, 1000.0, 0.1) = 200.0;
 
+
 void fragment() {
 	// Setup step parameters
 	vec2 step_length = 1.0 / VIEWPORT_SIZE * thickness;

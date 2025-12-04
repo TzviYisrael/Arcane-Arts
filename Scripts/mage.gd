@@ -17,10 +17,14 @@ extends CharacterBody3D
  
 @onready var gpu_particles_3d: GPUParticles3D = $Rig/GPUParticles3D
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
+
 @onready var camera_spring_arm: SpringArm3D = $camera_spring_arm
 @onready var camera_3d: Camera3D = $camera_spring_arm/Camera3D
 @onready var camera_shape_cast: ShapeCast3D = $camera_spring_arm/Camera3D/ShapeCast3D 
 var camera_last_angle: float = 0.0
+
+@onready var shader_mesh: MeshInstance3D = $camera_spring_arm/Camera3D/shader_mesh
+
 
 var target_rotation_y: float = -1.0 
 
@@ -29,7 +33,10 @@ func _ready() -> void:
 	Signals.connect("mage_look", look)
 	Signals.connect("walk_destination", set_walk_destination)
 	Signals.connect("rotate_camera", rotate_camera)
+	Signals.connect("summon_effect", summon_effect)
 	SceneManager.set_mage(self)
+	
+	shader_mesh.mesh.material.set_shader_parameter("summon_effect", 1.0)
 	
 	camera_spring_arm.rotation_degrees = SceneManager.camera_rot_deg
 
@@ -101,6 +108,21 @@ func look(pos: Vector3) -> void:
 	var target_yaw: float = atan2(target_direction.x, target_direction.z) + PI
 	
 	set_rotation_smooth(target_yaw)
+	
+func summon_effect() -> void:
+	var material: ShaderMaterial = shader_mesh.mesh.material
+	
+	var tween := create_tween()
+	tween.tween_property(
+		material, 
+		"shader_parameter/summon_effect", 
+		0.0, 0.6 # Duration in seconds
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD) 
+	tween.chain().tween_property(
+		material, 
+		"shader_parameter/summon_effect", 
+		1.0,0.01
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 
 func emit_spell(spell: String) -> void:
 	anim_state.travel("summon")
