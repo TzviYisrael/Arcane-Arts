@@ -2,6 +2,7 @@ extends Node
 
 # Define the save file path, now pointing to a resource file
 const SAVE_FILE_PATH: String = "user://savegame.res"
+const DEFAULT_SAVE_FILE_PATH: String = "res://GameData/resources/default_save.tres"
 
 # --- Global & Dynamic Data ---
 
@@ -78,11 +79,6 @@ func _byte_array_to_image(bytes: PackedByteArray) -> Image:
 
 ## Saves the game state to the SaveData resource file.
 func save_game() -> Error:
-	## Use ResourceLoader to get the script, then instantiate it
-	#var SaveDataScript = load("res://SaveData.gd")
-	#if SaveDataScript == null:
-		#push_error("SaveData.gd script not found. Make sure it's in the project root.")
-		#return ERR_CANT_OPEN
 
 	var save_data: SaveData = SaveData.new()
 
@@ -127,13 +123,24 @@ func save_game() -> Error:
 	return error
 
 ## Loads game data from the SaveData resource file and restores state.
-func load_game() -> Error:
-	if not ResourceLoader.exists(SAVE_FILE_PATH):
-		print("No save file found at: " + SAVE_FILE_PATH)
-		return ERR_FILE_NOT_FOUND
+## must run after the GameData parser
+func load_save_file() -> Error:
+	var path_to_load: String = SAVE_FILE_PATH
+	var save_found: bool = ResourceLoader.exists(SAVE_FILE_PATH)
+
+	# 1. Determine which path to load
+	if not save_found:
+		if ResourceLoader.exists(DEFAULT_SAVE_FILE_PATH):
+			path_to_load = DEFAULT_SAVE_FILE_PATH
+			print("No user save file found. Loading default save resource.")
+		else:
+			print("No save file found and default save is missing. Using initial SceneManager values.")
+			# Returns OK because we are successfully using the initial state (the script's var definitions)
+			return OK
+	else: print("loading user save file")
 
 	# 1. Load the resource
-	var save_data: SaveData = ResourceLoader.load(SAVE_FILE_PATH) as SaveData
+	var save_data: SaveData = ResourceLoader.load(path_to_load) as SaveData
 	if not save_data:
 		push_error("Failed to load save data resource.")
 		return ERR_CANT_OPEN
@@ -141,8 +148,12 @@ func load_game() -> Error:
 	# 2. Copy state from Resource back to SceneManager
 	
 	# Global
-	inventory = save_data.inventory
-
+	for item_name: String in GameData.items_data.keys():
+		if save_data.inventory.has(item_name):
+			inventory[item_name] = save_data.inventory[item_name]
+		else: inventory[item_name] = 0
+	
+	
 	# Mage
 	camera_rot_deg = save_data.camera_rot_deg
 
@@ -152,12 +163,12 @@ func load_game() -> Error:
 
 	# Restore placed_item
 	placed_item.clear()
-	for item_data in save_data.placed_item_data:
-		var pos: Vector2 = item_data.get("pos")
-		var item_name: String = item_data.get("item_name")
+	for item_dict in save_data.placed_item_data:
+		var pos: Vector2 = item_dict.get("pos")
+		var item_name: String = item_dict.get("item_name")
 		
 		if pos is Vector2 and item_name is String:
-			placed_item[pos] = GameData[item_name]
+			placed_item[pos] = GameData.items_data[item_name]
 
 	# Drawing Desk
 	drawing_desk_current_tool = save_data.drawing_desk_current_tool
@@ -181,9 +192,7 @@ func load_game() -> Error:
 	chalk_line_2d = _byte_array_to_image(save_data.chalk_line_2d_data)
 	ink_circle_2d = _byte_array_to_image(save_data.ink_circle_2d_data)
 	
-	# It's good practice to free resources that are only temporarily loaded
-	save_data.free()
-		
+
 	print("Game loaded successfully.")
 	return OK
 
@@ -191,13 +200,15 @@ func load_game() -> Error:
 
 func _ready() -> void:
 	Signals.connect("save_game", save_game)
+	Signals.connect("reload_save_file", load_save_file)
 	# Attempt to load game data when the SceneManager is ready
-	load_game()
+	await Signals.static_data_loaded
+	load_save_file()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		print("saving...")
-		save_game() # Call the save function
+		save_game()
 		get_tree().quit()
 	#elif what == NOTIFICATION_DISABLED:
 		## Also good practice to save when the application is requested to quit

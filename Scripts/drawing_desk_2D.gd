@@ -183,7 +183,7 @@ func save_to_disk() -> void:
 	
 	guide_drawer.clear()
 
-func save_to_tex_mem() -> void:
+func sync_textures() -> void:
 	var img : Image = Ink_circle.crop_image_to_circle(guide_viewer.texture.get_image(), 1.0)
 	SceneManager.chalk_line_2d = img
 	SceneManager.chalk_line = Ink_circle.resize_image(img, SceneManager.resize_factor)
@@ -194,7 +194,7 @@ func _on_tool_pressed() -> void:
 	set_tool_icon()
 	
 func _on_save_pressed() -> void:
-	save_to_tex_mem()
+	sync_textures()
 	
 func _on_return_pressed() -> void:
 	save_and_change_scene("res://Scenes/main_room.tscn")
@@ -216,7 +216,8 @@ func _on_spell_chanted(spell: String) -> void:
 		get_tree().get_current_scene())
 
 func save_and_change_scene(scene_path: String) -> void:
-	save_to_tex_mem()
+	sync_textures()
 	SceneManager.drawing_desk_current_tool = tool
 	
+	Signals.emit_signal("save_game")
 	get_tree().change_scene_to_file(scene_path)

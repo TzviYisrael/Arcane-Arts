@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SaveData" load_steps=2 format=3 uid="uid://btbfgqrs35oi6"]
+
+[ext_resource type="Script" uid="uid://c5vq8bssanp1d" path="res://Scripts/Resources/save_data.gd" id="1_bvvie"]
+
+[resource]
+script = ExtResource("1_bvvie")
+inventory = Dictionary[String, int]({
+"candles": 2,
+"leaves": 4
+})
+chalk_line_data = null
+ink_circle_data = null
+chalk_line_2d_data = null
+ink_circle_2d_data = null
+metadata/_custom_type_script = "uid://c5vq8bssanp1d"

@@ -1,5 +1,7 @@
 extends Node
+signal static_data_loaded
 signal save_game
+signal reload_save_file
 
 signal start_ritual
 signal summon_effect

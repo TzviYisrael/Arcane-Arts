@@ -177,7 +177,7 @@ func save_to_disk() -> void:
 	img = SceneManager.resize_image(img, SceneManager.resize_factor)
 	img.save_png(save_path)
 	
-func save_to_TextureManager()  -> void:
+func sync_textures()  -> void:
 	var img : Image = ink_viewer.texture.get_image()
 	#img = Ink_circle.mask_image(img, SceneManager.chalk_line_2d)
 	SceneManager.ink_circle_2d = img
@@ -190,7 +190,7 @@ func _on_tool_pressed() -> void:
 
 func _on_save_pressed() -> void:
 	#save_to_disk()
-	save_to_TextureManager()
+	sync_textures()
 	reload_scene()
 
 func _on_return_pressed() -> void:
@@ -248,8 +248,9 @@ func _on_item_moved(item: Item) -> void:
 	add_child(item_pin_ghost)
 
 func save_and_change_scene(scene_path: String) -> void:
-	save_to_TextureManager()
-	
+	sync_textures()
 	SceneManager.summoning_floor_current_tool = tool
 	SceneManager.summoning_floor_brush_size = brush_slider.value
+	
+	Signals.emit_signal("save_game")
 	get_tree().change_scene_to_file(scene_path)

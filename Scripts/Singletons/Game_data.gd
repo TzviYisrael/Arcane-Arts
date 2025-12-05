@@ -20,6 +20,7 @@ func _ready() -> void:
 	items_data = load_items_from_json(items_file_path)
 	summons_data = load_summons_from_json(summons_file_path)
 	print("game data loaded...")
+	Signals.emit_signal("static_data_loaded")
 	#print_colors()
 	
 func print_colors() -> void:
@@ -89,7 +90,6 @@ func load_items_from_json(path: String) -> Dictionary:
 		
 		items[item_name] = item
 		
-		SceneManager.inventory[item_name] = 0
 	return items
 
 ## Loads summon data from a JSON file and returns a dictionary of SummonData resources.

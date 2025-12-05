@@ -62,6 +62,7 @@ func _ready() -> void:
 	colors_to_count[Color.GREEN] = true
 	for p in SceneManager.placed_item:
 		colors_to_count[SceneManager.placed_item[p].color] = true
+	print("colors_to_count: ", colors_to_count)
 
 func _process(_delta: float) -> void:
 	if state == states.RITUAL_STARTED || state == states.GRAPPLE:
@@ -218,23 +219,16 @@ func summon() -> void:
 	
 	Signals.emit_signal("summon_particles", gpu_ink_circle.global_position)
 	await get_tree().create_timer(2.0).timeout 
-	
-	#var summons_res: Dictionary = {
-		#"bull": "res://GameData/resources/summons/bull.tres",
-		#"ink_toad": "res://GameData/resources/summons/ink_toad.tres",
-		#"eye_demon": "res://GameData/resources/summons/eye_demon.tres"
-	#}
-	var colors_amount: Dictionary[Color, float]
+	var colors_amounts: Dictionary[Color, float]
 	for color: Color in colors_to_count.keys():
-		colors_amount[color] = await gpu_ink_circle.count_color(color)
-	print("colors ", colors_amount)
+		colors_amounts[color] = await gpu_ink_circle.count_color(color)
+	print("colors ", colors_amounts)
 	GameData.print_colors()
-	#var power: float = color_amount[Color.RED]
-	##var power : float = await gpu_ink_circle.count_color(Color.RED)
-	#prints("power:", power)
+
+
 	var answering_summon : Node3D = null
 	var select_summoned: String = ""
-	select_summoned = select_summon(colors_amount)
+	select_summoned = select_summon(colors_amounts)
 
 	if not select_summoned == "":
 		print("select_summoned: ", select_summoned)
@@ -355,5 +349,5 @@ func _on_spell_chanted(spell: String) -> void:
 func save_and_change_scene(scene_path: String) -> void:
 	SceneManager.mage_pos = mage.position
 	SceneManager.mage_rot = mage.model.rotation
-	
+	Signals.emit_signal("save_game")
 	get_tree().change_scene_to_file(scene_path)
