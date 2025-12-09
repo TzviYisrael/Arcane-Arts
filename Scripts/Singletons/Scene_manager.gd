@@ -52,28 +52,6 @@ func resize_image(image: Image, factor: int) -> Image:
 func set_mage(mage_node: Node) -> void:
 	mage = mage_node
 
-# --- Utility Functions for Image Serialization ---
-
-## Converts an Image object to a PackedByteArray (PNG format) for saving.
-func _image_to_byte_array(image: Image) -> PackedByteArray:
-	if not is_instance_valid(image) or image.is_empty():
-		return PackedByteArray()
-	var bytes := PackedByteArray()
-	# Save as PNG buffer for compression and reliability
-	bytes = image.save_png_to_buffer()
-	return bytes
-
-## Converts a PackedByteArray back to an Image object.
-func _byte_array_to_image(bytes: PackedByteArray) -> Image:
-	if bytes.is_empty():
-		return null
-	var image := Image.new()
-	# Load from the PNG buffer
-	var error: Error = image.load_png_from_buffer(bytes)
-	if error != OK:
-		push_error("Failed to load image from bytes: " + error_string(error))
-		return null
-	return image
 
 # --- Save and Load Functions (Using SaveData Resource) ---
 
@@ -213,3 +191,26 @@ func _notification(what: int) -> void:
 	#elif what == NOTIFICATION_DISABLED:
 		## Also good practice to save when the application is requested to quit
 		#save_game()
+
+# --- Utility Functions for Image Serialization ---
+
+## Converts an Image object to a PackedByteArray (PNG format) for saving.
+func _image_to_byte_array(image: Image) -> PackedByteArray:
+	if not is_instance_valid(image) or image.is_empty():
+		return PackedByteArray()
+	var bytes := PackedByteArray()
+	# Save as PNG buffer for compression and reliability
+	bytes = image.save_png_to_buffer()
+	return bytes
+
+## Converts a PackedByteArray back to an Image object.
+func _byte_array_to_image(bytes: PackedByteArray) -> Image:
+	if bytes.is_empty():
+		return null
+	var image := Image.new()
+	# Load from the PNG buffer
+	var error: Error = image.load_png_from_buffer(bytes)
+	if error != OK:
+		push_error("Failed to load image from bytes: " + error_string(error))
+		return null
+	return image

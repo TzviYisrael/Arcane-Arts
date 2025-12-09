@@ -2,43 +2,57 @@
   "leaves": {
 	"origin": "0",
 	"icon": "leaves.png",
-	"color": "#008000",
-	"model": "leaves.gltf"
+	"color": "#3a892a",
+	"model": "leaves.gltf",
+	"col6": ""
   },
   "heart": {
 	"origin": "2",
 	"icon": "heart.png",
-	"color": "#ff0011",
-	"model": "heart.gltf"
+	"color": "#a00c0c",
+	"model": "heart.gltf",
+	"col6": ""
   },
   "salt": {
 	"origin": "0",
 	"icon": "salt.png",
-	"color": "#ffffdd",
-	"model": "salt.gltf"
+	"color": "#c0dadc",
+	"model": "salt.gltf",
+	"col6": ""
   },
   "nails": {
 	"origin": "0",
 	"icon": "nails.png",
-	"color": "#acacba",
-	"model": "nails.gltf"
+	"color": "#4c6589",
+	"model": "nails.gltf",
+	"col6": ""
   },
   "bones": {
 	"origin": "0",
 	"icon": "bones.png",
-	"color": "#ffeeee",
-	"model": "bones.gltf"
+	"color": "#edd5a5",
+	"model": "bones.gltf",
+	"col6": ""
   },
   "candles": {
 	"origin": "1",
 	"icon": "candles.png",
-	"color": "#fffb00",
-	"model": "candles.gltf"
+	"color": "#ffce3b",
+	"model": "candles.gltf",
+	"col6": ""
   },
   "meat": {
 	"origin": "0",
 	"icon": "meat.png",
-	"color": "#ffbbbb",
-	"model": "meat.gltf"
+	"color": "#d35858",
+	"model": "meat.gltf",
+	"col6": ""
+  },
+  "demon_meat": {
+	"origin": "2",
+	"icon": "demon_meat.png",
+	"color": "#66408d",
+	"model": "demon_meat.gltf",
+	"col6": ""
   }
 }

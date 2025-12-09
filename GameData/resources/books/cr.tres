@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BookContent" load_steps=2 format=3 uid="uid://7wx1r4es8fuq"]
+
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="1_kejim"]
+
+[resource]
+script = ExtResource("1_kejim")
+title = "new book"
+pages = Array[String](["This is the first block of text data. It can contain multiple lines and normal punctuation.[cd=400,400][line(-10,0,10,0)][circle(0,0,200)][dot(20,10,5,#ff0000)][symbol(20,100,s,10,#ffff00)][/cd]This is the final block of text. We can use this to add captions or concluding remarks.", "This is the first block of text data. It can contain multiple lines and normal punctuation.[cd=400,400][line(-10,0,10,0)][circle(0,0,200)][dot(20,10,5,#ff0000)][symbol(0,-100,ϖ,100,#ff0000)][/cd]This is the final block of text. We can use this to add captions or concluding remarks.", "This is the first block of text data. It can contain multiple lines and normal punctuation.[cd=400,400][line(-10,0,10,0)][circle(0,0,200)][dot(20,10,50,#ff0ee0)][symbol(20,100,c,10,#ffff00)][/cd]This is the final block of text. We can use this to add captions or concluding remarks.", "This is the first block of text data. It can contain multiple lines and normal punctuation.[cd=400,400][line(-10,0,10,0)][circle(0,0,200)][dot(20,10,5,#ff0000)][symbol(20,100,o,10,#ffff00)][/cd]This is the final block of text. We can use this to add captions or concluding remarks."])
+metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

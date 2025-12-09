@@ -222,7 +222,6 @@ func summon() -> void:
 	var colors_amounts: Dictionary[Color, float]
 	for color: Color in colors_to_count.keys():
 		colors_amounts[color] = await gpu_ink_circle.count_color(color)
-	print("colors ", colors_amounts)
 	GameData.print_colors()
 
 

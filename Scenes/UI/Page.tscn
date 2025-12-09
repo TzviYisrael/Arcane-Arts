@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3 uid="uid://dyspm3hy6o2oi"]
+
+[ext_resource type="Script" uid="uid://04oopq8uqonj" path="res://Scripts/UI/Page.gd" id="1_vr5tu"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/main_theme.tres" id="2_ddf64"]
+[ext_resource type="PackedScene" uid="uid://bvkl737decxht" path="res://Scenes/UI/circle_diagram.tscn" id="3_ddf64"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_64fw0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_width_right = 10
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vr5tu"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Page" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vr5tu")
+
+[node name="Background" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(400, 600)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.94902, 0.941176, 0.803922, 1)
+
+[node name="Panel" type="Panel" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_64fw0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 19.0
+offset_right = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="content" type="RichTextLabel" parent="Background/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_ddf64")
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+fit_content = true
+
+[node name="Number" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_ddf64")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "- 0 -"
+horizontal_alignment = 1
+
+[node name="CircleDiagram" parent="." instance=ExtResource("3_ddf64")]
+visible = false
+layout_mode = 0
+texture = SubResource("ViewportTexture_vr5tu")

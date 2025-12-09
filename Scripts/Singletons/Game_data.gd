@@ -21,12 +21,10 @@ func _ready() -> void:
 	summons_data = load_summons_from_json(summons_file_path)
 	print("game data loaded...")
 	Signals.emit_signal("static_data_loaded")
-	#print_colors()
-	
+
 func print_colors() -> void:
 	for i: String in summons_data.keys():
 		prints(summons_data[i].name, summons_data[i].colors_rec, summons_data[i].model)
-	
 
 ## Loads items from a JSON file and returns a dictionary of Item resources.
 func load_items_from_json(path: String) -> Dictionary:

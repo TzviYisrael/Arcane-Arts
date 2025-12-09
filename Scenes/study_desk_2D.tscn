@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ch8ll3sslk35x"]
+[gd_scene load_steps=15 format=3 uid="uid://ch8ll3sslk35x"]
 
 [ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="1_gasow"]
 [ext_resource type="Script" uid="uid://dsof7wax16ulh" path="res://Scripts/study_desk_2D.gd" id="1_npo2v"]
@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://ck21f1053jp2x" path="res://GameData/resources/books/Alice_in_wonderland.tres" id="11_r2ocl"]
 [ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="11_wsgvc"]
 [ext_resource type="Resource" uid="uid://gf3kbr2hakl3" path="res://GameData/resources/books/the_greencces_bride.tres" id="12_yk5o7"]
+[ext_resource type="Resource" uid="uid://7wx1r4es8fuq" path="res://GameData/resources/books/cr.tres" id="13_yk5o7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ogdhk"]
 size = Vector2(243, 360)
@@ -122,7 +123,7 @@ texture_normal = ExtResource("7_wsgvc")
 visible = false
 z_index = 1
 layout_mode = 1
-books = Array[ExtResource("8_wsgvc")]([ExtResource("10_yk5o7"), ExtResource("11_r2ocl"), ExtResource("11_wsgvc"), ExtResource("12_yk5o7")])
+books = Array[ExtResource("8_wsgvc")]([ExtResource("10_yk5o7"), ExtResource("11_r2ocl"), ExtResource("11_wsgvc"), ExtResource("12_yk5o7"), ExtResource("13_yk5o7")])
 
 [connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_to_main_pressed"]
 [connection signal="released" from="Control/touch_controls/Book_2D/book_left_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_left_b_released"]
