@@ -1,0 +1,125 @@
+[gd_scene load_steps=9 format=3 uid="uid://ch8ll3sslk35x"]
+
+[ext_resource type="Script" uid="uid://dsof7wax16ulh" path="res://Scripts/2D/study_desk_2D.gd" id="1_poxqt"]
+[ext_resource type="Texture2D" uid="uid://cjk83f6vgiypf" path="res://Assets/textures/wood_floor_worn_diff_4k.jpg" id="2_ojt77"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/main_theme.tres" id="3_3e586"]
+[ext_resource type="PackedScene" uid="uid://lt18vxtt0db8" path="res://Scenes/UI/notebook.tscn" id="4_swvkd"]
+[ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://Scenes/UI/Book.tscn" id="5_2uaqk"]
+[ext_resource type="Texture2D" uid="uid://dxen7mm4sgxh8" path="res://Assets/textures/bookshelf.png" id="6_hw5bg"]
+[ext_resource type="PackedScene" uid="uid://8ojmfyx0m2hp" path="res://Scenes/UI/book_selection_ui.tscn" id="7_vti5h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ogdhk"]
+size = Vector2(243, 360)
+
+[node name="study_desk_2D" type="Node2D"]
+script = ExtResource("1_poxqt")
+
+[node name="background" type="Sprite2D" parent="."]
+z_index = -2
+texture_repeat = 2
+texture = ExtResource("2_ojt77")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2024, 2024)
+
+[node name="Control" type="Control" parent="."]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="touch_controls" type="CanvasLayer" parent="Control"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -118.5
+offset_right = 118.5
+offset_bottom = 202.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_3e586")
+text = "return to the room"
+metadata/_edit_use_anchors_ = true
+
+[node name="notebook" parent="Control/touch_controls" instance=ExtResource("4_swvkd")]
+page = 1
+
+[node name="Book_2D" type="SubViewportContainer" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1220.0
+offset_top = -980.0
+offset_right = -708.0
+offset_bottom = -468.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2, 2)
+mouse_filter = 0
+
+[node name="book_viewport" type="SubViewport" parent="Control/touch_controls/Book_2D"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Book" parent="Control/touch_controls/Book_2D/book_viewport" instance=ExtResource("5_2uaqk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4291, 3.07441, -6.21028)
+
+[node name="book_left_b" type="TouchScreenButton" parent="Control/touch_controls/Book_2D"]
+position = Vector2(140, 270)
+shape = SubResource("RectangleShape2D_ogdhk")
+
+[node name="book_right_b" type="TouchScreenButton" parent="Control/touch_controls/Book_2D"]
+position = Vector2(384, 270)
+shape = SubResource("RectangleShape2D_ogdhk")
+shape_centered = false
+
+[node name="book_b" type="Button" parent="Control/touch_controls"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -176.0
+offset_right = 211.0
+offset_bottom = -126.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "close book
+"
+
+[node name="books_shelf" type="TextureButton" parent="Control/touch_controls"]
+z_index = -1
+custom_minimum_size = Vector2(500, 256)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -500.0
+offset_bottom = 256.0
+grow_horizontal = 0
+mouse_filter = 1
+texture_normal = ExtResource("6_hw5bg")
+
+[node name="book_selection_ui" parent="Control" instance=ExtResource("7_vti5h")]
+visible = false
+z_index = 1
+layout_mode = 1
+
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_to_main_pressed"]
+[connection signal="released" from="Control/touch_controls/Book_2D/book_left_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_left_b_released"]
+[connection signal="released" from="Control/touch_controls/Book_2D/book_right_b" to="Control/touch_controls/Book_2D/book_viewport/Book" method="_on_book_right_b_released"]
+[connection signal="pressed" from="Control/touch_controls/book_b" to="." method="_on_book_b_pressed"]
+[connection signal="pressed" from="Control/touch_controls/books_shelf" to="." method="_on_books_shelf_pressed"]

@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="BookContent" load_steps=2 format=3 uid="uid://daobfsxp66ljh"]
-
-[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="1_1508u"]
-
-[resource]
-script = ExtResource("1_1508u")
-title = "the princces bride"
-pages = Array[String](["case", "the princces bride[br][br]the best movie ever", "hello", "My name is Inigo Montoya.", "You killed my father. ", "Prepare to die.", "the end"])
-metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"

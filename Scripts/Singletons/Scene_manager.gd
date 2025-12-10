@@ -30,7 +30,7 @@ var summoning_floor_current_tool: int = 1
 # UI
 enum {MAIN, SUMMON_FLOOR, DRAWING_DESK}
 var current_room: int = MAIN
-var current_book: BookContent
+var current_book_name: String
 
 # --- Texture Manager (Dynamic Images) ---
 
@@ -80,11 +80,11 @@ func save_game() -> Error:
 	save_data.summoning_floor_current_tool = summoning_floor_current_tool
 	save_data.current_room = current_room
 	
-	# Save the book's path/ID
-	if current_book is Resource:
-		save_data.current_book_id = current_book.resource_path
+	# Save the book's name
+	if current_book_name is String:
+		save_data.current_book_name = current_book_name
 	else:
-		save_data.current_book_id = ""
+		save_data.current_book_name = ""
 
 	# Serialize Images to ByteArrays for saving
 	save_data.chalk_line_data = _image_to_byte_array(chalk_line)
@@ -157,12 +157,7 @@ func load_save_file() -> Error:
 
 	# UI
 	current_room = save_data.current_room
-
-	# Restore current_book (requires resource loading logic)
-	#var book_id = save_data.current_book_id
-	#if book_id != "":
-		## Example: current_book = load(book_id)
-		#pass # Implement your specific resource loading here
+	current_book_name = save_data.current_book_name
 
 	# Deserialize Images from ByteArrays
 	chalk_line = _byte_array_to_image(save_data.chalk_line_data)

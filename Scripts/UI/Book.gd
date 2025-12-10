@@ -1,7 +1,7 @@
 extends Node3D
 
 # The current page is the one on the left
-var current_page_number: int = 1
+@export var current_page_number: int = 0
 @export var content: BookContent
 
 # This is displayed when pages are not moving
@@ -94,7 +94,7 @@ func update_page_number(page_offset: int = 0) -> void:
 	var number_offset: int = -2
 	for v: Viewport in [v1, v2, v3, v4, v5, v6]:
 		var page_num: int = current_page_number + number_offset
-		v.get_node("Page").set_page_by_number(page_num, content.get_page(page_num))
+		v.get_node("Page").set_page_by_number(page_num, content.get_page_string(page_num))
 		number_offset += 1
 
 ## Attaches a viewport texture to a page.

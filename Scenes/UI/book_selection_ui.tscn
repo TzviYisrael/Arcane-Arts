@@ -1,15 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://8ojmfyx0m2hp"]
+[gd_scene load_steps=2 format=3 uid="uid://8ojmfyx0m2hp"]
 
 [ext_resource type="Script" uid="uid://me01p2x3m4df" path="res://Scripts/UI/book_selection_ui.gd" id="1_hngo6"]
-[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="2_yv853"]
-[ext_resource type="Resource" uid="uid://daobfsxp66ljh" path="res://GameData/resources/books/the_princces_bride.tres" id="3_y5qxj"]
-
-[sub_resource type="Resource" id="Resource_22f8m"]
-script = ExtResource("2_yv853")
-title = "the qween bride"
-scale = Vector3(1, 1, 1)
-pages = Array[String]([])
-metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"
 
 [node name="book_selection_ui" type="Control"]
 layout_mode = 3
@@ -20,7 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_hngo6")
-books = Array[ExtResource("2_yv853")]([ExtResource("3_y5qxj"), SubResource("Resource_22f8m")])
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1

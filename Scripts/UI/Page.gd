@@ -81,72 +81,13 @@ func parse_page_string(data_string: String) -> Dictionary:
 		for cmd_match_entry: RegExMatch in command_matches:
 			var command_type: String = cmd_match_entry.get_string(1).to_lower().strip_edges() # Use to_lower for dictionary keys
 			
-			# FIX 2: Store the raw argument string instead of parsing it
 			var raw_args: String = cmd_match_entry.get_string(2).strip_edges()
 			
-			# FIX 3: Check if the command type is a key in the elements dictionary
 			if result.elements.has(command_type):
-				# FIX 4: Append the raw argument string to the corresponding list
 				result.elements[command_type].append(raw_args)
+			else: printerr("unknown type on element in the circle diagram")
 
 	return result
-
-#func parse_page_string(data_string: String) -> Dictionary:
-	#var result: Dictionary = {
-		#"text_before": data_string.strip_edges(),
-		#"text_after": "",
-		#"commands": []
-	#}
-	#
-	## --- TAGS ---
-	#const START_TAG = "[cd]"
-	#const END_TAG = "[/cd]"
-#
-	#var start_pos: int = data_string.find(START_TAG)
-	#var end_pos: int = data_string.find(END_TAG)
-	#
-	## Check if the image block is present and properly sequenced
-	#if start_pos == -1 or end_pos == -1 or start_pos > end_pos:
-		#return result
-#
-	## --- 1. Extract and Assign Text Blocks ---
-	#
-	#result.text_before = data_string.substr(0, start_pos).strip_edges()
-	#result.text_after = data_string.substr(end_pos + END_TAG.length()).strip_edges()
-#
-	#var command_block: String = data_string.substr(start_pos + START_TAG.length(),
-	   #end_pos - (start_pos + START_TAG.length())).strip_edges()
-	#
-	## --- 2. Parse Commands ---
-	#
-	#for command_entry in command_block.split("$", false):
-		#var trimmed_line: String = command_entry.strip_edges()
-		#if trimmed_line.is_empty(): continue
-#
-		## 2a. Split Command Type and Arguments (limit to 1 split)
-		#var name_args: PackedStringArray = trimmed_line.split(":", false, 1)
-		#if name_args.size() < 2: continue
-			#
-		#var command_type: String = name_args[0].strip_edges().to_upper()
-		#
-		#if command_type != "LINE" and command_type != "CIRCLE":
-			#continue # Skip any other command type
-			#
-		#var raw_args: String = name_args[1].strip_edges()
-#
-		## 2b. Parse Coordinates (convert strings to integers)
-		#var coords := []
-		#for coord_str in raw_args.split(",", false):
-			#var val: String = coord_str.strip_edges()
-			#coords.append(float(val) if val.is_valid_float() else 0.0)
-#
-		## Append the parsed command
-		#result.commands.append({
-			#"type": command_type,
-			#"coords": coords,
-		#})
-#
-	#return result
 
 func set_circle_diagram(elements: Dictionary, im_size: Vector2) -> void:
 	circle_diagram.image_size = im_size

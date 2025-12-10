@@ -1,7 +1,7 @@
 extends Node
 
 var items_data: Dictionary
-var items_file_path: String = "res://GameData/json/item.json"
+var items_file_path: String = "res://GameData/json/items.json"
 
 var items_icons_dir: String = "res://Assets/textures/items/"
 var items_models_dir: String = "res://Assets/models/items/"
@@ -11,14 +11,14 @@ var summons_file_path: String = "res://GameData/json/summons.json"
 
 var summons_models_dir: String = "res://Assets/models/summons/"
 
-#var books_data: Dictionary
-#var books_file_path: String = "res://GameData/json/books.json"
-#
-#var books_icons_dir: String = "res://Assets/textures/books/"
+var books_data: Dictionary
+var books_file_path: String = "res://GameData/json/books.json"
+
 
 func _ready() -> void:
 	items_data = load_items_from_json(items_file_path)
 	summons_data = load_summons_from_json(summons_file_path)
+	books_data = load_books_from_json(books_file_path)
 	print("game data loaded...")
 	Signals.emit_signal("static_data_loaded")
 
@@ -26,7 +26,7 @@ func print_colors() -> void:
 	for i: String in summons_data.keys():
 		prints(summons_data[i].name, summons_data[i].colors_rec, summons_data[i].model)
 
-## Loads items from a JSON file and returns a dictionary of Item resources.
+## Loads items from a JSON file and returns a dictionary of [name, Item].
 func load_items_from_json(path: String) -> Dictionary:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if not file:
@@ -90,7 +90,7 @@ func load_items_from_json(path: String) -> Dictionary:
 		
 	return items
 
-## Loads summon data from a JSON file and returns a dictionary of SummonData resources.
+## Loads summon data from a JSON file and returns a dictionary of [name, SummonData]. 
 func load_summons_from_json(path: String) -> Dictionary:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if not file:
@@ -161,3 +161,34 @@ func load_summons_from_json(path: String) -> Dictionary:
 		summons[summon_name] = summon
 			
 	return summons
+
+## Loads books data from a JSON file and returns a dictionary of [name, BookData].
+func load_books_from_json(path: String) -> Dictionary:
+	var books: Dictionary = {}
+	
+	if not FileAccess.file_exists(path):
+		printerr("Error: File not found at ", path)
+		return books
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	var json_text: String = file.get_as_text()
+	var json_data: Variant = JSON.parse_string(json_text)
+	
+	# Verify that we got a Dictionary (and not null or an Array)
+	if json_data == null or not (json_data is Dictionary):
+		printerr("Error: Failed to parse JSON or format is incorrect.")
+		return books
+
+	# Iterate over the keys (Titles)
+	for title_key: String in json_data:
+		var pages_data: Variant = json_data[title_key]
+		# Ensure the value is actually an array of pages
+		if pages_data is Array:
+			var new_book := BookContent.new()
+			new_book.title = title_key
+			new_book.pages.assign(pages_data)
+			books[title_key] = new_book
+		else:
+			printerr("Warning: Book '", title_key, "' has invalid page data.")
+	
+	return books

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://qvfgba0y4ebe"]
-
-[ext_resource type="Script" uid="uid://db0rxke3ay7sl" path="res://Scripts/summons/summon.gd" id="1_twmrq"]
-
-[node name="summon" type="Node3D"]
-script = ExtResource("1_twmrq")

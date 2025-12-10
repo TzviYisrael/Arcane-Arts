@@ -1,4 +1,5 @@
 extends Node
+@warning_ignore_start("unused_signal")
 signal static_data_loaded
 signal save_game
 signal reload_save_file
@@ -20,3 +21,4 @@ signal change_notebook_page(page: String)
 
 signal rotate_camera(angle: float)
 signal hide_wall(wall: Node3D)
+@warning_ignore_restore("unused_signal")

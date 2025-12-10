@@ -1,0 +1,155 @@
+[gd_scene load_steps=16 format=3 uid="uid://cbw7pmrwoar5r"]
+
+[ext_resource type="Script" uid="uid://shx32fraow1o" path="res://Scripts/2D/summoning_floor_2D.gd" id="1_jc3jh"]
+[ext_resource type="PackedScene" uid="uid://3tkmsmvy5kqa" path="res://Scenes/UI/item_pin.tscn" id="2_4246d"]
+[ext_resource type="Texture2D" uid="uid://b8d2uxv0sepeg" path="res://Assets/textures/summon_floor.png" id="3_633pv"]
+[ext_resource type="PackedScene" uid="uid://bxki658n1ls4l" path="res://Scenes/UI/touch_controls.tscn" id="3_nkr0i"]
+[ext_resource type="Texture2D" uid="uid://bwtdld6l6oobf" path="res://Assets/textures/main_room_floor.png" id="3_wemtm"]
+[ext_resource type="Theme" uid="uid://uew3hho53u71" path="res://Assets/ui/main_theme.tres" id="4_7mdlq"]
+[ext_resource type="Texture2D" uid="uid://d13jskad8hsam" path="res://Assets/ui/button_icons/coloring_tools.png" id="5_7mdlq"]
+[ext_resource type="PackedScene" uid="uid://d1pcsiccnkvw7" path="res://Scenes/UI/book_and_notebook_ui.tscn" id="5_jc3jh"]
+[ext_resource type="Texture2D" uid="uid://cqekf328f7243" path="res://Assets/ui/button_icons/room.png" id="6_4246d"]
+[ext_resource type="Texture2D" uid="uid://deniiifo46gmb" path="res://Assets/ui/button_icons/drawing1.png" id="7_633pv"]
+[ext_resource type="Material" uid="uid://nv34lixkykc7" path="res://Assets/shaders/drawing_ca.tres" id="12_fa5v7"]
+[ext_resource type="Script" uid="uid://c00pubvwks5hc" path="res://Scripts/3D/logic_with_shaders/Renderer.gd" id="13_owfn2"]
+[ext_resource type="Script" uid="uid://cjj8638mscdkp" path="res://Scripts/3D/logic_with_shaders/Renderer2.gd" id="15_hasf7"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5a8fl"]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4246d"]
+atlas = ExtResource("5_7mdlq")
+region = Rect2(450, 0, 450, 450)
+
+[node name="summon_floor_2D" type="Node2D"]
+script = ExtResource("1_jc3jh")
+item_pin_scene = ExtResource("2_4246d")
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.95)
+
+[node name="MainRoomFloor" type="Sprite2D" parent="Parallax2D"]
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("3_wemtm")
+
+[node name="SummonFloor" type="Sprite2D" parent="."]
+rotation = 2.3561945
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_633pv")
+
+[node name="chalk_lines" type="Sprite2D" parent="."]
+position = Vector2(-1012, -1012)
+centered = false
+
+[node name="ink_viewer" type="Sprite2D" parent="."]
+texture = SubResource("ViewportTexture_5a8fl")
+
+[node name="Control" type="Control" parent="."]
+top_level = true
+layout_mode = 3
+anchor_right = 0.709
+anchor_bottom = 0.801
+offset_right = 0.231934
+offset_bottom = -0.0480347
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="touch_controls" parent="Control" instance=ExtResource("3_nkr0i")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/touch_controls"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -170.0
+offset_right = 280.0
+offset_bottom = 1349.0
+grow_horizontal = 0
+scale = Vector2(0.3, 0.3)
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="tools" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_7mdlq")
+icon = SubResource("AtlasTexture_4246d")
+flat = true
+icon_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="returnToMain" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_7mdlq")
+icon = ExtResource("6_4246d")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="moveToDesk" type="Button" parent="Control/touch_controls/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_7mdlq")
+icon = ExtResource("7_633pv")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="brushSlider" type="HSlider" parent="Control/touch_controls"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -80.0
+offset_right = -120.0
+offset_bottom = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1.5, 1.5)
+min_value = 0.2
+max_value = 1.0
+step = 0.045
+value = 0.29000000000000004
+tick_count = 20
+
+[node name="book_and _notebook_ui" parent="Control/touch_controls" instance=ExtResource("5_jc3jh")]
+notebook_page = 4
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.5, 0.5)
+limit_enabled = false
+limit_left = 6750
+limit_top = 3820
+limit_right = -6750
+limit_bottom = -3820
+limit_smoothed = true
+position_smoothing_enabled = true
+
+[node name="Viewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer" type="Sprite2D" parent="Viewport" node_paths=PackedStringArray("viewport_2")]
+texture_filter = 1
+material = ExtResource("12_fa5v7")
+scale = Vector2(2, 2)
+script = ExtResource("13_owfn2")
+viewport_2 = NodePath("../../Viewport2")
+
+[node name="Viewport2" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(2024, 2024)
+render_target_clear_mode = 2
+render_target_update_mode = 0
+
+[node name="Renderer2" type="Sprite2D" parent="Viewport2" node_paths=PackedStringArray("viewport")]
+texture_filter = 1
+material = ExtResource("12_fa5v7")
+scale = Vector2(2, 2)
+script = ExtResource("15_hasf7")
+viewport = NodePath("../../Viewport")
+
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/tools" to="." method="_on_tool_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/returnToMain" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="Control/touch_controls/VBoxContainer/moveToDesk" to="." method="_on_move_to_desk_pressed"]
+[connection signal="value_changed" from="Control/touch_controls/brushSlider" to="." method="_on_brush_slider_value_changed"]

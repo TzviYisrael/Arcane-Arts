@@ -27,7 +27,7 @@ class_name SaveData
 # UI
 # Corresponds to the index of the enum {MAIN=0, SUMMON_FLOOR=1, DRAWING_DESK=2}
 @export var current_room: int = 0 
-@export var current_book_id: String = "" # Save the resource path or ID of the book
+@export var current_book_name: String = ""
 
 # --- Texture Manager Dynamic Data (Saved as PNG-encoded PackedByteArray) ---
 # This keeps the image data contained within the resource file, avoiding separation.
