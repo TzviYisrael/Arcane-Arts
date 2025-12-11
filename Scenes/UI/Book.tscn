@@ -1,9 +1,16 @@
-[gd_scene load_steps=19 format=4 uid="uid://byxkmj117ohx0"]
+[gd_scene load_steps=21 format=4 uid="uid://byxkmj117ohx0"]
 
 [ext_resource type="Script" uid="uid://clesfvkw8pepu" path="res://Scripts/UI/Book.gd" id="2"]
+[ext_resource type="Script" uid="uid://dk4c8ftx1xxbu" path="res://Scripts/Resources/book_content.gd" id="2_5u3eo"]
 [ext_resource type="PackedScene" uid="uid://dyspm3hy6o2oi" path="res://Scenes/UI/Page.tscn" id="3"]
 [ext_resource type="AudioStream" uid="uid://d1t3mise0xonp" path="res://Assets/sfx/page.ogg" id="3_krc24"]
 [ext_resource type="Texture2D" uid="uid://uj1epvqfmjvx" path="res://Assets/textures/text-logo.webp" id="4_tbwyg"]
+
+[sub_resource type="Resource" id="Resource_nmn81"]
+script = ExtResource("2_5u3eo")
+title = "summons:"
+pages = Array[String](["case", "[center][font_size=30][b][u]{name}[/u][/b][/font_size][/center][br][font_size=25]category: {category} [br]mana requirement: [br][color=7700ffff]10[/color]<|>[color=green]50[/color][br][/font_size]", "[center][font_size=30][b][u]{name}[/u][/b][/font_size][/center][br][font_size=25]category: {category} [br]mana requirement: [br][color=red]10[/color]<|>[color=green]50[/color][br][/font_size]"])
+metadata/_custom_type_script = "uid://dk4c8ftx1xxbu"
 
 [sub_resource type="StandardMaterial3D" id="1"]
 
@@ -200,6 +207,7 @@ _data = {
 
 [node name="Book" type="Node3D"]
 script = ExtResource("2")
+content = SubResource("Resource_nmn81")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 0, 0, 2)

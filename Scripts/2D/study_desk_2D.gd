@@ -15,7 +15,7 @@ func _on_spell_chanted(spell: String) -> void:
 
 func book_changed() -> void:
 	$Control/touch_controls/book_b.show()
-	book.content = SceneManager.current_book
+	book.content = GameData.books_data[SceneManager.current_book_name]
 	book.setup()
 	book_2d.visible = true
 

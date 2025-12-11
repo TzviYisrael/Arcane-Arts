@@ -1,6 +1,6 @@
 extends Control
 
-const BOOK_3D = preload("res://Scenes/book_3d.tscn")
+const BOOK_3D = preload("res://Scenes/3D/book_3D.tscn")
 @onready var scroll_container: ScrollContainer = $ScrollContainer
 @onready var h_box_container: HBoxContainer = $ScrollContainer/HBoxContainer
 

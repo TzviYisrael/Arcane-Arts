@@ -1,6 +1,6 @@
 extends Node
 
-var items_data: Dictionary
+var items_data: Dictionary #[name: String, Item]
 var items_file_path: String = "res://GameData/json/items.json"
 
 var items_icons_dir: String = "res://Assets/textures/items/"
@@ -11,7 +11,7 @@ var summons_file_path: String = "res://GameData/json/summons.json"
 
 var summons_models_dir: String = "res://Assets/models/summons/"
 
-var books_data: Dictionary
+var books_data: Dictionary #[name: String, BookContent]
 var books_file_path: String = "res://GameData/json/books.json"
 
 
@@ -19,6 +19,7 @@ func _ready() -> void:
 	items_data = load_items_from_json(items_file_path)
 	summons_data = load_summons_from_json(summons_file_path)
 	books_data = load_books_from_json(books_file_path)
+	books_data.merge(make_summons_catalog())
 	print("game data loaded...")
 	Signals.emit_signal("static_data_loaded")
 
@@ -192,3 +193,34 @@ func load_books_from_json(path: String) -> Dictionary:
 			printerr("Warning: Book '", title_key, "' has invalid page data.")
 	
 	return books
+
+func make_summons_catalog() -> Dictionary:
+	var catalog: Dictionary = {}
+	var title := "summons catalog"
+	var new_book := BookContent.new()
+	new_book.title = title
+	for summon_name: String in summons_data.keys():
+		var data: SummonData = summons_data[summon_name]
+		var summon_dict: Dictionary = {
+			"name": data.name, 
+			"category": data.category,
+			"hp": data.hp,
+			"mp": data.mp,
+			"manaReq": data.colors_rec,
+			"loot": data.loot
+		}
+		var rich_text: String = ""
+		rich_text += "[center][font_size=30][b][u]{name}[/u][/b][/font_size][/center][br]".format(summon_dict)
+		rich_text += "[font_size=25]category: {category} [br]".format(summon_dict)
+		rich_text += "Hp: {hp} | Mp: {mp} [br]".format(summon_dict)
+		rich_text += "mana requirement: [br] ~ "
+		for color_key: Color in summon_dict["manaReq"]:
+			rich_text += "[color={0}]{1}[/color] ~ ".format(
+				[color_key.to_html(false),
+				summon_dict["manaReq"][color_key]
+			])
+		rich_text += "[br]"
+		rich_text += "loot: {loot} [br]".format(summon_dict)
+		new_book.pages.append(rich_text)
+	catalog[title] = new_book
+	return catalog

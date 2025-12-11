@@ -13,7 +13,6 @@ extends Control
 var rotation_factor: float
 var padding: int = 100
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	update_rotation(rotation_factor)
 	book_name_label.text = book_data.title
@@ -28,5 +27,5 @@ func update_rotation(factor: float) -> void:
 
 
 func _on_button_pressed() -> void:
-	SceneManager.current_book = book_data
+	SceneManager.current_book_name = book_data.title
 	Signals.emit_signal("book_changed")

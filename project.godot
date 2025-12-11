@@ -20,9 +20,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Signals="*res://Scripts/Singletons/Signals.gd"
-SceneManager="*res://Scripts/Singletons/Scene_manager.gd"
-GameData="*res://Scripts/Singletons/Game_data.gd"
+Signals="*res://Scripts/globals/Signals.gd"
+SceneManager="*res://Scripts/globals/Scene_manager.gd"
+GameData="*res://Scripts/globals/Game_data.gd"
 
 [debug]
 
