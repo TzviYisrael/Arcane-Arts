@@ -35,12 +35,7 @@ extends Node3D
 
 func _ready()  -> void:
 	if content == null:
-		#print("empty book init")
 		return
-	#if len(content.pages) % 2 == 1:
-		#content.pages.append("")
-		#content.pages.append("")
-		#content.pages.append("")
 	setup()
 
 func setup() -> void:
@@ -49,13 +44,13 @@ func setup() -> void:
 	set_texture(ps1, v3)
 	set_texture(ps2, v4)
 	
-	animationPlayer.animation_finished.connect(_on_animation_finished)
+	if not animationPlayer.animation_finished.is_connected(_on_animation_finished):
+		animationPlayer.animation_finished.connect(_on_animation_finished)
 
 func turn_right() -> void:
-	#print(len(content.pages))
-	if current_page_number + 4 > len(content.pages):
+	if current_page_number + 3 > len(content.pages):
 		return
-		
+	
 	set_texture(pf1, v3)
 	set_texture(pf2, v4)
 	set_texture(pf3, v5)

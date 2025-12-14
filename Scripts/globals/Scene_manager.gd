@@ -9,6 +9,7 @@ const DEFAULT_SAVE_FILE_PATH: String = "res://GameData/resources/default_save.tr
 # Global
 var inventory: Dictionary[String, int] = {}
 
+
 # Mage
 var camera_rot_deg := Vector3(-30.0, 0.0, 0.0)
 
@@ -31,6 +32,7 @@ var summoning_floor_current_tool: int = 1
 enum {MAIN, SUMMON_FLOOR, DRAWING_DESK}
 var current_room: int = MAIN
 var current_book_name: String
+var current_page: int
 
 # --- Texture Manager (Dynamic Images) ---
 

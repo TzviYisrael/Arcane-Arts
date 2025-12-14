@@ -20,7 +20,7 @@ func book_changed() -> void:
 	book_2d.visible = true
 
 func _on_return_to_main_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/main_room.tscn")
+	get_tree().change_scene_to_file("res://Scenes/3D/main_room.tscn")
 
 func _on_books_shelf_pressed() -> void:
 	book_selection_ui.show()

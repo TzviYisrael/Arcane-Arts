@@ -14,7 +14,6 @@ var summons_models_dir: String = "res://Assets/models/summons/"
 var books_data: Dictionary #[name: String, BookContent]
 var books_file_path: String = "res://GameData/json/books.json"
 
-
 func _ready() -> void:
 	items_data = load_items_from_json(items_file_path)
 	summons_data = load_summons_from_json(summons_file_path)
@@ -210,17 +209,21 @@ func make_summons_catalog() -> Dictionary:
 			"loot": data.loot
 		}
 		var rich_text: String = ""
-		rich_text += "[center][font_size=30][b][u]{name}[/u][/b][/font_size][/center][br]".format(summon_dict)
-		rich_text += "[font_size=25]category: {category} [br]".format(summon_dict)
+		rich_text += "[center][font_size=30][b][u]"
+		rich_text += str(summon_dict.name).capitalize()
+		rich_text += "[/u][/b][/font_size][/center][br]"
+		rich_text += "[font_size=25]Category: {category} [br]".format(summon_dict)
 		rich_text += "Hp: {hp} | Mp: {mp} [br]".format(summon_dict)
-		rich_text += "mana requirement: [br] ~ "
+		rich_text += "Mana requirement: [br][font_size=35] >< "
 		for color_key: Color in summon_dict["manaReq"]:
-			rich_text += "[color={0}]{1}[/color] ~ ".format(
+			rich_text += "[color={0}]{1}[/color] >< ".format(
 				[color_key.to_html(false),
 				summon_dict["manaReq"][color_key]
 			])
-		rich_text += "[br]"
-		rich_text += "loot: {loot} [br]".format(summon_dict)
+		rich_text += "[/font_size][br]"
+		var loot_string: String = str(summon_dict.loot)\
+			.remove_chars("\"[]").capitalize()
+		rich_text += "Loot: %s [br]" % loot_string
 		new_book.pages.append(rich_text)
 	catalog[title] = new_book
 	return catalog

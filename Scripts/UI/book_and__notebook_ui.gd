@@ -26,7 +26,7 @@ func _ready() -> void:
 	notebook.set_page()
 
 func _on_book_button_toggled(toggled_on: bool) -> void:
-	if SceneManager.current_book != null:
+	if SceneManager.current_book_name != "":
 		book_container.visible = toggled_on
 
 func _on_items_button_pressed() -> void:

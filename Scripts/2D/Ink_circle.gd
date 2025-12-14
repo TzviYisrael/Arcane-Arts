@@ -303,7 +303,7 @@ static func fast_ca_genretion(img: Image, state: int) -> bool:
 			
 		
 		var new_surface_pos: Array[Vector2] = []
-		for p in SceneManager.surface_pos:
+		for p: Vector2 in SceneManager.surface_pos:
 			var x: float = p.x
 			var y: float = p.y
 			if compare_rgb(img.get_pixelv(p), Color.BLACK):
