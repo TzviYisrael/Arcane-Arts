@@ -1,5 +1,5 @@
 extends Node
-class_name color_pallate
+class_name Color_pallate
 
 const DEEP_PURPLE_1 := Color("140f24")
 const DEEP_PURPLE_2 := Color("221f3e")
@@ -56,3 +56,55 @@ const BEIGE_1 := Color("edd5a5")
 const BLACK := Color("000000")
 const CHARCOAL_1 := Color("203040")
 const WHITE := Color("ffffff")
+
+const colors_array := [
+	DEEP_PURPLE_1,
+	DEEP_PURPLE_2,
+	INDIGO_1,
+	INDIGO_2,
+	PURPLE_1,
+	PURPLE_2,
+	LAVENDER_1,
+	LAVENDER_2,
+	PINK_1,
+	PINK_2,
+	BLUEGRAY_1,
+	BLUEGRAY_2,
+	BLUEGRAY_3,
+	TEALGRAY_1,
+	TEALGRAY_2,
+	CYAN_1,
+	CYAN_2,
+	BLUE_1,
+	BLUE_2,
+	DARK_TEAL_1,
+	DARK_TEAL_2,
+	GREEN_1,
+	GREEN_2,
+	GREEN_3,
+	GREEN_4,
+	YELLOWGREEN_1,
+	LIGHT_YELLOW_1,
+	LIGHT_YELLOW_2,
+	ORANGE_1,
+	ORANGE_2,
+	ORANGE_3,
+	DARK_RED_1,
+	DARK_RED_2,
+	DARK_RED_3,
+	DARK_RED_4,
+	CRIMSON_1,
+	CRIMSON_2,
+	LIGHT_RED_1,
+	LIGHT_RED_2,
+	BROWN_1,
+	BROWN_2,
+	BROWN_3,
+	BROWN_4,
+	BROWN_5,
+	BROWN_6,
+	BEIGE_1,
+	BLACK,
+	CHARCOAL_1,
+	WHITE,
+]

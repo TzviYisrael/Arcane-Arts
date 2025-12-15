@@ -53,10 +53,6 @@ func _ready() -> void:
 		var chalk := ImageTexture.create_from_image(SceneManager.chalk_line)
 		work_desk.find_child("chalk").texture = chalk
 	
-	#if not SceneManager.current_book_name == "":
-		#book.content = GameData.books_data[SceneManager.current_book_name]
-		#book.setup()
-		#$Control/touch_controls/book_b.show()
 
 	colors_to_count[Color.RED] = true
 	colors_to_count[Color.GREEN] = true

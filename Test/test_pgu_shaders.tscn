@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://7jlg3drqiabr"]
+
+[ext_resource type="Script" uid="uid://dmwaiiaoka6uw" path="res://Test/test_pgu_shaders.gd" id="1_4caf7"]
+[ext_resource type="PackedScene" uid="uid://ojtlnin1bjr7" path="res://Scenes/3D/logic_with_shaders/gpu_ink_circle.tscn" id="1_ahxvq"]
+[ext_resource type="Texture2D" uid="uid://dysnwqtd2djxt" path="res://Assets/textures/test_texture.png" id="2_w28om"]
+[ext_resource type="Texture2D" uid="uid://dwtlrxnppvq1q" path="res://Assets/ui/button_icons/ring.png" id="4_w1hby"]
+[ext_resource type="Texture2D" uid="uid://dn0lg5pt2ehtg" path="res://Assets/ui/button_icons/hand.png" id="5_iwxs6"]
+
+[node name="test_scene" type="Node3D"]
+script = ExtResource("1_4caf7")
+init_texture = ExtResource("2_w28om")
+
+[node name="ink_circle" parent="." instance=ExtResource("1_ahxvq")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.3711392e-08, -1, -4.3711392e-08, 0, -4.371139e-08, 1.0000001, -1.0000001, 4.371139e-08, 1.9106857e-15, 0, 10, 0)
+
+[node name="clear_button" type="Button" parent="."]
+custom_minimum_size = Vector2(150, 150)
+offset_left = 1734.0
+offset_top = 907.0
+offset_right = 1884.0
+offset_bottom = 1057.0
+icon = ExtResource("4_w1hby")
+expand_icon = true
+
+[node name="start_button" type="Button" parent="."]
+custom_minimum_size = Vector2(150, 150)
+offset_left = 1733.0
+offset_top = 730.0
+offset_right = 1883.0
+offset_bottom = 880.0
+icon = ExtResource("5_iwxs6")
+expand_icon = true
+
+[connection signal="pressed" from="clear_button" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="start_button" to="." method="_on_start_button_pressed"]

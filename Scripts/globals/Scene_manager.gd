@@ -2,7 +2,8 @@ extends Node
 
 # Define the save file path, now pointing to a resource file
 const SAVE_FILE_PATH: String = "user://savegame.res"
-const DEFAULT_SAVE_FILE_PATH: String = "res://GameData/resources/default_save.tres"
+#const DEFAULT_SAVE_FILE_PATH: String = "res://GameData/resources/default_save.tres"
+const DEFAULT_SAVE_FILE_PATH: String = "res://GameData/resources/test_save.tres"
 
 # --- Global & Dynamic Data ---
 

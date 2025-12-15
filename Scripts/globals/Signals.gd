@@ -10,6 +10,10 @@ signal change_ca_state(run: bool)
 signal mage_look(pos: Vector3)
 signal walk_destination(target_position: Vector3)
 
+#Test
+signal set_shader_textures(rt: Texture2D, lut: Texture3D, pt: Texture2D)
+#test
+
 signal spell_chanted(spell: String)
 signal breach
 signal summon_particles(target: Vector3, color: Color)

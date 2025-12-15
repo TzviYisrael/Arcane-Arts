@@ -1,85 +1,108 @@
 shader_type canvas_item;
-//render_mode blend_sub;
+render_mode blend_disabled;
 
-uniform bool run = false;
-uniform float power = 0.007;
+// --- UNIFORMS ---
 
-const float color_threshold = 0.01;
-const vec3 black_rgb = vec3(0.0, 0.0, 0.0);
-const vec3 white_rgb = vec3(1.0, 1.0, 1.0);
-const vec3 red_rgb = vec3(1.0, 0.0, 0.0);
+// 1. THE TRANSLATOR (3D Texture)
+// Input: RGB Coordinate (The visual color)
+// Output: Red Channel = ID (0.0 to 1.0)
+uniform sampler3D color_to_id_lut : filter_nearest;
 
-//for any shade of black and gray
-bool is_monochrome(vec4 color) {
-	return (abs(color.r - color.g) < color_threshold  &&
-	 abs(color.g - color.b) < color_threshold && color.a > 0.9);
+// 2. THE LOGIC (2D Texture)
+// Input: X = Neighbor ID, Y = My ID
+// Output: 
+//   R = Resulting ID (What do I become?)
+//   G = Reaction Type (0=Ignore, 0.5=Damage, 1.0=Swap/Spread)
+//   B = Severity/Damage Amount
+uniform sampler2D reaction_table : filter_nearest;
+
+// 3. THE PAINTER (2D Texture)
+// Input: X = ID
+// Output: RGB = The Visual Color to draw
+uniform sampler2D id_to_color_palette : filter_nearest;
+
+// Settings
+uniform float damage_speed = 0.01; 
+
+// --- HELPER FUNCTIONS ---
+
+float get_id_from_visual(vec3 visual_color) {
+	// 3D Lookup: Use the color itself as the coordinate
+	return texture(color_to_id_lut, visual_color).r;
 }
 
-bool is_white(vec4 color) {
-    return distance(color.rgb, white_rgb) < color_threshold;
-}
-
-bool is_red(vec4 color) {
-    return distance(color.rgb, red_rgb) < color_threshold;
+vec4 get_visual_from_id(float id) {
+	// 1D Lookup: Use the ID to fetch the color from the palette
+	return texture(id_to_color_palette, vec2(id, 0.5));
 }
 
 void fragment() {
-	vec2 uv = SCREEN_UV;
 	vec2 sz = SCREEN_PIXEL_SIZE;
-	vec4 result_color = vec4(0.0, 0.0, 0.0, 0.0); // default: transparent
-
-	vec2 center = vec2(0.5, 0.5);
-	float radius = 0.501;
-
-	if(distance(uv, center) > radius){
-		result_color = vec4(0.0);// transparent outside circle
-	}
-	else if (!run) {
-		result_color = texture(TEXTURE, uv);
-	} else {
-		vec4 current = texture(TEXTURE, uv);
-
-		if(is_white(current)) result_color = vec4(1.0, 0.0, 0.0, 1.0);
-		else if(is_red(current)) result_color = current;
-		else
-		{
-			vec2 offsets[4] = vec2[](
-				vec2(-1.0, 0.0),
-				vec2(1.0, 0.0),
-				vec2(0.0, -1.0),
-				vec2(0.0, 1.0)
-			);
-			if(current.a < 0.05){//tranparent pixel
-				result_color = vec4(0.0);
-				for (int i = 0; i < 4; i++) {
-					vec4 neighbor = texture(TEXTURE, uv + offsets[i] * sz);
-					if (!is_monochrome(neighbor) && neighbor.a > 0.9) {
-						result_color = neighbor;
-						break;
-					}
-				}
-			}
-			else if(is_monochrome(current)){
-				for (int i = 0; i < 4; i++) {
-					vec4 neighbor = texture(TEXTURE, uv + offsets[i] * sz);
-					if (is_red(neighbor)) {
-						result_color = vec4(current.rgb + power, 1.0);
-					}
-				}
-			}
-			else
-			{
-				result_color = current;
-				for (int i = 0; i < 4; i++) {
-					vec4 neighbor = texture(TEXTURE, uv + offsets[i] * sz);
-					if (is_red(neighbor)) {
-						result_color = vec4(black_rgb.rgb + (power * 100.0), 1.0);
-					}
-				}
-			}
+	vec4 current_color = texture(TEXTURE, UV);
+	
+	// 1. DECODE SELF
+	float my_id = get_id_from_visual(current_color.rgb);
+	float my_health = current_color.a; // We use Alpha for health!
+	
+	// Prepare next state (defaults to staying the same)
+	float next_id = my_id;
+	float next_health = my_health;
+	
+	// Define neighbors (Up, Down, Left, Right)
+	vec2 offsets[4] = vec2[](vec2(-1,0), vec2(1,0), vec2(0,-1), vec2(0,1));
+	
+	// 2. INTERACT LOOP
+	for (int i = 0; i < 4; i++) {
+		vec4 neighbor_col = texture(TEXTURE, UV + offsets[i] * sz);
+		
+		// Optimization: Skip empty neighbors (assuming Alpha 0 is empty)
+		if (neighbor_col.a <= 0.01) continue;
+		
+		float neighbor_id = get_id_from_visual(neighbor_col.rgb);
+		
+		// 3. CHECK REACTION TABLE
+		// X = Neighbor, Y = Me
+		vec4 reaction = texture(reaction_table, vec2(neighbor_id, my_id));
+		
+		int type = int(round(reaction.g * 10.0)); // 0=None, 5=Damage, 10=Swap
+		float severity = reaction.b; // How strong is the reaction?
+		
+		// --- HANDLING CONFLICTS (LOGIC) ---
+		
+		// TYPE: INSTANT SWAP / SPREAD
+		// Example: Water touches Fire -> Fire vanishes instantly
+		if (type == 10) {
+			next_id = reaction.r;
+			next_health = 1.0; // Reset health for the new material
+			break; // Critical change! Stop checking other neighbors.
+		}
+		
+		// TYPE: DAMAGE / FADE
+		// Example: Acid touches Metal -> Metal slowly corrodes
+		else if (type == 5) {
+			next_health -= (severity * damage_speed);
+			// We DO NOT break here. 
+			// Multiple neighbors can damage me at the same time (accumulate damage).
 		}
 	}
-
-	if(result_color.a < 0.05) result_color = vec4(0.0);
-	COLOR = result_color;
+	
+	// 4. RESOLVE DAMAGE
+	if (next_health <= 0.0) {
+		// I died from damage!
+		// Check the table for what I turn into when I die (e.g., Metal -> Air)
+		// We lookup Self vs Self (or a special "Death" column) to find the debris ID
+		// For simplicity here, let's say we turn into the ID that damaged us last:
+		// (A better system would store "DeathTransformID" in the reaction table)
+		
+		// Fallback: If health hits 0, vanish (ID 0) or change to a default "Ash" ID
+		next_health = 0.0; 
+	}
+	
+	// 5. ENCODE BACK TO VISUALS
+	vec4 final_color = get_visual_from_id(next_id);
+	
+	// Preserve the calculated health in the Alpha channel
+	final_color.a = next_health;
+	
+	COLOR = final_color;
 }

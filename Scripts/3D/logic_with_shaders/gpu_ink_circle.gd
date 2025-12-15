@@ -22,6 +22,7 @@ class_name GPU_Ink_Circle
 func _ready() -> void:
 	Signals.connect("change_ca_state", _on_change_ca_state)
 	Signals.connect("summon_particles", summon_particles)
+	Signals.connect("set_shader_textures", set_shader_textures)
 	# We've turned off the viewport rendering in the
 	# Godot editor to improve battery life & development time
 	#
@@ -93,6 +94,11 @@ func set_ca_texture(tex: Texture2D) -> void:
 func _on_change_ca_state(run: bool) -> void:
 	#print("change ca state: ", run)
 	Renderer.material.set_shader_parameter("run", run)
+
+func set_shader_textures(rt: Texture2D, lut: Texture3D, pt: Texture2D) -> void:
+	Renderer.material.set_shader_parameter("reaction_table", rt)
+	Renderer.material.set_shader_parameter("color_to_id_lut", lut)
+	Renderer.material.set_shader_parameter("id_to_color_palette", pt)
 
 func clear_colors() -> void:
 	one_shot_shader(clear_material, 10)
